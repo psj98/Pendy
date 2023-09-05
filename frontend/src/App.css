@@ -1,3 +1,5 @@
+/* App.css */
+
 .App {
   text-align: center;
 }
@@ -35,4 +37,29 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input {
+  border: 0;
+  padding: 10px 0;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+
+.input ~ .border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #007bff;
+}
+
+.input:focus ~ .border {
+  width: 100%;
+  transition: 0.5s;
 }
