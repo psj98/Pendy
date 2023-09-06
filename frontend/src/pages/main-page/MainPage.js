@@ -1,11 +1,13 @@
 import React from 'react';
 import './MainPage.css';
 import { Outlet } from 'react-router-dom';
+import Header from '../../components/common/header/Header';
 
 const MainPage = () => {
   return (
     <div>
-      <p>메인 페이지입니다.</p>
+      <Header />
+      <div className="header-save" />
       <Outlet />
     </div>
   );

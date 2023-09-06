@@ -32,15 +32,14 @@ function App() {
       {/* 메인 페이지 */}
       <Route path="/" element={<MainPage />}>
         {isLoggedIn ? (
-          <Route path="" element={<UserTemplate />}>
-            <Route path="setting" element={<SettingTemplate />} />
-            <Route path="goal" element={<GoalTemplate />} />
-            <Route path="analysis" element={<AnalysisTemplate />} />
-            <Route path="diary" element={<DiaryTemplate />} />
-          </Route>
+          <Route path="" element={<UserTemplate />} />
         ) : (
           <Route path="" element={<GuestTemplate />} />
         )}
+        <Route path="setting" element={<SettingTemplate />} />
+        <Route path="goal" element={<GoalTemplate />} />
+        <Route path="analysis" element={<AnalysisTemplate />} />
+        <Route path="diary" element={<DiaryTemplate />} />
       </Route>
 
       {/* 로그인 페이지 */}
@@ -53,8 +52,8 @@ function App() {
       {/* 계좌 페이지 */}
       <Route path="/bank" element={<BankPage />}>
         <Route path="" element={<BankMainTemplate />} />
-        <Route path="" element={<AccountTemplate />} />
-        <Route path="" element={<RegistrationTemplate />} />
+        <Route path="account" element={<AccountTemplate />} />
+        <Route path="regist" element={<RegistrationTemplate />} />
       </Route>
     </Routes>
   );
