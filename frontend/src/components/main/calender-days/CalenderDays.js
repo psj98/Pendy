@@ -1,6 +1,7 @@
 import React from 'react';
 import './CalenderDays.css';
 
+// 캘린더 요일
 const CalenderDays = () => {
   const days = [];
   const date = ['Sun', 'Mon', 'Thu', 'Wed', 'Thrs', 'Fri', 'Sat'];

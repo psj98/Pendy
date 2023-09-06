@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
 import { isSameMonth, isSameDay, addDays } from 'date-fns';
 
+// 캘린더 cell
 const CalenderCells = ({ currentMonth }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const monthStart = startOfMonth(currentMonth);
@@ -16,6 +17,7 @@ const CalenderCells = ({ currentMonth }) => {
   let day = startDate;
   let formattedDate = '';
 
+  //날짜 선택
   const onDateClick = (day) => {
     setSelectedDate(day);
   };

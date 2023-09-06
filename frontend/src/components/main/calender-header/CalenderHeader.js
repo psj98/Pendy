@@ -3,6 +3,7 @@ import './CalenderHeader.css';
 import { Icon } from '@iconify/react';
 import { format } from 'date-fns';
 
+// 캘린더 상단 헤더
 const CalenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
     <div className="calendar-header">

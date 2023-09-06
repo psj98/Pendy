@@ -1,6 +1,5 @@
 /* CalenderDays.css */
 
-/* .calendar .days */
 .calender-days {
   display: flex;
   flex-wrap: wrap;
@@ -11,7 +10,6 @@
   color: #444;
 }
 
-/* .calendar .days .col */
 .calender-col {
   width: calc(14.2%);
   height: 100%;

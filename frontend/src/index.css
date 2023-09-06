@@ -8,7 +8,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
+
   min-height: 100%;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(170, 218, 255, 0) 52.08%,
+    rgba(170, 218, 255, 0.3) 100%
+  );
 }
 
 code {
