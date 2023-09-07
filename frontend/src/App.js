@@ -3,19 +3,22 @@ import './App.css';
 
 import TestPage from './pages/test-page/TestPage';
 
+// 메인페이지
 import MainPage from './pages/main-page/MainPage';
 import UserTemplate from './templates/user-template/UserTemplate';
+import GuestTemplate from './templates/guest-template/GuestTemplate';
 import SettingTemplate from './templates/setting-template/SettingTemplate';
 import GoalTemplate from './templates/goal-template/GoalTemplate';
-import DiaryTemplate from './templates/diary-template/DiaryTemplate';
-import GuestTemplate from './templates/guest-template/GuestTemplate';
 import AnalysisTemplate from './templates/analysis-template/AnalysisTemplate';
+import DiaryTemplate from './templates/diary-template/DiaryTemplate';
 
+// 로그인 관련 페이지
 import LoginPage from './pages/login-page/LoginPage';
 import LoginTemplate from './templates/login-template/LoginTemplate';
 import SignUpTemplate from './templates/signup-template/SignUpTemplate';
 import RepasswordTemplate from './templates/repassword-template/RepasswordTemplate';
 
+// 은행 계좌 관련 페이지
 import BankPage from './pages/bank-page/BankPage';
 import BankMainTemplate from './templates/bank-main-template/BankMainTemplate';
 import AccountTemplate from './templates/account-template/AccountTemplate';
