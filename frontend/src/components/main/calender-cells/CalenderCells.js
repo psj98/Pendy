@@ -17,7 +17,7 @@ const CalenderCells = ({ currentMonth }) => {
   let day = startDate;
   let formattedDate = '';
 
-  //날짜 선택
+  // 날짜 선택
   const onDateClick = (day) => {
     setSelectedDate(day);
   };
