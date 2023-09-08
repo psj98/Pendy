@@ -21,7 +21,7 @@ public class MonthlyStatistic {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Long id; // 일간 통계 id
+    private Long id; // 월간 통계 id
 
     @ManyToOne
     @JoinColumn(name = "member_id")
