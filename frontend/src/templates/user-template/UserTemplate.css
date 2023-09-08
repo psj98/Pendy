@@ -1,0 +1,29 @@
+/* UserTemplate.css */
+
+.user {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.calender-container {
+  flex: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calender-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+}
+
+.chart-container {
+  flex: 4;
+}
