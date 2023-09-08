@@ -17,7 +17,7 @@ import lombok.Getter;
 @Getter
 public class AvgConsumptionAmount {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; // 평균 소비 금액 아이디
 	@OneToOne
 	@JoinColumn(name = "category_id")
