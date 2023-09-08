@@ -1,4 +1,4 @@
-package com.ssafy.namani.domain.entity;
+package com.ssafy.namani.domain.member.entity;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
