@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class BaseResponseService {
 
     /**
-     * 성공 응답 메서드
+     * 성공 응답 메서드 - 전달 데이터 O
      *
      * @param data - 결과 데이터
      * @return BaseResponse - 응답 객체
@@ -17,6 +17,19 @@ public class BaseResponseService {
                 .code(BaseResponseStatus.SUCCESS.getCode())
                 .message(BaseResponseStatus.SUCCESS.getMessage())
                 .data(data)
+                .build();
+    }
+
+    /**
+     * 성공 응답 메서드 - 전달 데이터 X
+     *
+     * @return BaseResponse - 응답 객체
+     */
+    public <T> BaseResponse<Object> getSuccessNoDataResponse() {
+        return BaseResponse.builder()
+                .isSuccess(true)
+                .code(BaseResponseStatus.SUCCESS.getCode())
+                .message(BaseResponseStatus.SUCCESS.getMessage())
                 .build();
     }
 
