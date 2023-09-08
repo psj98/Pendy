@@ -1,1 +1,5 @@
 /* LoginPage.css */
+.login-page {
+  max-height: 100vh;
+  overflow-y: auto;
+}
