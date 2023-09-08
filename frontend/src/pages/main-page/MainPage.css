@@ -1,1 +1,6 @@
 /* MainPage.css */
+
+.main-page {
+  max-height: 100vh;
+  overflow-y: auto;
+}
