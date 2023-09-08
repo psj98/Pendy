@@ -9,6 +9,6 @@ import lombok.Getter;
 @Getter
 public class Bank {
 	@Id
-	String bankCode;
-	String bankName;
+	private String bankCode; // 은행 코드
+	private String bankName; // 은행명
 }
