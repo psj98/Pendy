@@ -1,11 +1,13 @@
 import React from 'react';
 import './LoginPage.css';
+import Header from '../../components/common/header/Header';
 import { Outlet } from 'react-router-dom';
 
 const LoginPage = () => {
   return (
-    <div>
-      <div>로그인 및 회원가입</div>
+    <div className="login-page">
+      <Header />
+      <div className="header-save" />
       <Outlet />
     </div>
   );
