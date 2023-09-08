@@ -12,7 +12,7 @@ const Header = () => {
     <div className="header">
       <div className="header-logo-container">
         <Link to={'/'} className="header-link-content">
-          NAMANI
+          PENDY
         </Link>
       </div>
       <div className="header-blank"></div>

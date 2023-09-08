@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const axiosCreate = axios.create({
   //baseURL 설정
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://localhost:8080',
   withCredentials: true,
 });
 

@@ -25,7 +25,7 @@ const LoginTemplate = () => {
 
   return (
     <div className="login">
-      <h2 className="login-title">NAMANI</h2>
+      <h2 className="login-title">PENDY</h2>
 
       {/* 이메일 입력 */}
       <div className="login-input">
