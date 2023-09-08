@@ -32,8 +32,8 @@ public class Member {
     private String name; // 이름
 
     @NotNull
-    private int age; // 나이
+    private Integer age; // 나이
 
     @NotNull
-    private int salary; // 연봉
+    private Integer salary; // 연봉
 }
