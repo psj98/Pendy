@@ -1,4 +1,4 @@
-package com.ssafy.namani.domain.dailyStatistic.entity;
+package com.ssafy.namani.domain.statistic.entity;
 
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.member.entity.Member;
