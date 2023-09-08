@@ -1,13 +1,13 @@
 package com.ssafy.namani.domain.goal.entity;
 
 import com.ssafy.namani.domain.category.entity.Category;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data

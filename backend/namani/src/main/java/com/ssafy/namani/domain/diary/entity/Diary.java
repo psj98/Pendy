@@ -1,15 +1,14 @@
 package com.ssafy.namani.domain.diary.entity;
 
 import com.ssafy.namani.domain.member.entity.Member;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
-import java.util.UUID;
 
 @Entity
 @Data
