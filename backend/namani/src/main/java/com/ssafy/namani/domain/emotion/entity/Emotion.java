@@ -9,6 +9,6 @@ import lombok.Getter;
 @Getter
 public class Emotion {
 	@Id
-	private int score;
-	private String name;
+	private Integer emotionScore; // 감정 점수
+	private String emotionName; // 감정명
 }

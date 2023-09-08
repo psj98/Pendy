@@ -5,7 +5,9 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
+import com.ssafy.namani.domain.bank.entity.Bank;
 import com.ssafy.namani.domain.member.entity.Member;
 
 import lombok.AccessLevel;
@@ -17,13 +19,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccountInfo {
 	@Id
-	private String accountNumber;
+	private String accountNumber; // 계좌 번호
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
-	private Member member;
+	private Member member; // 멤버 아이디
 
-	public AccountInfo(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
+	@OneToOne
+	@JoinColumn(name = "bank_code")
+	private Bank bank; // 은행 코드
+
+	private Integer accountPassword; // 계좌 비밀번호
+
+	private Integer balance; // 잔액
+
 }

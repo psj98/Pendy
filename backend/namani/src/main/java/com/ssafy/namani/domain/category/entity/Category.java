@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 	@Id
-	private Integer id;
-	private String name;
+	private Integer id; // 카테고리 아이디
+	private String name; // 카테고리 이름
 }
