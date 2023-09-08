@@ -1,11 +1,11 @@
 import React from 'react';
 import './MainPage.css';
-import { Outlet } from 'react-router-dom';
 import Header from '../../components/common/header/Header';
+import { Outlet } from 'react-router-dom';
 
 const MainPage = () => {
   return (
-    <div>
+    <div className="main-page">
       <Header />
       <div className="header-save" />
       <Outlet />
