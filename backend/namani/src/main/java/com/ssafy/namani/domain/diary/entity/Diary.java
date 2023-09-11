@@ -1,7 +1,6 @@
 package com.ssafy.namani.domain.diary.entity;
 
 import com.ssafy.namani.domain.member.entity.Member;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +11,7 @@ import java.sql.Date;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Diary {
 
     @Id
@@ -37,4 +34,14 @@ public class Diary {
 
     @NotNull
     private Date regDate; // 일기 등록 날짜
+
+    @Builder
+    public Diary(Long id, Member member, String content, String comment, Integer stampType, Date regDate) {
+        this.id = id;
+        this.member = member;
+        this.content = content;
+        this.comment = comment;
+        this.stampType = stampType;
+        this.regDate = regDate;
+    }
 }
