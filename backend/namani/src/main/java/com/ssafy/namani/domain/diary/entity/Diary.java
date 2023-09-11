@@ -18,7 +18,7 @@ import java.sql.Date;
 public class Diary {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id; // 일기 아이디
 
