@@ -19,7 +19,7 @@ import java.sql.Date;
 public class MonthlyStatistic {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id; // 월간 통계 id
 
