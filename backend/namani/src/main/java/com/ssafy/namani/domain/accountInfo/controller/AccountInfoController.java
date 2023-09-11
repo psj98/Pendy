@@ -28,6 +28,11 @@ public class AccountInfoController {
 		this.baseResponseService = baseResponseService;
 	}
 
+	/**
+	 * 계좌를 생성하는 api입니다.
+	 * @param accountInfoRegistRequestDto
+	 * @return
+	 */
 	@PostMapping("/regist")
 	public BaseResponse<Object> addAccount(
 		@RequestBody AccountInfoRegistRequestDto accountInfoRegistRequestDto) {
