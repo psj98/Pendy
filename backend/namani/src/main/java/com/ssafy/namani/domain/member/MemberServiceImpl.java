@@ -6,17 +6,23 @@ import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.member.dto.MemberRegisterRequestDto;
 import com.ssafy.namani.domain.member.entity.Member;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.extern.slf4j.Slf4j;
+import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
-@NoArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private MemberRepository memberRepository;
     private AccountInfoRepository accountInfoRepository;
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Autowired
     public MemberServiceImpl(MemberRepository memberRepository, AccountInfoRepository accountInfoRepository) {
         this.memberRepository = memberRepository;
         this.accountInfoRepository = accountInfoRepository;
@@ -28,30 +34,34 @@ public class MemberServiceImpl implements MemberService {
      * BCryptPasswordEncoder 이용한 Password 암호화 진행. 나머지는 JPA를 사용하여 저장.
      * @param memberRegisterRequestDto
      */
+
     @Override
     public void register(MemberRegisterRequestDto memberRegisterRequestDto) {
-        Member member = new Member();
 
-        member.setEmail(memberRegisterRequestDto.getEmail());
+            Member member = new Member();
+            log.info("call the register Service");
 
-        //Bcrypt를 이용한 Password 암호화
-        String encodedPassword = passwordEncoder.encode(memberRegisterRequestDto.getPassword());
-        member.setPassword(encodedPassword);
+            member.setId(UUID.randomUUID());
+            member.setEmail(memberRegisterRequestDto.getEmail());
 
-        member.setName(memberRegisterRequestDto.getName());
-        member.setAge(memberRegisterRequestDto.getAge());
-        member.setSalary(memberRegisterRequestDto.getSalary());
+            // Bcrypt를 이용한 Password 암호화
+            member.setPassword(BCrypt.hashpw(memberRegisterRequestDto.getPassword(), BCrypt.gensalt()));
 
-        //회원 정보 저장.
-        memberRepository.save(member);
+            member.setName(memberRegisterRequestDto.getName());
+            member.setAge(memberRegisterRequestDto.getAge());
+            member.setSalary(memberRegisterRequestDto.getSalary());
 
-        //계좌 정보 연결 및 저장
-        for(String accountNumber : memberRegisterRequestDto.getAccounts()){
-            AccountInfo accountInfo = accountInfoRepository.findById(accountNumber).orElse(null);
-            if(accountInfo != null){
-                accountInfo.updateMemberId(member);
-                accountInfoRepository.save(accountInfo);
+            memberRepository.save(member);
+
+            for (String accountNumber : memberRegisterRequestDto.getAccounts()) {
+                AccountInfo accountInfo = accountInfoRepository.findById(accountNumber).orElse(null);
+                log.debug("memberAccoutns" + accountInfo.toString());
+                if (accountInfo != null) {
+                    accountInfo.updateMemberId(member);
+                    accountInfoRepository.save(accountInfo);
+                }
             }
-        }
+
     }
+
 }
