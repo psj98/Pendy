@@ -33,4 +33,7 @@ public class AccountInfo {
 
 	private Integer balance; // 잔액
 
+	public void updateMemberId(Member member){
+		this.member = member;
+	}
 }
