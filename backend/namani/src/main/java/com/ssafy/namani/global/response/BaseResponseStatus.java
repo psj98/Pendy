@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum BaseResponseStatus {
 
     // -------- 성공 코드 시작 -------- //
-    SUCCESS(true, 1000, "요청에 성공했습니다.");
+    SUCCESS(true, 1000, "요청에 성공했습니다."),
     // -------- 성공 코드 종료 -------- //
 
     // -------- 실패 코드 시작 -------- //
@@ -20,6 +20,7 @@ public enum BaseResponseStatus {
      *  AccountInfo
      *  Code : 3000번대
      */
+    CONFLICK_ACCOUNT_NUMBER(false, 3001, "이미 등록된 계좌번호입니다.");
 
     /**
      * TransactionInfo
