@@ -13,10 +13,12 @@ import com.ssafy.namani.domain.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class AccountInfo {
 	@Id
 	private String accountNumber; // 계좌 번호
@@ -33,4 +35,7 @@ public class AccountInfo {
 
 	private Integer balance; // 잔액
 
+	public void updateMemberId(Member member){
+		this.member = member;
+	}
 }
