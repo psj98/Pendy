@@ -20,13 +20,13 @@ public enum BaseResponseStatus {
      *  AccountInfo
      *  Code : 3000번대
      */
-    CONFLICK_ACCOUNT_NUMBER(false, 3001, "이미 등록된 계좌번호입니다.");
+    CONFLICK_ACCOUNT_NUMBER(false, 3001, "이미 등록된 계좌번호입니다."),
 
     /**
      * TransactionInfo
      * Code : 4000번대
      */
-
+    ACCOUNT_NOT_FOUND(false, 4001, "존재하지 않는 계좌번호입니다");
     /**
      * Diary
      * Code : 5000번대
