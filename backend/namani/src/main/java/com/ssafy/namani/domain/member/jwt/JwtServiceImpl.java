@@ -1,33 +1,32 @@
 package com.ssafy.namani.domain.member.jwt;
 
-import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
-@NoArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
+    @Autowired
     public JwtServiceImpl(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
     @Override
-    public TokenDto generateTokens(String email) {
-        return jwtUtil.generateTokens(email);
+    public TokenDto generateTokens(UUID memberId) {
+        return jwtUtil.generateTokens(memberId);
     }
 
     @Override
-    public String getEmailFromToken(String token) {
-        return jwtUtil.getEmailFromToken(token);
+    public UUID getMemberIdFromToken(String token) {
+        return jwtUtil.getMemberIdFromToken(token);
     }
 
     @Override
     public boolean validateToken(String token) {
         return jwtUtil.validateToken(token);
     }
-
-
 }
-

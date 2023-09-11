@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -16,33 +17,33 @@ public class JwtUtil {
     private Long jwtRefreshExpiration = 36000L;
 
 
-    public TokenDto generateTokens(String email){
-        String accessToken = generateAccessToken(email);
-        String refreshToken = generateRefreshToken(email);
+    public TokenDto generateTokens(UUID memberId){
+        String accessToken = generateAccessToken(memberId);
+        String refreshToken = generateRefreshToken(memberId);
         return new TokenDto(accessToken, refreshToken);
     }
 
-    public String generateAccessToken(String email){
-        return generateToken(email, jwtAccessExpiration);
+    public String generateAccessToken(UUID memberId){
+        return generateToken(memberId, jwtAccessExpiration);
 
     }
-    public String generateRefreshToken(String email){
-        return generateToken(email, jwtRefreshExpiration);
+    public String generateRefreshToken(UUID memberId){
+        return generateToken(memberId, jwtRefreshExpiration);
 
     }
 
     //Email을 기반으로 JWT Access Token을 생성
-    private String generateToken(String email, Long expiration ){
+    private String generateToken(UUID memberId, Long expiration ){
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(String.valueOf(memberId))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date().getTime() + expiration)))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public String getEmailFromToken(String token){
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJwt(token).getBody().getSubject();
+    public UUID getMemberIdFromToken(String token){
+        return UUID.fromString(Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject());
     }
 
     public boolean validateToken(String authToken){
