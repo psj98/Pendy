@@ -30,7 +30,6 @@ public class MemberController {
 
     @PostMapping("/join")
     public ResponseEntity<BaseResponse<Object>> joinMember(@RequestBody MemberRegisterRequestDto memberRegisterRequestDto) {
-        log.info("call the joinController");
         try {
             memberService.register(memberRegisterRequestDto);
             return ResponseEntity.ok(baseResponseService.getSuccessResponse(BaseResponseStatus.SUCCESS));

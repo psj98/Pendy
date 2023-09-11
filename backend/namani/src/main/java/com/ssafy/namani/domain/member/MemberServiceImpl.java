@@ -39,7 +39,6 @@ public class MemberServiceImpl implements MemberService {
     public void register(MemberRegisterRequestDto memberRegisterRequestDto) {
 
             Member member = new Member();
-            log.info("call the register Service");
 
             member.setId(UUID.randomUUID());
             member.setEmail(memberRegisterRequestDto.getEmail());
@@ -55,7 +54,6 @@ public class MemberServiceImpl implements MemberService {
 
             for (String accountNumber : memberRegisterRequestDto.getAccounts()) {
                 AccountInfo accountInfo = accountInfoRepository.findById(accountNumber).orElse(null);
-                log.debug("memberAccoutns" + accountInfo.toString());
                 if (accountInfo != null) {
                     accountInfo.updateMemberId(member);
                     accountInfoRepository.save(accountInfo);
