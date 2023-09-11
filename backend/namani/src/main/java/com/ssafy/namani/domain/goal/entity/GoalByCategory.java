@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class GoalByCategory {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id; // 카테고리 별 목표 아이디
 

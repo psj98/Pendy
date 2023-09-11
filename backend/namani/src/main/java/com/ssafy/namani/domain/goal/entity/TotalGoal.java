@@ -18,7 +18,7 @@ import java.sql.Date;
 public class TotalGoal {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id; // 목표 아이디
 
