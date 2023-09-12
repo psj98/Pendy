@@ -41,4 +41,18 @@ public class AccountInfo {
 		this.accountPassword = accountPassword;
 		this.balance = balance;
 	}
+
+	/**
+	 * 잔액 업데이트
+	 * @param type
+	 * @param amount
+	 */
+	public void updateBalance(Integer type, Integer amount) {
+		// 입금이면 잔액 추가
+		if (type == 1) {
+			this.balance += amount;
+		} else { // 출금이면 잔액 감소
+			this.balance -= amount;
+		}
+	}
 }
