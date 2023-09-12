@@ -24,6 +24,7 @@ public enum BaseResponseStatus {
 	 *  Code : 3000번대
 	 */
 	CONFLICK_ACCOUNT_NUMBER(false, 3001, "이미 등록된 계좌번호입니다."),
+	INVALID_AUTHORIZATION_NUMBER(false, 3002, "잘못된 인증 코드입니다."),
 
 	/**
 	 * TransactionInfo
@@ -57,7 +58,7 @@ public enum BaseResponseStatus {
     NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_REG_DATE(false, 9001, "나이, 소득, 해당 연월에 해당하는 평균 소비 정보가 없습니다."),
 	NO_AGE_SALARY_INFO_BY_AGE_SALARY(false, 9002, "나이, 소득 구간에 해당하는 정보가 없습니다.");
 
-    // 필요하면 추가할 것
+	// 필요하면 추가할 것
 
 	// -------- 실패 코드 종료 -------- //
 
