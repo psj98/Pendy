@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum BaseResponseStatus {
 
     // -------- 성공 코드 시작 -------- //
-    SUCCESS(true, 1000, "요청에 성공했습니다.");
+    SUCCESS(true, 1000, "요청에 성공했습니다."),
     // -------- 성공 코드 종료 -------- //
 
     // -------- 실패 코드 시작 -------- //
@@ -45,6 +45,13 @@ public enum BaseResponseStatus {
      * MonthlyStatistic
      * Code : 8000번대
      */
+
+    /**
+     * AvgConsumptionAmount
+     * Code : 9000번대
+     */
+    NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY(false, 9001, "나이, 소득에 해당하는 평균 소비값이 없습니다.");
+
 
     // 필요하면 추가할 것
 
