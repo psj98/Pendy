@@ -9,11 +9,11 @@ import java.util.UUID;
 
 @Data
 public class MemberRegisterRequestDto {
+
     private String email;
     private String password;
     private String name;
-    private int age;
-    private int salary;
+    private Integer age;
+    private Integer salary;
     List<String> accounts;
-
 }
