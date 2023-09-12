@@ -6,6 +6,7 @@ import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,19 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Slf4j
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/members")
 public class MemberController {
 
-    private MemberService memberService;
-    private BaseResponseService baseResponseService;
-
-    @Autowired
-    public MemberController(MemberService memberService, BaseResponseService baseResponseService) {
-        this.memberService = memberService;
-        this.baseResponseService = baseResponseService;
-    }
+    private final MemberService memberService;
+    private final BaseResponseService baseResponseService;
 
     @PostMapping("/join")
     public ResponseEntity<BaseResponse<Object>> joinMember(@RequestBody MemberRegisterRequestDto memberRegisterRequestDto) {
@@ -36,7 +32,6 @@ public class MemberController {
         } catch (Exception e) {
             log.info(e.getMessage());
             return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(BaseResponseStatus.DUPLICATE_MEMBER_EMAIL));
-
         }
     }
 }
