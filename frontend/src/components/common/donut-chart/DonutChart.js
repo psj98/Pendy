@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 // , useEffect
-import ReactApexChart from 'react-apexcharts';
 import './DonutChart.css';
+
+import ReactApexChart from 'react-apexcharts';
 // import axios from 'axios';
 
 const DonutChart = () => {
@@ -65,7 +66,7 @@ const DonutChart = () => {
   };
 
   return (
-    <div className="chart">
+    <div className="donut-chart">
       <ReactApexChart
         options={options}
         series={chartData.series}
