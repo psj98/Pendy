@@ -69,7 +69,8 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
 
             AvgConsumptionAmountDetailResponseDto avgConsumptionAmountDetailResponseDto
                     = AvgConsumptionAmountDetailResponseDto.builder()
-                    .category(amount.getCategory())
+                    .categoryId(amount.getCategory().getId())
+                    .categoryName(amount.getCategory().getName())
                     .avgAmount(avgAmount)
                     .build();
 

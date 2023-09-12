@@ -1,6 +1,5 @@
 package com.ssafy.namani.domain.avgConsumptionAmount.dto;
 
-import com.ssafy.namani.domain.category.entity.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +14,15 @@ public class AvgConsumptionAmountDetailResponseDto {
     private Double avgAmount; // 평균 소비 금액
 
     @NotNull
-    private Category category; // 카테고리 정보
+    private Integer categoryId; // 카테고리 정보
+
+    @NotNull
+    private String categoryName; // 카테고리 명
 
     @Builder
-    public AvgConsumptionAmountDetailResponseDto(Double avgAmount, Category category) {
+    public AvgConsumptionAmountDetailResponseDto(Double avgAmount, Integer categoryId, String categoryName) {
         this.avgAmount = avgAmount;
-        this.category = category;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 }
