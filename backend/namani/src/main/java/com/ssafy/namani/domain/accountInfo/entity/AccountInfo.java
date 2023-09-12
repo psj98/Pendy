@@ -11,6 +11,7 @@ import com.ssafy.namani.domain.bank.entity.Bank;
 import com.ssafy.namani.domain.member.entity.Member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,4 +34,11 @@ public class AccountInfo {
 
 	private Integer balance; // 잔액
 
+	@Builder
+	public AccountInfo(String accountNumber, Bank bank, Integer accountPassword, Integer balance) {
+		this.accountNumber = accountNumber;
+		this.bank = bank;
+		this.accountPassword = accountPassword;
+		this.balance = balance;
+	}
 }
