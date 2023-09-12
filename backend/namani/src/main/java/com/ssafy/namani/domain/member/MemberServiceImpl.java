@@ -1,18 +1,16 @@
 package com.ssafy.namani.domain.member;
 
 
-import com.ssafy.namani.domain.accountInfo.AccountInfoRepository;
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
+import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
 import com.ssafy.namani.domain.member.dto.MemberRegisterRequestDto;
 import com.ssafy.namani.domain.member.entity.Member;
-import lombok.NoArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
