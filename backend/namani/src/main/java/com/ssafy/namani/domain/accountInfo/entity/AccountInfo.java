@@ -14,10 +14,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class AccountInfo {
 	@Id
 	private String accountNumber; // 계좌 번호
@@ -54,5 +56,9 @@ public class AccountInfo {
 		} else { // 출금이면 잔액 감소
 			this.balance -= amount;
 		}
+	}
+
+	public void updateMemberId(Member member){
+		this.member = member;
 	}
 }

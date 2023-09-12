@@ -15,6 +15,9 @@ public enum BaseResponseStatus {
      * Code : 2000번대
      */
     // ex) NOT_FOUND_MEMBER(false, 2001, "일치하는 사용자가 없습니다."), ...
+    NOT_FOUND_MEMBER(false, 2001, "일치하는 사용자가 없습니다."),
+    DUPLICATE_MEMBER_EMAIL(false, 2002, "이미 사용중인 이메일입니다."),
+    INVALID_MEMBER_PASSWORD(false,2003, "비밀번호가 일치하지 않습니다.");
 
     /**
      *  AccountInfo
