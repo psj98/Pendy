@@ -29,7 +29,7 @@ public enum BaseResponseStatus {
 	 * TransactionInfo
 	 * Code : 4000번대
 	 */
-	ACCOUNT_NOT_FOUND(false, 4001, "존재하지 않는 계좌번호입니다");
+	ACCOUNT_NOT_FOUND(false, 4001, "존재하지 않는 계좌번호입니다"),
 	/**
 	 * Diary
 	 * Code : 5000번대
@@ -50,7 +50,14 @@ public enum BaseResponseStatus {
 	 * Code : 8000번대
 	 */
 
-	// 필요하면 추가할 것
+    /**
+     * AvgConsumptionAmount
+     * Code : 9000번대
+     */
+    NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY(false, 9001, "나이, 소득에 해당하는 평균 소비값이 없습니다.");
+
+
+    // 필요하면 추가할 것
 
 	// -------- 실패 코드 종료 -------- //
 
