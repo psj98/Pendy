@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoSendCodeRequestDto;
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
+import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.transactionInfo.dto.request.TransactionInfoRegistRequestDto;
+import com.ssafy.namani.domain.transactionInfo.dto.response.TransactionInfoRegistResponseDto;
 import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
 import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
 import com.ssafy.namani.global.response.BaseException;
@@ -31,8 +33,33 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 	 * @param transactionInfoRegistRequestDto
 	 */
 	@Override
-	public void addTransaction(TransactionInfoRegistRequestDto transactionInfoRegistRequestDto) {
+	public TransactionInfoRegistResponseDto addTransaction(
+		TransactionInfoRegistRequestDto transactionInfoRegistRequestDto) throws BaseException {
+		Optional<AccountInfo> byId = accountInfoRepository.findById(transactionInfoRegistRequestDto.getAccountNumber());
+		// 거래내역을 추가하려는 계좌번호가 있는지 확인
+		if (byId.isPresent()) {
+			AccountInfo accountInfo = byId.get();
+			// Category category =
+			TransactionInfo transactionInfo = TransactionInfo.builder()
+				.accountInfo(accountInfo)
+				//.category()
+				.transactionName(transactionInfoRegistRequestDto.getTransactionName())
+				.transactionAmount(transactionInfoRegistRequestDto.getTransactionAmount())
+				.transactionType(transactionInfoRegistRequestDto.getTransactionType())
+				.afterBalance(accountInfo.getBalance() + transactionInfoRegistRequestDto.getTransactionAmount())
+				.build();
 
+			// 계좌 잔액 업데이트
+			accountInfo.updateBalance(transactionInfoRegistRequestDto.getTransactionType(),
+				transactionInfoRegistRequestDto.getTransactionAmount());
+			transactionInfoRepository.save(transactionInfo);
+
+			int newBalance = accountInfo.getBalance();
+			return new TransactionInfoRegistResponseDto(Integer.toString(newBalance));
+		} else {
+			// 계좌번호 존재하지않음
+			throw new BaseException(BaseResponseStatus.ACCOUNT_NOT_FOUND);
+		}
 	}
 
 	/**
