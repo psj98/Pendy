@@ -14,11 +14,11 @@ public interface AvgConsumptionAmountService {
      * 
      * @param age
      * @param salary
-     * @param regDate
+     * @param curDate
      * @return
      * @throws BaseException
      */
-    List<AvgConsumptionAmountDetailResponseDto> getAvgConsumptionAmountInfo(Integer age, Integer salary, Timestamp regDate) throws BaseException;
+    List<AvgConsumptionAmountDetailResponseDto> getAvgConsumptionAmountInfo(Integer age, Integer salary, Timestamp curDate) throws BaseException;
 
     /**
      * 매달 1일 모든 카테고리 + 모든 나이-소득 에 해당하는 avgConsumptionAmount 값을 생성하는 메서드
