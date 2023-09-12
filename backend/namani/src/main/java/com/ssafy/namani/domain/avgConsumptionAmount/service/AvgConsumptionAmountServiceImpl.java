@@ -84,7 +84,7 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
      * 매달 1일 모든 카테고리 + 모든 나이-소득 에 해당하는 avgConsumptionAmount 값을 생성하는 메서드
      */
     @Override
-    @Scheduled(cron = "0 0 0 0/1 * *")
+    @Scheduled(cron = "0 0 0 1 * *")
     public void registAvgConsumptionAmount() {
         List<Category> categoryList = categoryRepository.findAll();
         List<AgeSalary> ageSalaryList = ageSalaryRepository.findAll();
