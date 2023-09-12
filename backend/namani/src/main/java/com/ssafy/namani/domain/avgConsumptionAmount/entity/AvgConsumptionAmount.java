@@ -1,6 +1,6 @@
 package com.ssafy.namani.domain.avgConsumptionAmount.entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,5 +42,5 @@ public class AvgConsumptionAmount {
 	private Integer avgAmount; // 평균 소비 금액
 
 	@NotNull
-	private Date regDate; // 연월
+	private Timestamp regDate; // 연월
 }
