@@ -2,7 +2,7 @@ package com.ssafy.namani.domain.avgConsumptionAmount.service;
 
 import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
 import com.ssafy.namani.domain.ageSalary.repository.AgeSalaryRepository;
-import com.ssafy.namani.domain.avgConsumptionAmount.dto.AvgConsumptionAmountDetailDto;
+import com.ssafy.namani.domain.avgConsumptionAmount.dto.AvgConsumptionAmountDetailResponseDto;
 import com.ssafy.namani.domain.avgConsumptionAmount.entity.AvgConsumptionAmount;
 import com.ssafy.namani.domain.avgConsumptionAmount.repository.AvgConsumptionAmountRepository;
 import com.ssafy.namani.global.response.BaseException;
@@ -31,7 +31,7 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
      * @return List<AvgConsumptionAmountDetailDto>
      * @throws BaseException
      */
-    public List<AvgConsumptionAmountDetailDto> getAvgConsumptionAmountInfo(Integer age, Integer salary, Timestamp regDate) throws BaseException {
+    public List<AvgConsumptionAmountDetailResponseDto> getAvgConsumptionAmountInfo(Integer age, Integer salary, Timestamp regDate) throws BaseException {
         /* 나이-소득 정보 조회 */
         Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.getAgeSalaryInfo(age, salary);
 
@@ -53,22 +53,22 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
         }
 
         List<AvgConsumptionAmount> avgConsumptionAmount = avgConsumptionAmountOptional.get(); // 평균 소비 정보
-        List<AvgConsumptionAmountDetailDto> avgConsumptionAmountDetailDtoList = new ArrayList<>(); // return 값
+        List<AvgConsumptionAmountDetailResponseDto> avgConsumptionAmountDetailResponseDtoList = new ArrayList<>(); // return 값
 
         // 반복문을 통해 평균 소비값을 계산하여 카테고리 정보와 함께 저장
         for (AvgConsumptionAmount amount : avgConsumptionAmount) {
             Integer sumAmount = amount.getSumAmount();
             Double avgAmount = (double) (sumAmount / peopleNum);
 
-            AvgConsumptionAmountDetailDto avgConsumptionAmountDetailDto
-                    = AvgConsumptionAmountDetailDto.builder()
+            AvgConsumptionAmountDetailResponseDto avgConsumptionAmountDetailResponseDto
+                    = AvgConsumptionAmountDetailResponseDto.builder()
                     .category(amount.getCategory())
                     .avgAmount(avgAmount)
                     .build();
 
-            avgConsumptionAmountDetailDtoList.add(avgConsumptionAmountDetailDto);
+            avgConsumptionAmountDetailResponseDtoList.add(avgConsumptionAmountDetailResponseDto);
         }
 
-        return avgConsumptionAmountDetailDtoList;
+        return avgConsumptionAmountDetailResponseDtoList;
     }
 }

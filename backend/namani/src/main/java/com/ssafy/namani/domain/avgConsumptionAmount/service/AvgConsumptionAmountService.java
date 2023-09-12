@@ -1,6 +1,6 @@
 package com.ssafy.namani.domain.avgConsumptionAmount.service;
 
-import com.ssafy.namani.domain.avgConsumptionAmount.dto.AvgConsumptionAmountDetailDto;
+import com.ssafy.namani.domain.avgConsumptionAmount.dto.AvgConsumptionAmountDetailResponseDto;
 import com.ssafy.namani.global.response.BaseException;
 
 import java.sql.Timestamp;
@@ -17,5 +17,5 @@ public interface AvgConsumptionAmountService {
      * @return
      * @throws BaseException
      */
-    List<AvgConsumptionAmountDetailDto> getAvgConsumptionAmountInfo(Integer age, Integer salary, Timestamp regDate) throws BaseException;
+    List<AvgConsumptionAmountDetailResponseDto> getAvgConsumptionAmountInfo(Integer age, Integer salary, Timestamp regDate) throws BaseException;
 }

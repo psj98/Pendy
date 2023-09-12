@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
-public class AvgConsumptionAmountDetailDto {
+public class AvgConsumptionAmountDetailResponseDto {
 
     @NotNull
     private Double avgAmount; // 평균 소비 금액
@@ -18,7 +18,7 @@ public class AvgConsumptionAmountDetailDto {
     private Category category; // 카테고리 정보
 
     @Builder
-    public AvgConsumptionAmountDetailDto(Double avgAmount, Category category) {
+    public AvgConsumptionAmountDetailResponseDto(Double avgAmount, Category category) {
         this.avgAmount = avgAmount;
         this.category = category;
     }
