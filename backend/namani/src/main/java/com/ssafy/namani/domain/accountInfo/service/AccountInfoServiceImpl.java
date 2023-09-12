@@ -5,11 +5,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoCertificationRequestDto;
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoRegistRequestDto;
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
 import com.ssafy.namani.domain.bank.entity.Bank;
 import com.ssafy.namani.domain.bank.repository.BankRepository;
+import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
+import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 
@@ -17,12 +20,15 @@ import com.ssafy.namani.global.response.BaseResponseStatus;
 public class AccountInfoServiceImpl implements AccountInfoService {
 	private final AccountInfoRepository accountInfoRepository;
 	private final BankRepository bankRepository;
+	private final TransactionInfoRepository transactionInfoRepository;
 
 	@Autowired
 	public AccountInfoServiceImpl(AccountInfoRepository accountInfoRepository,
-		BankRepository bankRepository) {
+		BankRepository bankRepository,
+		TransactionInfoRepository transactionInfoRepository) {
 		this.accountInfoRepository = accountInfoRepository;
 		this.bankRepository = bankRepository;
+		this.transactionInfoRepository = transactionInfoRepository;
 	}
 
 	@Override
@@ -44,6 +50,30 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 			}
 			// 계좌 정보 저장
 			accountInfoRepository.save(accountInfo);
+		}
+	}
+
+	@Override
+	public void certAccount(AccountInfoCertificationRequestDto accountInfoCertificationRequestDto) throws
+		BaseException {
+		// 사용자가 입력한 인증 코드
+		String authCode = accountInfoCertificationRequestDto.getAuthCode();
+		// 사용자가 입력한 계좌 번호
+		String accountNumber = accountInfoCertificationRequestDto.getAccountNumber();
+
+		// 계좌 번호의 거래내역에서 거래명이 Pendy로 시작하는 가장 최근 거래내역 찾음
+		TransactionInfo transactionInfo = transactionInfoRepository.findTopByAccountInfo_AccountNumberAndTransactionNameLikeOrderByTradeDateDesc(
+			accountNumber, "Pendy%");
+
+		String transactionName = transactionInfo.getTransactionName();
+
+		if (transactionName != null && transactionName.length() > 5) {
+			if (!transactionName.substring(5).equals(authCode)) {
+				// 예외 처리
+				throw new BaseException(BaseResponseStatus.INVALID_AUTHORIZATION_NUMBER);
+			}
+		} else {
+			throw new BaseException(BaseResponseStatus.INVALID_AUTHORIZATION_NUMBER);
 		}
 	}
 }
