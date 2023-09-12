@@ -17,6 +17,6 @@ public interface AgeSalaryRepository extends JpaRepository<AgeSalary, Integer> {
      * @param salary
      * @return AgeSalary
      */
-    @Query(value = "SELECT * FROM avg_salary a WHERE a.age = ?1 and a.salary = ?2", nativeQuery = true)
+    @Query(value = "SELECT * FROM age_salary a WHERE a.age = ?1 and a.salary = ?2", nativeQuery = true)
     Optional<AgeSalary> getAgeSalaryInfo(Integer age, Integer salary);
 }
