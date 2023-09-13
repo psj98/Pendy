@@ -2,11 +2,13 @@ package com.ssafy.namani.domain.avgConsumptionAmount.service;
 
 import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
 import com.ssafy.namani.domain.ageSalary.repository.AgeSalaryRepository;
-import com.ssafy.namani.domain.avgConsumptionAmount.dto.AvgConsumptionAmountDetailResponseDto;
+import com.ssafy.namani.domain.avgConsumptionAmount.dto.response.AvgConsumptionAmountDetailResponseDto;
 import com.ssafy.namani.domain.avgConsumptionAmount.entity.AvgConsumptionAmount;
 import com.ssafy.namani.domain.avgConsumptionAmount.repository.AvgConsumptionAmountRepository;
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.category.repository.CategoryRepository;
+import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
+import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
     private final AvgConsumptionAmountRepository avgConsumptionAmountRepository;
     private final AgeSalaryRepository ageSalaryRepository;
     private final CategoryRepository categoryRepository;
+    private final TransactionInfoRepository transactionInfoRepository;
 
     /**
      * 나이, 소득 별 평균 소비값을 가져오는 메서드
@@ -38,9 +41,9 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
      * @throws BaseException
      */
     @Override
-    public List<AvgConsumptionAmountDetailResponseDto> getAvgConsumptionAmountInfo(Integer age, Integer salary, Timestamp curDate) throws BaseException {
+    public List<AvgConsumptionAmountDetailResponseDto> getAvgConsumptionAmountList(Integer age, Integer salary, Timestamp curDate) throws BaseException {
         /* 나이-소득 정보 조회 */
-        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.getAgeSalaryInfo(age, salary);
+        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
 
         // 나이-소득 구간 정보가 존재하는지 체크
         if (!ageSalaryOptional.isPresent()) {
@@ -52,7 +55,7 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
         Integer peopleNum = ageSalary.getPeopleNum(); // 인원수
 
         /* 나이-소득, 해당 연월로 평균 소비 정보 조회 */
-        Optional<List<AvgConsumptionAmount>> avgConsumptionAmountOptional = avgConsumptionAmountRepository.getAvgConsumptionAmountInfo(ageSalaryId, curDate);
+        Optional<List<AvgConsumptionAmount>> avgConsumptionAmountOptional = avgConsumptionAmountRepository.findAllByAgeSalaryIdRegDate(ageSalaryId, curDate);
 
         // 평균 소비 정보가 존재하는지 체크
         if (!avgConsumptionAmountOptional.isPresent()) {
@@ -100,6 +103,66 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
 
                 avgConsumptionAmountRepository.save(avgConsumptionAmount);
             }
+        }
+    }
+
+    /**
+     * 회원가입 시, 평균 소비 금액을 업데이트하는 메서드
+     *
+     * @param accountNumber
+     * @param age
+     * @param salary
+     * @throws BaseException
+     */
+    @Override
+    public void updateAvgConsumptionAmountByMemberJoin(String accountNumber, Integer age, Integer salary) throws BaseException {
+        // 계좌 번호로 현재까지의 거래 내역 조회
+        Optional<List<TransactionInfo>> transactionInfoOptional = transactionInfoRepository.findAllByAccountNumber(accountNumber);
+
+        // 거래 내역 정보가 없는 경우, 정보 업데이트 X
+        if (!transactionInfoOptional.isPresent()) {
+            return;
+        }
+
+        // 연령대, 연봉대로 AgeSalary 정보 가져오기
+        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
+
+        // AgeSalary 정보가 없는 경우
+        if (!ageSalaryOptional.isPresent()) {
+            throw new BaseException(BaseResponseStatus.NO_AGE_SALARY_INFO_BY_AGE_SALARY);
+        }
+
+        // 모든 거래 내역에 대해 평균 소비 정보 업데이트 실행
+        List<TransactionInfo> transactionInfoList = transactionInfoOptional.get();
+        AgeSalary ageSalary = ageSalaryOptional.get();
+        for (TransactionInfo transactionInfo : transactionInfoList) {
+            // 입금인 경우, 스킵
+            if (transactionInfo.getTransactionType() == 1) {
+                continue;
+            }
+
+            // 카테고리 조회
+            Category category = transactionInfo.getCategory();
+
+            // AvgConsumptionAmount 정보 가져오기
+            Optional<AvgConsumptionAmount> avgConsumptionAmountOptional = avgConsumptionAmountRepository.findByAgeSalaryIdCategoryId(ageSalary.getId(), category.getId(), transactionInfo.getTradeDate());
+
+            // 평균 소비 정보가 없는 경우
+            if (!avgConsumptionAmountOptional.isPresent()) {
+                throw new BaseException(BaseResponseStatus.NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_CATEGORY_ID_AND_REG_DATE);
+            }
+
+            // 카테고리와 AgeSalary에 맞게 sumAmount 업데이트
+            AvgConsumptionAmount avgConsumptionAmount = avgConsumptionAmountOptional.get();
+            AvgConsumptionAmount newAvgConsumptionAmount = AvgConsumptionAmount.builder()
+                    .id(avgConsumptionAmount.getId())
+                    .ageSalary(ageSalary)
+                    .category(category)
+                    .sumAmount(avgConsumptionAmount.getSumAmount() + transactionInfo.getTransactionAmount())
+                    .regDate(avgConsumptionAmount.getRegDate())
+                    .build();
+
+            avgConsumptionAmountRepository.save(newAvgConsumptionAmount);
         }
     }
 }

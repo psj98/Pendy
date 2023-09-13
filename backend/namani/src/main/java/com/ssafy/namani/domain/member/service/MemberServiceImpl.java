@@ -4,6 +4,7 @@ import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
 import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
 import com.ssafy.namani.domain.ageSalary.repository.AgeSalaryRepository;
+import com.ssafy.namani.domain.avgConsumptionAmount.service.AvgConsumptionAmountServiceImpl;
 import com.ssafy.namani.domain.jwt.dto.TokenDto;
 import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.domain.member.dto.request.MemberLoginRequestDto;
@@ -32,6 +33,7 @@ public class MemberServiceImpl implements MemberService {
     private final AccountInfoRepository accountInfoRepository;
     private final AgeSalaryRepository ageSalaryRepository;
     private final JwtService jwtService;
+    private final AvgConsumptionAmountServiceImpl avgConsumptionAmountService;
 
     /**
      * 회원 가입 API.
@@ -49,7 +51,7 @@ public class MemberServiceImpl implements MemberService {
                 .password(BCrypt.hashpw(memberRegisterRequestDto.getPassword(), BCrypt.gensalt())) // BCrypt를 이용한 Password 암호화
                 .name(memberRegisterRequestDto.getName())
                 .age(memberRegisterRequestDto.getAge())
-                .salary(memberRegisterRequestDto.getSalary())
+                .salary(memberRegisterRequestDto.getSalary() * 10000)
                 .build();
 
         memberRepository.save(member);
@@ -59,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
         Integer age = memberRegisterRequestDto.getAge() / 10 * 10; // 연령대
         Integer salary = memberRegisterRequestDto.getSalary() / 1000 * 1000; // 연봉대
 
-        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.getAgeSalaryInfo(age, salary);
+        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
 
         // 나이-소득 구간 정보 존재 체크
         if (!ageSalaryOptional.isPresent()) {
@@ -87,6 +89,9 @@ public class MemberServiceImpl implements MemberService {
 
             accountInfo.updateMemberId(member);
             accountInfoRepository.save(accountInfo);
+
+            // 현재까지의 거래내역을 평균 소비 정보에 업데이트
+            avgConsumptionAmountService.updateAvgConsumptionAmountByMemberJoin(accountNumber, age, salary);
         }
     }
 
