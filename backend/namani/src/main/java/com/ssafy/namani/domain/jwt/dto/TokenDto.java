@@ -1,4 +1,4 @@
-package com.ssafy.namani.domain.member.jwt;
+package com.ssafy.namani.domain.jwt.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
