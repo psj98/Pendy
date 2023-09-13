@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './SignUpTemplate.css';
 import { Icon } from '@iconify/react';
+import handleSignup from '../../utils/handleSignup';
 
 const SignUpTemplate = () => {
   const [state, setState] = useState({
@@ -30,6 +31,35 @@ const SignUpTemplate = () => {
     const updatedAccounts = [...state.accounts];
     updatedAccounts[index] = value;
     setState({ ...state, accounts: updatedAccounts });
+  };
+
+  //비밀번호 재확인 성공여부 판단
+  const passwordCheck = state.password === state.repassword;
+
+  // 회원가입 버튼 클릭 시
+  const onSignUpButtonClick = async (event) => {
+    event.preventDefault();
+    if (passwordCheck) {
+      try {
+        const response = await handleSignup(
+          state.mail,
+          state.password,
+          state.name,
+          state.age,
+          state.salary,
+          state.accounts,
+        );
+        const token = response.data.token;
+        console.log('SignUp success', token);
+        alert('회원가입에 성공하셨습니다.');
+        navigator('/login');
+      } catch (error) {
+        console.error('SignUp failed:', error);
+        alert('회원가입에 실패하셨습니다.');
+      }
+    } else {
+      alert('비밀번호가 일치하지 않습니다');
+    }
   };
 
   return (
@@ -153,7 +183,9 @@ const SignUpTemplate = () => {
       </div>
       <br />
       <div className="signup-input">
-        <button className="signup-button">가입하기</button>
+        <button className="signup-button" onClick={onSignUpButtonClick}>
+          가입하기
+        </button>
       </div>
     </div>
   );
