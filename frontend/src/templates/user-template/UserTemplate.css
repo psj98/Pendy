@@ -58,4 +58,26 @@
 .bar-content {
   flex: 3;
   width: 100%;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spend {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.spend-text-blue {
+  font-size: 20px;
+  color: blue;
+  font-weight: 700;
+}
+
+.spend-text-black {
+  font-size: 20px;
+  font-weight: 700;
 }
