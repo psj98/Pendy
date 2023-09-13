@@ -71,16 +71,24 @@ public class TransactionInfoController {
 		}
 	}
 
-	// @PostMapping("/today-list")
-	// public BaseResponse<Object> getDailyTransactionList(
-	// 	@RequestHeader(value = "accessToken", required = false) String token,
-	// 	@RequestBody TransactionInfoTodayListRequestDto transactionInfoTodayListRequestDto) {
-	// 	UUID memberIdFromToken = jwtService.getMemberIdFromToken(token);
-	// 	try {
-	// 		List<TransactionInfoTodayDto> dailyTransactionInfoList = transactionInfoService.getDailyTransactionInfoList(
-	// 			memberIdFromToken, transactionInfoTodayListRequestDto);
-	// 	} catch (BaseException e) {
-	// 		throw new RuntimeException(e);
-	// 	}
-	// }
+	/**
+	 * 과거 일기 작성 시점으로부터 현재시간까지 소비 내역 목록을 불러오는 API입니다.
+	 * @param token
+	 * @param transactionInfoTodayListRequestDto
+	 * @return
+	 */
+	@PostMapping("/today-list")
+	public BaseResponse<Object> getDailyTransactionList(
+		@RequestHeader(value = "accessToken") String token,
+		@RequestBody TransactionInfoTodayListRequestDto transactionInfoTodayListRequestDto) {
+		UUID memberIdFromToken = jwtService.getMemberIdFromToken(token);
+		try {
+			List<TransactionInfoTodayDto> dailyTransactionInfoList = transactionInfoService.getDailyTransactionInfoList(
+				memberIdFromToken, transactionInfoTodayListRequestDto);
+
+			return baseResponseService.getSuccessResponse(dailyTransactionInfoList);
+		} catch (BaseException e) {
+			return baseResponseService.getFailureResponse(e.status);
+		}
+	}
 }

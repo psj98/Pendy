@@ -87,7 +87,7 @@ public class MemberServiceImpl implements MemberService {
 
             ageSalaryRepository.save(ageSalary);
 
-            ageSalaryOptional = ageSalaryRepository.getAgeSalaryInfo(age, salary);
+            ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
         }
 
         // 인원수 계산

@@ -2,6 +2,7 @@ package com.ssafy.namani.domain.transactionInfo.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,7 +30,10 @@ import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoReposit
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class TransactionInfoServiceImpl implements TransactionInfoService {
 	private final TransactionInfoRepository transactionInfoRepository;
 	private final AccountInfoRepository accountInfoRepository;
@@ -82,9 +86,9 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 				.afterBalance(accountInfo.getBalance() - transactionInfoRegistRequestDto.getTransactionAmount())
 				.build();
 
-            if (accountInfo.getMember() != null) {
-                Integer age = accountInfo.getMember().getAge() / 10 * 10;
-                Integer salary = accountInfo.getMember().getSalary() / 10000000 * 1000;
+			if (accountInfo.getMember() != null) {
+				Integer age = accountInfo.getMember().getAge() / 10 * 10;
+				Integer salary = accountInfo.getMember().getSalary() / 10000000 * 1000;
 
 				// 연령대, 연봉대에 해당하는 정보 조회
 				Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
@@ -195,6 +199,27 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 		UUID memberId,
 		TransactionInfoTodayListRequestDto transactionInfoTodayListRequestDto) throws BaseException {
 
-		return null;
+		List<TransactionInfoTodayDto> result = new ArrayList<>();
+		// memberId에 해당하는 accountList 조회
+		List<AccountInfo> byMemberId = accountInfoRepository.findByMember_Id(memberId);
+
+		// accountList를 for문으로 돌면서 해당 구간 내 거래내역 리스트
+		for (AccountInfo accountInfo : byMemberId) {
+			log.debug("계좌 아이디 : " + accountInfo.getAccountNumber());
+			Optional<List<TransactionInfo>> allByAccountNumber = transactionInfoRepository.findAllWithdrawalsByAccountNumber(
+				accountInfo.getAccountNumber(), 2);
+			if (allByAccountNumber.isPresent()) {
+				for (TransactionInfo transactionInfo : allByAccountNumber.get()) {
+					log.debug("트랜잭션: " + transactionInfo);
+					TransactionInfoTodayDto transactionInfoTodayDto = new TransactionInfoTodayDto(
+						transactionInfo.getId(), transactionInfo.getCategory().getId(),
+						transactionInfo.getEmotion().getEmotionScore(), transactionInfo.getTransactionName(),
+						transactionInfo.getTransactionAmount(), transactionInfo.getTradeDate());
+					log.debug("거래내역: " + transactionInfo);
+					result.add(transactionInfoTodayDto);
+				}
+			}
+		}
+		return result;
 	}
 }
