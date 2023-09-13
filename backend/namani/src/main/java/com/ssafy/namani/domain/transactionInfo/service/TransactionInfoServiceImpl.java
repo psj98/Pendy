@@ -60,18 +60,6 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
         AccountInfo accountInfo = byId.get();
         TransactionInfo transactionInfo;
 
-        Integer age = accountInfo.getMember().getAge() / 10 * 10;
-        Integer salary = accountInfo.getMember().getSalary() / 1000 * 1000;
-
-        // 연령대, 연봉대에 해당하는 정보 조회
-        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
-
-        // 연령대, 연봉대에 해당하는 정보 없음
-        if (!ageSalaryOptional.isPresent()) {
-            throw new BaseException(BaseResponseStatus.NO_AGE_SALARY_INFO_BY_AGE_SALARY);
-        }
-
-        AgeSalary ageSalary = ageSalaryOptional.get();
         AvgConsumptionAmount newAvgConsumptionAmount = null;
 
         // 출금인 경우
@@ -86,23 +74,38 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
                     .afterBalance(accountInfo.getBalance() - transactionInfoRegistRequestDto.getTransactionAmount())
                     .build();
 
-            // 나이-소득 구간, 카테고리, 현재 연월에 해당하는 평균 소비 정보 조회
-            Optional<AvgConsumptionAmount> avgConsumptionAmountOptional = avgConsumptionAmountRepository.findByAgeSalaryIdCategoryId(ageSalary.getId(), category.get().getId(), Timestamp.valueOf(LocalDateTime.now()));
+            if (accountInfo.getMember() != null) {
+                Integer age = accountInfo.getMember().getAge() / 10 * 10;
+                Integer salary = accountInfo.getMember().getSalary() / 1000 * 1000;
 
-            // 나이-소득 구간, 카테고리, 현재 연월에 해당하는 평균 소비 정보 없음
-            if (!avgConsumptionAmountOptional.isPresent()) {
-                throw new BaseException(BaseResponseStatus.NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_CATEGORY_ID_AND_REG_DATE);
+                // 연령대, 연봉대에 해당하는 정보 조회
+                Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
+
+                // 연령대, 연봉대에 해당하는 정보 없음
+                if (!ageSalaryOptional.isPresent()) {
+                    throw new BaseException(BaseResponseStatus.NO_AGE_SALARY_INFO_BY_AGE_SALARY);
+                }
+
+                AgeSalary ageSalary = ageSalaryOptional.get();
+
+                // 나이-소득 구간, 카테고리, 현재 연월에 해당하는 평균 소비 정보 조회
+                Optional<AvgConsumptionAmount> avgConsumptionAmountOptional = avgConsumptionAmountRepository.findByAgeSalaryIdCategoryId(ageSalary.getId(), category.get().getId(), Timestamp.valueOf(LocalDateTime.now()));
+
+                // 나이-소득 구간, 카테고리, 현재 연월에 해당하는 평균 소비 정보 없음
+                if (!avgConsumptionAmountOptional.isPresent()) {
+                    throw new BaseException(BaseResponseStatus.NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_CATEGORY_ID_AND_REG_DATE);
+                }
+
+                // 평균 소비 정보 총합 수정
+                AvgConsumptionAmount avgConsumptionAmount = avgConsumptionAmountOptional.get();
+                newAvgConsumptionAmount = AvgConsumptionAmount.builder()
+                        .id(avgConsumptionAmount.getId())
+                        .ageSalary(avgConsumptionAmount.getAgeSalary())
+                        .category(avgConsumptionAmount.getCategory())
+                        .sumAmount(avgConsumptionAmount.getSumAmount() + transactionInfoRegistRequestDto.getTransactionAmount())
+                        .regDate(avgConsumptionAmount.getRegDate())
+                        .build();
             }
-
-            // 평균 소비 정보 총합 수정
-            AvgConsumptionAmount avgConsumptionAmount = avgConsumptionAmountOptional.get();
-            newAvgConsumptionAmount = AvgConsumptionAmount.builder()
-                    .id(avgConsumptionAmount.getId())
-                    .ageSalary(avgConsumptionAmount.getAgeSalary())
-                    .category(avgConsumptionAmount.getCategory())
-                    .sumAmount(avgConsumptionAmount.getSumAmount() + transactionInfoRegistRequestDto.getTransactionAmount())
-                    .regDate(avgConsumptionAmount.getRegDate())
-                    .build();
         } else { // 입금인 경우
             transactionInfo = TransactionInfo.builder()
                     .accountInfo(accountInfo)
