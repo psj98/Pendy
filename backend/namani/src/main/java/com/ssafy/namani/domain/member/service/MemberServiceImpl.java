@@ -51,7 +51,7 @@ public class MemberServiceImpl implements MemberService {
                 .password(BCrypt.hashpw(memberRegisterRequestDto.getPassword(), BCrypt.gensalt())) // BCrypt를 이용한 Password 암호화
                 .name(memberRegisterRequestDto.getName())
                 .age(memberRegisterRequestDto.getAge())
-                .salary(memberRegisterRequestDto.getSalary())
+                .salary(memberRegisterRequestDto.getSalary() * 10000)
                 .build();
 
         memberRepository.save(member);
