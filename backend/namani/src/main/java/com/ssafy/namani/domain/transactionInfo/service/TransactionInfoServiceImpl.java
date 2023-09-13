@@ -2,21 +2,24 @@ package com.ssafy.namani.domain.transactionInfo.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
-import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
-import com.ssafy.namani.domain.ageSalary.repository.AgeSalaryRepository;
-import com.ssafy.namani.domain.avgConsumptionAmount.entity.AvgConsumptionAmount;
-import com.ssafy.namani.domain.avgConsumptionAmount.repository.AvgConsumptionAmountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoSendCodeRequestDto;
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
+import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
+import com.ssafy.namani.domain.ageSalary.repository.AgeSalaryRepository;
+import com.ssafy.namani.domain.avgConsumptionAmount.entity.AvgConsumptionAmount;
+import com.ssafy.namani.domain.avgConsumptionAmount.repository.AvgConsumptionAmountRepository;
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.category.repository.CategoryRepository;
+import com.ssafy.namani.domain.transactionInfo.dto.request.TransactionInfoListRequestDto;
 import com.ssafy.namani.domain.transactionInfo.dto.request.TransactionInfoRegistRequestDto;
+import com.ssafy.namani.domain.transactionInfo.dto.response.TransactionInfoListResponseDto;
 import com.ssafy.namani.domain.transactionInfo.dto.response.TransactionInfoRegistResponseDto;
 import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
 import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
@@ -157,4 +160,21 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
             throw new BaseException(BaseResponseStatus.ACCOUNT_NOT_FOUND);
         }
     }
+
+	/**
+	 * 계좌 거래내역을 조회하는 메소드입니다.
+	 * @param transactionInfoListRequestDto
+	 * @return
+	 * @throws BaseException
+	 */
+	@Override
+	public List<TransactionInfoListResponseDto> getTransactionInfoList(
+		TransactionInfoListRequestDto transactionInfoListRequestDto) throws BaseException {
+		Optional<AccountInfo> byId = accountInfoRepository.findById(transactionInfoListRequestDto.getAccountNumber());
+		if (byId.isEmpty()) {
+			throw new BaseException(BaseResponseStatus.ACCOUNT_NOT_FOUND);
+		}
+		return transactionInfoRepository.findByAccountInfo_AccountNumber(
+			transactionInfoListRequestDto.getAccountNumber());
+	}
 }
