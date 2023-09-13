@@ -8,6 +8,7 @@ import com.ssafy.namani.domain.jwt.dto.TokenDto;
 import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.domain.member.dto.request.MemberDuplicationCheckRequestDto;
 import com.ssafy.namani.domain.member.dto.request.MemberLoginRequestDto;
+import com.ssafy.namani.domain.member.dto.request.MemberUpdateRequestDto;
 import com.ssafy.namani.domain.member.dto.response.MemberLoginResponseDto;
 import com.ssafy.namani.domain.member.repository.MemberRepository;
 import com.ssafy.namani.domain.member.dto.request.MemberRegisterRequestDto;
@@ -48,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
         //PostMan 체크용 중복확인 메서드.
         //Front랑 엮을시 삭제.
         Optional<Member> validMemberEmail = memberRepository.findByEmail(memberRegisterRequestDto.getEmail());
-        if(validMemberEmail.isPresent()){
+        if (validMemberEmail.isPresent()) {
             throw new BaseException(BaseResponseStatus.DUPLICATE_MEMBER_EMAIL);
         }
 
@@ -80,7 +81,7 @@ public class MemberServiceImpl implements MemberService {
                     .age(age)
                     .salary(salary)
                     .peopleNum(0)
-            .build();
+                    .build();
 
             ageSalaryRepository.save(ageSalary);
 
@@ -130,6 +131,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 로그인 메소드 입니다.
+     *
      * @param memberLoginRequestDto
      * @return
      * @throws BaseException
@@ -138,13 +140,13 @@ public class MemberServiceImpl implements MemberService {
     public MemberLoginResponseDto login(MemberLoginRequestDto memberLoginRequestDto) throws BaseException {
         Optional<Member> memberOptional = memberRepository.findByEmail(memberLoginRequestDto.getEmail());
 
-        if(!memberOptional.isPresent()){
+        if (!memberOptional.isPresent()) {
             throw new BaseException(BaseResponseStatus.NOT_FOUND_MEMBER);
         }
 
         Member member = memberOptional.get();
 
-        if(!BCrypt.checkpw(memberLoginRequestDto.getPassword(), member.getPassword())){
+        if (!BCrypt.checkpw(memberLoginRequestDto.getPassword(), member.getPassword())) {
             throw new BaseException(BaseResponseStatus.INVALID_MEMBER);
         }
 
@@ -163,12 +165,26 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean checkDuplication(MemberDuplicationCheckRequestDto requestDto) throws BaseException {
-        Optional<Member> existingMember  = memberRepository.findByEmail(requestDto.getEmail());
+        Optional<Member> existingMember = memberRepository.findByEmail(requestDto.getEmail());
 
-        if(existingMember.isPresent()){
+        if (existingMember.isPresent()) {
             throw new BaseException(BaseResponseStatus.DUPLICATE_MEMBER_EMAIL);
         }
         return true;
+    }
+
+    @Override
+    public void updateMemberInfo(UUID memberId, MemberUpdateRequestDto requestDto) throws BaseException {
+        Member member = memberRepository.findById(memberId).get();
+
+        Member member1 = member.toBuilder()
+                .age(requestDto.getAge())
+                .password(BCrypt.hashpw(requestDto.getPassword(), BCrypt.gensalt()))
+                .salary(requestDto.getSalary()).
+                build();
+
+        memberRepository.save(member1);
+
     }
 }
 
