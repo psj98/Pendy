@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoCertificationRequestDto;
+import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoLoginRequestDto;
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoRegistRequestDto;
+import com.ssafy.namani.domain.accountInfo.dto.response.AccountInfoLoginResponseDto;
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
 import com.ssafy.namani.domain.bank.entity.Bank;
@@ -75,5 +77,29 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 		} else {
 			throw new BaseException(BaseResponseStatus.INVALID_AUTHORIZATION_NUMBER);
 		}
+	}
+
+	/**
+	 * 계좌정보로 로그인합니다.
+	 * @param accountInfoLoginRequestDto
+	 * @return
+	 */
+	@Override
+	public AccountInfoLoginResponseDto loginAccount(AccountInfoLoginRequestDto accountInfoLoginRequestDto) throws BaseException{
+		String accountNumber = accountInfoLoginRequestDto.getAccountNumber();
+		Integer accountPassword = accountInfoLoginRequestDto.getAccountPassword();
+
+		Optional<AccountInfo> byIdAndAccountPassword = accountInfoRepository.findByAccountNumberAndAccountPassword(accountNumber,
+			accountPassword);
+		// 로그인하려는 계좌가 등록되어있음
+		if (byIdAndAccountPassword.isPresent()) {
+			AccountInfo accountInfo = byIdAndAccountPassword.get();
+			return AccountInfoLoginResponseDto.builder()
+				.accountNumber(accountInfo.getAccountNumber())
+				.bankCode(accountInfo.getBank().getBankCode())
+				.balance(accountInfo.getBalance())
+				.build();
+		}
+		throw new BaseException(BaseResponseStatus.ACCOUNT_LOGIN_FAIL);
 	}
 }
