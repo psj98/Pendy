@@ -10,9 +10,9 @@ import com.ssafy.namani.domain.transactionInfo.dto.response.TransactionInfoRegis
 import com.ssafy.namani.global.response.BaseException;
 
 public interface TransactionInfoService {
-	TransactionInfoRegistResponseDto addTransaction(TransactionInfoRegistRequestDto transactionInfoRegistRequestDto) throws BaseException;
+    TransactionInfoRegistResponseDto addTransaction(TransactionInfoRegistRequestDto transactionInfoRegistRequestDto) throws BaseException;
 
-	void addTransaction(AccountInfoSendCodeRequestDto accountInfoSendCodeRequestDto) throws BaseException;
+    void addTransaction(AccountInfoSendCodeRequestDto accountInfoSendCodeRequestDto) throws BaseException;
 
-	List<TransactionInfoListResponseDto> getTransactionInfoList(TransactionInfoListRequestDto transactionInfoListRequestDto) throws BaseException;
+    List<TransactionInfoListResponseDto> getTransactionInfoList(TransactionInfoListRequestDto transactionInfoListRequestDto) throws BaseException;
 }
