@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './GoalBar.css';
 
 const GoalBar = () => {
-  const current = 0;
+  const current = 120;
   const goal = 230;
   const [midpoint] = useState(`${(current / goal) * 100}%`);
 
