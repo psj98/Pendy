@@ -33,7 +33,7 @@ public class Member {
     @NotNull
     private Integer salary; // 연봉
 
-    @Builder
+    @Builder(toBuilder = true)
     public Member(UUID id, String email, String password, String name, Integer age, Integer salary) {
         this.id = id;
         this.email = email;

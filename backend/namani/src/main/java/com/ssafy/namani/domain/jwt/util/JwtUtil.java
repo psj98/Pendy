@@ -13,8 +13,8 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    private Long jwtAccessExpiration = 36000L;
-    private Long jwtRefreshExpiration = 36000L;
+    private Long jwtAccessExpiration = 1000*60*60*24L;
+    private Long jwtRefreshExpiration = 1000*60*60*24L;
 
 
     public TokenDto generateTokens(UUID memberId){
