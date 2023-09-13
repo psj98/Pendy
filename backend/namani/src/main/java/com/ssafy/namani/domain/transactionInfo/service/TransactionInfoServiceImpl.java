@@ -81,7 +81,7 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 
             if (accountInfo.getMember() != null) {
                 Integer age = accountInfo.getMember().getAge() / 10 * 10;
-                Integer salary = accountInfo.getMember().getSalary() / 1000 * 1000;
+                Integer salary = accountInfo.getMember().getSalary() / 10000000 * 1000;
 
                 // 연령대, 연봉대에 해당하는 정보 조회
                 Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
