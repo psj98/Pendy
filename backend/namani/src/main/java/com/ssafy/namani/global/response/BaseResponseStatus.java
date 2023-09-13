@@ -15,9 +15,9 @@ public enum BaseResponseStatus {
 	 * Code : 2000번대
 	 */
 	// ex) NOT_FOUND_MEMBER(false, 2001, "일치하는 사용자가 없습니다."), ...
-	NOT_FOUND_MEMBER(false, 2001, "일치하는 사용자가 없습니다."),
+	NOT_FOUND_MEMBER(false, 2001, "존재하지 않는 사용자 정보입니다."),
 	DUPLICATE_MEMBER_EMAIL(false, 2002, "이미 사용중인 이메일입니다."),
-	INVALID_MEMBER_PASSWORD(false, 2003, "비밀번호가 일치하지 않습니다."),
+	INVALID_MEMBER(false, 2003, "회원정보가 일치하지 않습니다."),
 
 	/**
 	 *  AccountInfo
@@ -25,12 +25,14 @@ public enum BaseResponseStatus {
 	 */
 	CONFLICK_ACCOUNT_NUMBER(false, 3001, "이미 등록된 계좌번호입니다."),
 	INVALID_AUTHORIZATION_NUMBER(false, 3002, "잘못된 인증 코드입니다."),
+	ACCOUNT_NOT_FOUND(false, 3002, "존재하지 않는 계좌번호입니다."),
+	ACCOUNT_LOGIN_FAIL(false, 3003, "계좌 로그인에 실패하였습니다."),
 
 	/**
 	 * TransactionInfo
 	 * Code : 4000번대
 	 */
-	ACCOUNT_NOT_FOUND(false, 4001, "존재하지 않는 계좌번호입니다"),
+
 	/**
 	 * Diary
 	 * Code : 5000번대

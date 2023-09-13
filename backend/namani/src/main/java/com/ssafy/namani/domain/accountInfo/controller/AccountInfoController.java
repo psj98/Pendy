@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoCertificationRequestDto;
+import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoLoginRequestDto;
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoRegistRequestDto;
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoSendCodeRequestDto;
+import com.ssafy.namani.domain.accountInfo.dto.response.AccountInfoLoginResponseDto;
 import com.ssafy.namani.domain.accountInfo.service.AccountInfoService;
-import com.ssafy.namani.domain.member.MemberService;
-import com.ssafy.namani.domain.member.jwt.JwtService;
+import com.ssafy.namani.domain.member.service.MemberService;
+import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.domain.transactionInfo.service.TransactionInfoService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
@@ -103,6 +105,23 @@ public class AccountInfoController {
 			return baseResponseService.getSuccessNoDataResponse();
 		} catch (BaseException e) {
 			return baseResponseService.getFailureResponse(BaseResponseStatus.INVALID_AUTHORIZATION_NUMBER);
+		}
+	}
+
+	/**
+	 * 계좌 정보로 로그인 하는 API입니다.
+	 * @param accountInfoLoginRequestDto
+	 * @return
+	 */
+	@PostMapping("/login")
+	public BaseResponse<Object> accountLogin(@RequestBody AccountInfoLoginRequestDto accountInfoLoginRequestDto) {
+		try {
+			AccountInfoLoginResponseDto accountInfoLoginResponseDto = accountInfoService.loginAccount(
+				accountInfoLoginRequestDto);
+			return baseResponseService.getSuccessResponse(accountInfoLoginResponseDto);
+		} catch (BaseException e) {
+			// 계좌 로그인 실패
+			return baseResponseService.getFailureResponse(BaseResponseStatus.ACCOUNT_LOGIN_FAIL);
 		}
 	}
 }

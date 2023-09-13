@@ -1,19 +1,18 @@
-package com.ssafy.namani.domain.member;
+package com.ssafy.namani.domain.member.controller;
 
 
-import com.ssafy.namani.domain.member.dto.MemberRegisterRequestDto;
+import com.ssafy.namani.domain.member.dto.request.MemberLoginRequestDto;
+import com.ssafy.namani.domain.member.dto.response.MemberLoginResponseDto;
+import com.ssafy.namani.domain.member.service.MemberService;
+import com.ssafy.namani.domain.member.dto.request.MemberRegisterRequestDto;
+import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -33,5 +32,17 @@ public class MemberController {
             log.info(e.getMessage());
             return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(BaseResponseStatus.DUPLICATE_MEMBER_EMAIL));
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<BaseResponse<Object>> login(@RequestBody MemberLoginRequestDto requestDto){
+
+        try {
+            MemberLoginResponseDto responseDto = memberService.login(requestDto);
+            return ResponseEntity.ok(baseResponseService.getSuccessResponse(responseDto));
+        } catch (BaseException e) {
+            return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(e.getStatus()));
+        }
+
     }
 }
