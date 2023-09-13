@@ -11,6 +11,7 @@ import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +29,8 @@ public class MemberController {
         try {
             memberService.register(memberRegisterRequestDto);
             return ResponseEntity.ok(baseResponseService.getSuccessResponse(BaseResponseStatus.SUCCESS));
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(BaseResponseStatus.DUPLICATE_MEMBER_EMAIL));
+        } catch (BaseException e) {
+            return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(e.getStatus()));
         }
     }
 

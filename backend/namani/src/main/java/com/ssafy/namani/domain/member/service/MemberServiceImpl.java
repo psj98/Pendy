@@ -41,7 +41,16 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public void register(MemberRegisterRequestDto memberRegisterRequestDto) throws BaseException {
-        /* ----------- 이메일 중복 체크할 것 ----------- */
+
+
+        //중복확인
+        Optional<Member> existingMember  = memberRepository.findByEmail(memberRegisterRequestDto.getEmail());
+
+        if(existingMember.isPresent()){
+            throw new BaseException(BaseResponseStatus.DUPLICATE_MEMBER_EMAIL);
+        }
+
+        //체크 후 회원가입.
 
         Member member = Member.builder()
                 .id(UUID.randomUUID())
@@ -62,8 +71,18 @@ public class MemberServiceImpl implements MemberService {
         Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.getAgeSalaryInfo(age, salary);
 
         // 나이-소득 구간 정보 존재 체크
+        // To-do 연령대 새롭게 추가.
         if (!ageSalaryOptional.isPresent()) {
-            throw new BaseException(BaseResponseStatus.NO_AGE_SALARY_INFO_BY_AGE_SALARY);
+//            throw new BaseException(BaseResponseStatus.NO_AGE_SALARY_INFO_BY_AGE_SALARY);
+            AgeSalary ageSalary = AgeSalary.builder()
+                    .age(age)
+                    .salary(salary)
+                    .peopleNum(0)
+            .build();
+
+            ageSalaryRepository.save(ageSalary);
+
+            ageSalaryOptional = ageSalaryRepository.getAgeSalaryInfo(age, salary);
         }
 
         // 인원수 계산
