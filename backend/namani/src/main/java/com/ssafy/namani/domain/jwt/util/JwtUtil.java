@@ -1,5 +1,5 @@
-package com.ssafy.namani.domain.member.jwt;
-import antlr.Token;
+package com.ssafy.namani.domain.jwt.util;
+import com.ssafy.namani.domain.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
