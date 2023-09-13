@@ -1,5 +1,7 @@
-package com.ssafy.namani.domain.member.jwt;
+package com.ssafy.namani.domain.jwt.service;
 
+import com.ssafy.namani.domain.jwt.util.JwtUtil;
+import com.ssafy.namani.domain.jwt.dto.TokenDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

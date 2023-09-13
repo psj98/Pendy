@@ -1,4 +1,6 @@
-package com.ssafy.namani.domain.member.jwt;
+package com.ssafy.namani.domain.jwt.service;
+
+import com.ssafy.namani.domain.jwt.dto.TokenDto;
 
 import java.util.UUID;
 
