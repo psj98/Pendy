@@ -38,7 +38,7 @@ public class TransactionInfoController {
 				transactionInfoRegistRequestDto);
 			return baseResponseService.getSuccessResponse(transactionInfoRegistResponseDto);
 		} catch (BaseException e) {
-			return baseResponseService.getFailureResponse(BaseResponseStatus.ACCOUNT_NOT_FOUND);
+			return baseResponseService.getFailureResponse(e.status);
 		}
 	}
 }
