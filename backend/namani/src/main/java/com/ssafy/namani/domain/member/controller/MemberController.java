@@ -1,6 +1,7 @@
 package com.ssafy.namani.domain.member.controller;
 
 
+import com.ssafy.namani.domain.member.dto.request.MemberDuplicationCheckRequestDto;
 import com.ssafy.namani.domain.member.dto.request.MemberLoginRequestDto;
 import com.ssafy.namani.domain.member.dto.response.MemberLoginResponseDto;
 import com.ssafy.namani.domain.member.service.MemberService;
@@ -44,5 +45,15 @@ public class MemberController {
             return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(e.getStatus()));
         }
 
+    }
+
+    @PostMapping("/duplicate-check")
+    public ResponseEntity<BaseResponse<Object>> checkDuplication(@RequestBody MemberDuplicationCheckRequestDto requestDto){
+        try {
+            boolean isDuplicate = memberService.checkDuplication(requestDto);
+            return ResponseEntity.ok(baseResponseService.getSuccessResponse(isDuplicate));
+        }catch (BaseException e){
+            return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(e.getStatus()));
+        }
     }
 }

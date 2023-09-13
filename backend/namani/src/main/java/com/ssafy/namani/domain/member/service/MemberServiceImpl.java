@@ -6,6 +6,7 @@ import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
 import com.ssafy.namani.domain.ageSalary.repository.AgeSalaryRepository;
 import com.ssafy.namani.domain.jwt.dto.TokenDto;
 import com.ssafy.namani.domain.jwt.service.JwtService;
+import com.ssafy.namani.domain.member.dto.request.MemberDuplicationCheckRequestDto;
 import com.ssafy.namani.domain.member.dto.request.MemberLoginRequestDto;
 import com.ssafy.namani.domain.member.dto.response.MemberLoginResponseDto;
 import com.ssafy.namani.domain.member.repository.MemberRepository;
@@ -43,10 +44,11 @@ public class MemberServiceImpl implements MemberService {
     public void register(MemberRegisterRequestDto memberRegisterRequestDto) throws BaseException {
 
 
-        //중복확인
-        Optional<Member> existingMember  = memberRepository.findByEmail(memberRegisterRequestDto.getEmail());
-
-        if(existingMember.isPresent()){
+        //중복확인 api로 뺌
+        //PostMan 체크용 중복확인 메서드.
+        //Front랑 엮을시 삭제.
+        Optional<Member> validMemberEmail = memberRepository.findByEmail(memberRegisterRequestDto.getEmail());
+        if(validMemberEmail.isPresent()){
             throw new BaseException(BaseResponseStatus.DUPLICATE_MEMBER_EMAIL);
         }
 
@@ -157,6 +159,16 @@ public class MemberServiceImpl implements MemberService {
 
         return responseDto;
 
+    }
+
+    @Override
+    public boolean checkDuplication(MemberDuplicationCheckRequestDto requestDto) throws BaseException {
+        Optional<Member> existingMember  = memberRepository.findByEmail(requestDto.getEmail());
+
+        if(existingMember.isPresent()){
+            throw new BaseException(BaseResponseStatus.DUPLICATE_MEMBER_EMAIL);
+        }
+        return true;
     }
 }
 
