@@ -1,4 +1,4 @@
-package com.ssafy.namani.domain.avgConsumptionAmount.dto;
+package com.ssafy.namani.domain.avgConsumptionAmount.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

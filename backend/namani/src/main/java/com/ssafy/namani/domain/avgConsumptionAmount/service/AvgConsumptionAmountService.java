@@ -1,6 +1,6 @@
 package com.ssafy.namani.domain.avgConsumptionAmount.service;
 
-import com.ssafy.namani.domain.avgConsumptionAmount.dto.AvgConsumptionAmountDetailResponseDto;
+import com.ssafy.namani.domain.avgConsumptionAmount.dto.response.AvgConsumptionAmountDetailResponseDto;
 import com.ssafy.namani.global.response.BaseException;
 
 import java.sql.Timestamp;
