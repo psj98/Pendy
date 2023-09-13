@@ -25,12 +25,14 @@ public enum BaseResponseStatus {
 	 */
 	CONFLICK_ACCOUNT_NUMBER(false, 3001, "이미 등록된 계좌번호입니다."),
 	INVALID_AUTHORIZATION_NUMBER(false, 3002, "잘못된 인증 코드입니다."),
+	ACCOUNT_NOT_FOUND(false, 3002, "존재하지 않는 계좌번호입니다."),
+	ACCOUNT_LOGIN_FAIL(false, 3003, "계좌 로그인에 실패하였습니다."),
 
 	/**
 	 * TransactionInfo
 	 * Code : 4000번대
 	 */
-	ACCOUNT_NOT_FOUND(false, 4001, "존재하지 않는 계좌번호입니다"),
+
 	/**
 	 * Diary
 	 * Code : 5000번대
@@ -51,11 +53,11 @@ public enum BaseResponseStatus {
 	 * Code : 8000번대
 	 */
 
-    /**
-     * AvgConsumptionAmount, AgeSalary
-     * Code : 9000번대
-     */
-    NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_REG_DATE(false, 9001, "나이, 소득, 해당 연월에 해당하는 평균 소비 정보가 없습니다."),
+	/**
+	 * AvgConsumptionAmount, AgeSalary
+	 * Code : 9000번대
+	 */
+	NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_REG_DATE(false, 9001, "나이, 소득, 해당 연월에 해당하는 평균 소비 정보가 없습니다."),
 	NO_AGE_SALARY_INFO_BY_AGE_SALARY(false, 9002, "나이, 소득 구간에 해당하는 정보가 없습니다.");
 
 	// 필요하면 추가할 것
