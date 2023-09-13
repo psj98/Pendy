@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
         Integer age = memberRegisterRequestDto.getAge() / 10 * 10; // 연령대
         Integer salary = memberRegisterRequestDto.getSalary() / 1000 * 1000; // 연봉대
 
-        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.getAgeSalaryInfo(age, salary);
+        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
 
         // 나이-소득 구간 정보 존재 체크
         if (!ageSalaryOptional.isPresent()) {
