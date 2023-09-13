@@ -1,10 +1,15 @@
-package com.ssafy.namani.domain.member;
+package com.ssafy.namani.domain.member.service;
 
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
 import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
 import com.ssafy.namani.domain.ageSalary.repository.AgeSalaryRepository;
-import com.ssafy.namani.domain.member.dto.MemberRegisterRequestDto;
+import com.ssafy.namani.domain.jwt.dto.TokenDto;
+import com.ssafy.namani.domain.jwt.service.JwtService;
+import com.ssafy.namani.domain.member.dto.request.MemberLoginRequestDto;
+import com.ssafy.namani.domain.member.dto.response.MemberLoginResponseDto;
+import com.ssafy.namani.domain.member.repository.MemberRepository;
+import com.ssafy.namani.domain.member.dto.request.MemberRegisterRequestDto;
 import com.ssafy.namani.domain.member.entity.Member;
 
 import com.ssafy.namani.global.response.BaseException;
@@ -13,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final AccountInfoRepository accountInfoRepository;
     private final AgeSalaryRepository ageSalaryRepository;
+    private final JwtService jwtService;
 
     /**
      * 회원 가입 API.
@@ -100,6 +105,39 @@ public class MemberServiceImpl implements MemberService {
             accountInfo.get().updateMemberId(member.get());
             accountInfoRepository.save(accountInfo.get());
         }
+    }
+
+    /**
+     * 로그인 메소드 입니다.
+     * @param memberLoginRequestDto
+     * @return
+     * @throws BaseException
+     */
+    @Override
+    public MemberLoginResponseDto login(MemberLoginRequestDto memberLoginRequestDto) throws BaseException {
+        Optional<Member> memberOptional = memberRepository.findByEmail(memberLoginRequestDto.getEmail());
+
+        if(!memberOptional.isPresent()){
+            throw new BaseException(BaseResponseStatus.NOT_FOUND_MEMBER);
+        }
+
+        Member member = memberOptional.get();
+
+        if(!BCrypt.checkpw(memberLoginRequestDto.getPassword(), member.getPassword())){
+            throw new BaseException(BaseResponseStatus.INVALID_MEMBER);
+        }
+
+        TokenDto tokenDto = jwtService.generateTokens(member.getId());
+
+        MemberLoginResponseDto responseDto = MemberLoginResponseDto.builder()
+                .accessToken(tokenDto.getAccessToken())
+                .email(member.getEmail())
+                .name(member.getName())
+                .age(member.getAge())
+                .salary(member.getSalary()).build();
+
+        return responseDto;
+
     }
 }
 

@@ -1,4 +1,4 @@
-package com.ssafy.namani.domain.member.dto;
+package com.ssafy.namani.domain.member.dto.request;
 
 import lombok.Data;
 import lombok.Getter;

@@ -13,8 +13,8 @@ import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoCertificationR
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoRegistRequestDto;
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoSendCodeRequestDto;
 import com.ssafy.namani.domain.accountInfo.service.AccountInfoService;
-import com.ssafy.namani.domain.member.MemberService;
-import com.ssafy.namani.domain.member.jwt.JwtService;
+import com.ssafy.namani.domain.member.service.MemberService;
+import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.domain.transactionInfo.service.TransactionInfoService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
