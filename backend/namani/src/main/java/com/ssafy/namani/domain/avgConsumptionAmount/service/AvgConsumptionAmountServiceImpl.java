@@ -38,9 +38,9 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
      * @throws BaseException
      */
     @Override
-    public List<AvgConsumptionAmountDetailResponseDto> getAvgConsumptionAmountInfo(Integer age, Integer salary, Timestamp curDate) throws BaseException {
+    public List<AvgConsumptionAmountDetailResponseDto> getAvgConsumptionAmountList(Integer age, Integer salary, Timestamp curDate) throws BaseException {
         /* 나이-소득 정보 조회 */
-        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.getAgeSalaryInfo(age, salary);
+        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
 
         // 나이-소득 구간 정보가 존재하는지 체크
         if (!ageSalaryOptional.isPresent()) {
@@ -52,7 +52,7 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
         Integer peopleNum = ageSalary.getPeopleNum(); // 인원수
 
         /* 나이-소득, 해당 연월로 평균 소비 정보 조회 */
-        Optional<List<AvgConsumptionAmount>> avgConsumptionAmountOptional = avgConsumptionAmountRepository.getAvgConsumptionAmountInfo(ageSalaryId, curDate);
+        Optional<List<AvgConsumptionAmount>> avgConsumptionAmountOptional = avgConsumptionAmountRepository.findAllByAgeSalaryIdRegDate(ageSalaryId, curDate);
 
         // 평균 소비 정보가 존재하는지 체크
         if (!avgConsumptionAmountOptional.isPresent()) {
