@@ -21,5 +21,18 @@ public interface AvgConsumptionAmountRepository extends JpaRepository<AvgConsump
      */
     @Query(value = "SELECT * FROM avg_consumption_amount a, category c " +
             "WHERE a.category_id = c.id AND a.age_salary_id = ?1 AND DATE_FORMAT(a.reg_date, '%Y-%m') = DATE_FORMAT(?2, '%Y-%m')", nativeQuery = true)
-    Optional<List<AvgConsumptionAmount>> getAvgConsumptionAmountInfo(Integer ageSalaryId, Timestamp curDate);
+    Optional<List<AvgConsumptionAmount>> findAllByAgeSalaryIdRegDate(Integer ageSalaryId, Timestamp curDate);
+
+    /**
+     * 나이-소득 구간 아이디, 카테고리 아이디, 특정 연월에 해당하는 정보를 가져오는 메서드
+     *
+     * @param ageSalaryId
+     * @param categoryId
+     * @param curDate
+     * @return Optional<AvgConsumptionAmount>
+     */
+    @Query(value = "SELECT * FROM avg_consumption_amount a" +
+            " WHERE a.age_salary_id = ?1 AND a.category_id = ?2" +
+            " AND DATE_FORMAT(a.reg_date, '%Y-%m') = DATE_FORMAT(?3, '%Y-%m')", nativeQuery = true)
+    Optional<AvgConsumptionAmount> findByAgeSalaryIdCategoryId(Integer ageSalaryId, Integer categoryId, Timestamp curDate);
 }
