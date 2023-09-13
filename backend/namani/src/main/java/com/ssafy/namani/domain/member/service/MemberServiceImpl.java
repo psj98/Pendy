@@ -4,6 +4,7 @@ import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
 import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
 import com.ssafy.namani.domain.ageSalary.repository.AgeSalaryRepository;
+import com.ssafy.namani.domain.avgConsumptionAmount.service.AvgConsumptionAmountServiceImpl;
 import com.ssafy.namani.domain.jwt.dto.TokenDto;
 import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.domain.member.dto.request.MemberLoginRequestDto;
@@ -32,6 +33,7 @@ public class MemberServiceImpl implements MemberService {
     private final AccountInfoRepository accountInfoRepository;
     private final AgeSalaryRepository ageSalaryRepository;
     private final JwtService jwtService;
+    private final AvgConsumptionAmountServiceImpl avgConsumptionAmountService;
 
     /**
      * 회원 가입 API.
@@ -87,6 +89,9 @@ public class MemberServiceImpl implements MemberService {
 
             accountInfo.updateMemberId(member);
             accountInfoRepository.save(accountInfo);
+
+            // 현재까지의 거래내역을 평균 소비 정보에 업데이트
+            avgConsumptionAmountService.updateAvgConsumptionAmountByMemberJoin(accountNumber, age, salary);
         }
     }
 
