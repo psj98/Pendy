@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Repository
 public interface AgeSalaryRepository extends JpaRepository<AgeSalary, Integer> {
@@ -19,4 +20,5 @@ public interface AgeSalaryRepository extends JpaRepository<AgeSalary, Integer> {
      */
     @Query(value = "SELECT * FROM age_salary a WHERE a.age = ?1 and a.salary = ?2", nativeQuery = true)
     Optional<AgeSalary> findByAgeSalary(Integer age, Integer salary);
+
 }
