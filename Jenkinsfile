@@ -12,7 +12,7 @@ pipeline{
                 git branch: 'dev',
                         credentialsId: 'gitlabID',
                         url: 'https://lab.ssafy.com/s09-fintech-finance-sub2/S09P22A410.git'
-                sh "echo '###### CLONE DEV ######'"
+                sh "echo '####### CLONE DEV #######'"
             }
         }
 
