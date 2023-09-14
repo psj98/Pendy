@@ -30,7 +30,7 @@ public class TotalGoal {
 
     private String aiAnalysis; // AI 분석
 
-    @Builder
+    @Builder(toBuilder = true)
     public TotalGoal(Long id, Member member, Integer goalAmount, Timestamp goalDate, String aiAnalysis) {
         this.id = id;
         this.member = member;
