@@ -5,7 +5,7 @@ import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
 import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
 import com.ssafy.namani.domain.ageSalary.repository.AgeSalaryRepository;
-import com.ssafy.namani.domain.avgConsumptionAmount.service.AvgConsumptionAmountServiceImpl;
+import com.ssafy.namani.domain.avgConsumptionAmount.service.AvgConsumptionAmountService;
 import com.ssafy.namani.domain.jwt.dto.TokenDto;
 import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.domain.member.dto.request.MemberDuplicationCheckRequestDto;
@@ -38,7 +38,7 @@ public class MemberServiceImpl implements MemberService {
     private final AccountInfoRepository accountInfoRepository;
     private final AgeSalaryRepository ageSalaryRepository;
     private final JwtService jwtService;
-    private final AvgConsumptionAmountServiceImpl avgConsumptionAmountService;
+    private final AvgConsumptionAmountService avgConsumptionAmountService;
 
 
     /**

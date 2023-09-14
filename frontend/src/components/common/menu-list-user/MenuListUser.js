@@ -2,22 +2,33 @@ import React, { useState, useRef } from 'react';
 import './MenuListUser.css';
 import useClickOutside from '../../../hooks/useOutsideClick';
 import { Icon } from '@iconify/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // 회원용 메뉴
 const MenuListUser = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
   const menuRef = useRef(null);
+
+  // 메뉴가 아닌 위치 클릭 시 메뉴 비활성화
+  useClickOutside(menuRef, () => {
+    setIsMenuOpen(false);
+  });
 
   // 메뉴 활성화
   const onMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // 메뉴가 아닌 위치 클릭 시 메뉴 비활성화
-  useClickOutside(menuRef, () => {
-    setIsMenuOpen(false);
-  });
+  //로그아웃 클릭
+  const onClickLogout = () => {
+    localStorage.removeItem('accessToken');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('name');
+    sessionStorage.removeItem('age');
+    sessionStorage.removeItem('salary');
+    navigate('/', { replace: true });
+  };
 
   return (
     <div className="menu-list" ref={menuRef}>
@@ -35,7 +46,9 @@ const MenuListUser = () => {
             목표설정
           </Link>
         </div>
-        <div className="sub-menu-container">로그아웃</div>
+        <div className="sub-menu-container" onClick={onClickLogout}>
+          로그아웃
+        </div>
       </div>
     </div>
   );

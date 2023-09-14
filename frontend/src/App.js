@@ -1,4 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 
 import TestPage from './pages/test-page/TestPage';
@@ -25,7 +26,18 @@ import AccountTemplate from './templates/account-template/AccountTemplate';
 import RegistrationTemplate from './templates/registration-template/RegistrationTemplate';
 
 function App() {
-  const isLoggedIn = true;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (accessToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [location]);
 
   return (
     <Routes>
@@ -33,7 +45,7 @@ function App() {
       <Route path="/test" element={<TestPage />} />
 
       {/* 메인 페이지 */}
-      <Route path="/" element={<MainPage />}>
+      <Route path="/" element={<MainPage isLoggedIn={isLoggedIn} />}>
         {isLoggedIn ? (
           <Route path="" element={<UserTemplate />} />
         ) : (

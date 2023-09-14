@@ -1,7 +1,7 @@
 package com.ssafy.namani.domain.category.controller;
 
 import com.ssafy.namani.domain.category.dto.CategoryListResponseDto;
-import com.ssafy.namani.domain.category.service.CategoryServiceImpl;
+import com.ssafy.namani.domain.category.service.CategoryService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/categories")
 public class CategoryController {
 
-    private final CategoryServiceImpl categoryService;
+    private final CategoryService categoryService;
     private final BaseResponseService baseResponseService;
 
     /**
