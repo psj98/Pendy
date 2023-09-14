@@ -47,10 +47,9 @@ pipeline{
             steps{
                 sshagent(credentials:['ec2-user']){
                     sh "echo '##### BE DEPLOY START #####'"
-                    dir('backend/namani/build/libs'){
-                        sh "scp -o StrictHostKeyChecking=no -i ubuntu@j9a410.p.ssafy.io *.jar ubuntu@${env.DEV_BACK_IP}:/home/ubuntu/namani"
-                    }
-                    sh "ssh -o StrictHostKeyChecking=no -i ubuntu@j9a410.p.ssafy.io ubuntu@${env.DEV_BACK_IP} 'cd namani && ./deploy.sh'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@j9a410.p.ssafy.io uptime"
+                    sh "scp /var/jenkins_home/workspace/namani/backend/namani/build/libs/namani-0.0.1-SNAPSHOT.jar ubuntu@j9a410.p.ssafy.io:/home/ubuntu/namani"
+                    sh "ssh -t ubuntu@j9a410.p.ssafy.io ./deploy.sh"
                     sh "echo '###### BE DEPLOY SUCCESS ######'"
                     sh "echo '###### BE COMPLETE ######'"
                 }
