@@ -29,15 +29,7 @@ pipeline{
             }
         }
 
-        stage('FE-Build'){
-            steps{
-                sh "echo '##### FE BUILD START #####'"
-                dir('frontend'){
-                    sh 'npm run build'
-                }
-                sh "echo '##### FE BUILD SUCCESS #####'"
-            }
-        }
+        // fe build
 
         stage('BE-Build'){
             steps {
@@ -49,19 +41,7 @@ pipeline{
             }
         }
 
-        stage('FE-Deploy'){
-            steps{
-                sshagent(credentials:['ubuntu']){
-                    sh "echo '##### FE DEPLOY START #####'"
-                    dir('frontend'){
-                        sh "scp -o StrictHostKeyChecking=no -i ${env.FRONT_KEY_FILE} -r dist ubuntu@${env.DEV_BACK_IP}:/home/ubuntu"
-                    }
-                    sh "ssh -o StrictHostKeyChecking=no -i ${env.FRONT_KEY_FILE} ubuntu@${env.DEV_BACK_IP} 'sudo service nginx restart'"
-                    sh "echo '##### FE DEPLOY SUCCESS #####'"
-                    sh "echo '##### FE COMPLETE #####'"
-                }
-            }
-        }
+        // fe deploy
 
         stage('BE-Deploy'){
             steps{
