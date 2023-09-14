@@ -19,8 +19,10 @@ pipeline{
         stage('FE-Install'){
             steps{
                 sh "echo '##### FE INSTALL START#####'"
-                dir('frontend') {
-                    sh 'npm i'
+                dir('./frontend') {
+                    nodejs('18.16.1'){
+                        sh 'npm install'
+                    }
                 }
                 sh "echo '##### FE INSTALL SUCCESS #####'"
             }
@@ -29,7 +31,7 @@ pipeline{
         stage('FE-Test'){
             steps {
                 sh "echo '##### FE TEST START #####'"
-                dir('frontend'){
+                dir('./frontend'){
                     sh 'npm run test'
                 }
                 sh "echo '##### FE TEST SUCCESS #####'"
