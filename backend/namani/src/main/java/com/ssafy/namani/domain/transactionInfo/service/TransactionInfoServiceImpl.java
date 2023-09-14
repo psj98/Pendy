@@ -113,10 +113,9 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 
 				AvgConsumptionAmount avgConsumptionAmount;
 				// 나이-소득 구간, 카테고리, 현재 연월에 해당하는 평균 소비 정보 없음
-				if (!avgConsumptionAmountOptional.isPresent()) {
+				if (avgConsumptionAmountOptional.isEmpty()) {
 					// throw new BaseException(
 					// 	BaseResponseStatus.NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_CATEGORY_ID_AND_REG_DATE);
-
 
 					avgConsumptionAmount = AvgConsumptionAmount.builder()
 						.ageSalary(ageSalary)
@@ -126,10 +125,12 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 						.build();
 
 					avgConsumptionAmountRepository.save(avgConsumptionAmount);
+				} else {
+					avgConsumptionAmount = avgConsumptionAmountOptional.get();
 				}
 
 				// 평균 소비 정보 총합 수정
-				avgConsumptionAmount = avgConsumptionAmountOptional.get();
+				// avgConsumptionAmount = avgConsumptionAmountOptional.get();
 				newAvgConsumptionAmount = AvgConsumptionAmount.builder()
 					.id(avgConsumptionAmount.getId())
 					.ageSalary(avgConsumptionAmount.getAgeSalary())
@@ -216,7 +217,11 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 	public List<TransactionInfoTodayDto> getDailyTransactionInfoList(
 		UUID memberId,
 		TransactionInfoTodayListRequestDto transactionInfoTodayListRequestDto) throws BaseException {
-
+		Timestamp lastRegDate = transactionInfoTodayListRequestDto.getLastRegDate();
+		// Timestamp curDate = transactionInfoTodayListRequestDto.getCurDate();
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		Timestamp curDate = Timestamp.valueOf(currentDateTime);
+		log.debug("마지막 시간: " + lastRegDate + "현재 시간: " + curDate);
 		List<TransactionInfoTodayDto> result = new ArrayList<>();
 		// memberId에 해당하는 accountList 조회
 		List<AccountInfo> byMemberId = accountInfoRepository.findByMember_Id(memberId);
@@ -225,7 +230,8 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 		for (AccountInfo accountInfo : byMemberId) {
 			log.debug("계좌 아이디 : " + accountInfo.getAccountNumber());
 			Optional<List<TransactionInfo>> allByAccountNumber = transactionInfoRepository.findAllWithdrawalsByAccountNumber(
-				accountInfo.getAccountNumber(), 2);
+				accountInfo.getAccountNumber(), 2,
+				lastRegDate, curDate);
 			if (allByAccountNumber.isPresent()) {
 				for (TransactionInfo transactionInfo : allByAccountNumber.get()) {
 					log.debug("트랜잭션: " + transactionInfo);
@@ -238,6 +244,8 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 				}
 			}
 		}
+		result.sort((o1, o2) -> o1.getTradeDate().compareTo(o2.getTradeDate()));
+
 		return result;
 	}
 }

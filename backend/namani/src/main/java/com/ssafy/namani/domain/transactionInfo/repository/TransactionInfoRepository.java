@@ -1,5 +1,6 @@
 package com.ssafy.namani.domain.transactionInfo.repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,8 @@ public interface TransactionInfoRepository extends JpaRepository<TransactionInfo
 	Optional<List<TransactionInfo>> findAllByAccountNumber(String accountNumber);
 
 	@Query(value = "SELECT * FROM transaction_info t " +
-		"WHERE t.account_number = ?1 AND t.transaction_type = ?2", nativeQuery = true)
-	Optional<List<TransactionInfo>> findAllWithdrawalsByAccountNumber(String accountNumber, Integer transactionType);
+		"WHERE t.account_number = ?1 AND t.transaction_type = ?2 " +
+		"AND t.trade_date between ?3 and ?4", nativeQuery = true)
+	Optional<List<TransactionInfo>> findAllWithdrawalsByAccountNumber(String accountNumber, Integer transactionType,
+		Timestamp lastRegDate, Timestamp curDate);
 }
