@@ -35,7 +35,8 @@ pipeline{
             steps {
                 sh "echo '##### BE BUILD START #####'"
                 dir('backend/namani') {
-                    sh './gradlew bootJar'
+                    sh 'chmod +x ./gradlew'
+                    sh './gradlew clean bootJar'
                 }
                 sh "echo '##### BE BUILD SUCCESS #####'"
             }
