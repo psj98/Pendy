@@ -39,7 +39,13 @@ const UserTemplate = () => {
       <div className="chart-container">
         <div className="chart-button">
           <label>
-            <input type="radio" name="chart-option" value="option1" /> 오늘
+            <input
+              type="radio"
+              name="chart-option"
+              value="option1"
+              defaultChecked
+            />
+            오늘
           </label>
           <label>
             <input type="radio" name="chart-option" value="option2" /> 월간
