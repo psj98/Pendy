@@ -13,7 +13,7 @@ const LoginTemplate = () => {
     try {
       //eslint-disable-next-line
       const response = await handleLogin(state.email, state.password);
-      console.log(response.data.data.accountListResponseDtoList);
+      // console.log(response.data.data.accountListResponseDtoList);
       const accountList = JSON.stringify(
         response.data.data.accountListResponseDtoList,
       );
