@@ -28,7 +28,7 @@ public class GoalByCategory {
     @NotNull
     private Integer categoryGoalAmount; // 목표 소비 금액
 
-    @Builder
+    @Builder(toBuilder = true)
     public GoalByCategory(Long id, TotalGoal totalGoal, Category category, Integer categoryGoalAmount) {
         this.id = id;
         this.totalGoal = totalGoal;
