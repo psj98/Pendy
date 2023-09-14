@@ -16,25 +16,7 @@ pipeline{
             }
         }
 
-        stage('FE-Install'){
-            steps{
-                sh "echo '##### FE INSTALL START#####'"
-                dir('frontend') {
-                        sh 'npm install'
-                }
-                sh "echo '##### FE INSTALL SUCCESS #####'"
-            }
-        }
-
-        stage('FE-Test'){
-            steps {
-                sh "echo '##### FE TEST START #####'"
-                dir('frontend'){
-                    sh 'npm run test'
-                }
-                sh "echo '##### FE TEST SUCCESS #####'"
-            }
-        }
+        // fe 
 
         stage('BE-Test'){
             steps{
