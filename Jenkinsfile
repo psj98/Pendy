@@ -20,7 +20,7 @@ pipeline{
             steps{
                 sh "echo '##### FE INSTALL START#####'"
                 dir('frontend') {
-                    sh 'npm install'
+                    sh 'npm i'
                 }
                 sh "echo '##### FE INSTALL SUCCESS #####'"
             }
