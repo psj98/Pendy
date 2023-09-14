@@ -27,6 +27,7 @@ const MenuListUser = () => {
     sessionStorage.removeItem('name');
     sessionStorage.removeItem('age');
     sessionStorage.removeItem('salary');
+    sessionStorage.removeItem('accountList');
     navigate('/', { replace: true });
   };
 
