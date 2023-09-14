@@ -39,6 +39,9 @@
   opacity: 0.1;
 }
 
+.col.cell {
+  background-color: white;
+}
 .col.cell.valid:hover {
   cursor: pointer;
   box-shadow: 1.5px 1.5px 0.1em #444;
