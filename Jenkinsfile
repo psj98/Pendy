@@ -49,7 +49,7 @@ pipeline{
                     sh "echo '##### BE DEPLOY START #####'"
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@j9a410.p.ssafy.io uptime"
                     sh "scp /var/jenkins_home/workspace/namani-backend_dev/backend/namani/build/libs/namani-0.0.1-SNAPSHOT.jar ubuntu@j9a410.p.ssafy.io:/home/ubuntu/namani"
-                    sh "chmod +x ubuntu@j9a410.p.ssafy.io:/home/ubuntu/deploy.sh"
+                    sh "chmod +x ./home/ubuntu/deploy.sh"
                     sh "ssh -t ubuntu@j9a410.p.ssafy.io ./deploy.sh"
                     sh "echo '###### BE DEPLOY SUCCESS ######'"
                     sh "echo '###### BE COMPLETE ######'"
