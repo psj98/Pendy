@@ -164,18 +164,17 @@ public class MemberServiceImpl implements MemberService {
 
         List<AccountListResponseDto> accountList = new ArrayList<>();
 
-        Optional<List<AccountInfo>> optionalAccountInfos = accountInfoRepository.findByMember_Id(member.getId());
+        List<AccountInfo> optionalAccountInfos = accountInfoRepository.findByMember_Id(member.getId());
 
-        if(optionalAccountInfos.isPresent()) {
-            List<AccountInfo> accountInfos = optionalAccountInfos.get();
-            for (AccountInfo accountInfo : accountInfos) {
-                AccountListResponseDto accountListResponseDto = AccountListResponseDto.builder()
-                        .bankCode(accountInfo.getBank().getBankCode())
-                        .accountNumber(accountInfo.getAccountNumber())
-                        .build();
 
-                accountList.add(accountListResponseDto);
-            }
+        List<AccountInfo> accountInfos = optionalAccountInfos;
+        for (AccountInfo accountInfo : accountInfos) {
+            AccountListResponseDto accountListResponseDto = AccountListResponseDto.builder()
+                    .bankCode(accountInfo.getBank().getBankCode())
+                    .accountNumber(accountInfo.getAccountNumber())
+                    .build();
+
+            accountList.add(accountListResponseDto);
         }
 
 
