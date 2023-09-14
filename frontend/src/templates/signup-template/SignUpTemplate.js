@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './SignUpTemplate.css';
 import { Icon } from '@iconify/react';
 import handleSignup from '../../utils/handleSignup';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpTemplate = () => {
   const [state, setState] = useState({
@@ -13,6 +14,7 @@ const SignUpTemplate = () => {
     salary: '',
     accounts: [''],
   });
+  const navigate = useNavigate();
 
   //계좌 개수 증가
   const handleAddAccount = () => {
@@ -52,7 +54,7 @@ const SignUpTemplate = () => {
         const token = response.data.token;
         console.log('SignUp success', token);
         alert('회원가입에 성공하셨습니다.');
-        navigator('/login');
+        navigate('/login', { replace: true });
       } catch (error) {
         console.error('SignUp failed:', error);
         alert('회원가입에 실패하셨습니다.');
