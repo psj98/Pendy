@@ -48,7 +48,7 @@ pipeline{
                 sshagent(credentials:['ec2-user']){
                     sh "echo '##### BE DEPLOY START #####'"
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@j9a410.p.ssafy.io uptime"
-                    sh "scp /var/jenkins_home/workspace/namani-backend_dev/backend/namani/build/libs/namani-0.0.1-SNAPSHOT.jar ubuntu@j9a410.p.ssafy.io:/home/ubuntu/namani"
+                    sh "scp /var/jenkins_home/workspace/namani-backend_dev/backend/namani/build/libs/namani-0.0.1-SNAPSHOT.jar ubuntu@j9a410.p.ssafy.io:/home/ubuntu/Namani"
                     sh "ssh -t ubuntu@j9a410.p.ssafy.io ./deploy.sh"
                     sh "echo '###### BE DEPLOY SUCCESS ######'"
                     sh "echo '###### BE COMPLETE ######'"
