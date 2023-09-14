@@ -43,7 +43,13 @@ public enum BaseResponseStatus {
      * Goal
      * Code : 6000번대
      */
+
+    /* TotalGoal : 6000번대 */
     TOTAL_GOAL_IS_ALREADY_PRESENT(false, 6001, "월별 목표 정보 이미 존재합니다."),
+    TOTAL_GOAL_NOT_FOUND(false, 6002, "월별 목표가 존재하지 않습니다."),
+
+    /* GoalByCategory : 6050번대*/
+    GOAL_BY_CATEGORY_NOT_FOUND(false, 6051, "카테고리 별 목표가 존재하지 않습니다."),
 
     /**
      * DailyStatistic

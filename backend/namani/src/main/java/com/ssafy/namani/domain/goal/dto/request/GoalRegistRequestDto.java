@@ -1,6 +1,6 @@
 package com.ssafy.namani.domain.goal.dto.request;
 
-import com.ssafy.namani.domain.goal.dto.response.GoalByCategoryRegistResponseDto;
+import com.ssafy.namani.domain.goal.dto.response.GoalByCategoryDetailResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,5 +15,5 @@ public class GoalRegistRequestDto {
     private Integer goalAmount; // 월 목표
 
     @NotNull
-    private List<GoalByCategoryRegistResponseDto> goalByCategoryList; // 카테고리 별 목표
+    private List<GoalByCategoryDetailResponseDto> goalByCategoryList; // 카테고리 별 목표
 }
