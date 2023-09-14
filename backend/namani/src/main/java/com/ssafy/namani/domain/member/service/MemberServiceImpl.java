@@ -1,5 +1,6 @@
 package com.ssafy.namani.domain.member.service;
 
+import com.ssafy.namani.domain.accountInfo.dto.response.AccountListResponseDto;
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
 import com.ssafy.namani.domain.ageSalary.entity.AgeSalary;
@@ -23,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
     private final AgeSalaryRepository ageSalaryRepository;
     private final JwtService jwtService;
     private final AvgConsumptionAmountService avgConsumptionAmountService;
+
 
     /**
      * 회원 가입 API.
@@ -157,12 +161,31 @@ public class MemberServiceImpl implements MemberService {
 
         TokenDto tokenDto = jwtService.generateTokens(member.getId());
 
+
+        List<AccountListResponseDto> accountList = new ArrayList<>();
+
+        List<AccountInfo> optionalAccountInfos = accountInfoRepository.findByMember_Id(member.getId());
+
+
+        List<AccountInfo> accountInfos = optionalAccountInfos;
+        for (AccountInfo accountInfo : accountInfos) {
+            AccountListResponseDto accountListResponseDto = AccountListResponseDto.builder()
+                    .bankCode(accountInfo.getBank().getBankCode())
+                    .accountNumber(accountInfo.getAccountNumber())
+                    .build();
+
+            accountList.add(accountListResponseDto);
+        }
+
+
         MemberLoginResponseDto responseDto = MemberLoginResponseDto.builder()
                 .accessToken(tokenDto.getAccessToken())
                 .email(member.getEmail())
                 .name(member.getName())
                 .age(member.getAge())
-                .salary(member.getSalary()).build();
+                .salary(member.getSalary())
+                .accountListResponseDtoList(accountList)
+                .build();
 
         return responseDto;
 
