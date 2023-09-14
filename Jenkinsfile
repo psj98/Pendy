@@ -48,9 +48,9 @@ pipeline{
                 sshagent(credentials:['ec2-user']){
                     sh "echo '##### BE DEPLOY START #####'"
                     dir('backend/namani/build/libs'){
-                        sh "scp -o StrictHostKeyChecking=no -i ${env.BACK_KEY_FILE} ubuntu@${env.DEV_BACK_IP}:/home/ubuntu/namani"
+                        sh "scp -o StrictHostKeyChecking=no -i ubuntu@j9a410.p.ssafy.io *.jar ubuntu@${env.DEV_BACK_IP}:/home/ubuntu/namani"
                     }
-                    sh "ssh -o StrictHostKeyChecking=no -i ${env.BACK_KEY_FILE} ubuntu@${env.DEV_BACK_IP} 'cd namani && ./deploy.sh'"
+                    sh "ssh -o StrictHostKeyChecking=no -i ubuntu@j9a410.p.ssafy.io ubuntu@${env.DEV_BACK_IP} 'cd namani && ./deploy.sh'"
                     sh "echo '###### BE DEPLOY SUCCESS ######'"
                     sh "echo '###### BE COMPLETE ######'"
                 }
