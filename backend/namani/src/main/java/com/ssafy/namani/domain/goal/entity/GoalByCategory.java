@@ -1,19 +1,15 @@
 package com.ssafy.namani.domain.goal.entity;
 
 import com.ssafy.namani.domain.category.entity.Category;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GoalByCategory {
 
     @Id
@@ -21,7 +17,7 @@ public class GoalByCategory {
     @Column(name = "id")
     private Long id; // 카테고리 별 목표 아이디
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "total_goal_id")
     private TotalGoal totalGoal; // 전체 목표
 
@@ -31,4 +27,12 @@ public class GoalByCategory {
 
     @NotNull
     private Integer categoryGoalAmount; // 목표 소비 금액
+
+    @Builder
+    public GoalByCategory(Long id, TotalGoal totalGoal, Category category, Integer categoryGoalAmount) {
+        this.id = id;
+        this.totalGoal = totalGoal;
+        this.category = category;
+        this.categoryGoalAmount = categoryGoalAmount;
+    }
 }
