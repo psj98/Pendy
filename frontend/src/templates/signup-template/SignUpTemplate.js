@@ -42,7 +42,7 @@ const SignUpTemplate = () => {
     if (passwordCheck) {
       try {
         const response = await handleSignup(
-          state.mail,
+          state.email,
           state.password,
           state.name,
           state.age,
@@ -69,6 +69,7 @@ const SignUpTemplate = () => {
       {/* 이메일 입력 */}
       <div className="signup-input">
         <input
+          type="email"
           className="input"
           placeholder="이메일"
           variant="outlined"
@@ -107,7 +108,7 @@ const SignUpTemplate = () => {
       {/* 이름 입력 */}
       <div className="signup-input">
         <input
-          type="password"
+          type="text"
           className="input"
           placeholder="이름"
           variant="outlined"
@@ -121,7 +122,7 @@ const SignUpTemplate = () => {
       <div className="signup-input-main">
         <div className="signup-input-sub">
           <input
-            type="password"
+            type="number"
             className="input"
             placeholder="나이"
             variant="outlined"
@@ -134,7 +135,7 @@ const SignUpTemplate = () => {
         {/* 소득 입력 */}
         <div className="signup-input-sub">
           <input
-            type="password"
+            type="number"
             className="input"
             placeholder="연봉"
             variant="outlined"
@@ -149,7 +150,7 @@ const SignUpTemplate = () => {
       {state.accounts.map((account, index) => (
         <div key={index} className="signup-input">
           <input
-            type="text"
+            type="number"
             className="input"
             placeholder={`계좌 ${index + 1}`}
             variant="outlined"
