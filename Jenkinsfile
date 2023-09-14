@@ -21,7 +21,7 @@ pipeline{
         stage('BE-Test'){
             steps{
                 sh "echo '##### BE TEST START #####'"
-                dir('backend/namani'){
+                dir('./backend/namani'){
                     sh 'chmod +x ./gradlew'
                     sh './gradlew clean test'
                 }
