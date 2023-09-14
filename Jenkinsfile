@@ -20,9 +20,7 @@ pipeline{
             steps{
                 sh "echo '##### FE INSTALL START#####'"
                 dir('frontend') {
-                    nodejs('18.16.1'){
                         sh 'npm install'
-                    }
                 }
                 sh "echo '##### FE INSTALL SUCCESS #####'"
             }
