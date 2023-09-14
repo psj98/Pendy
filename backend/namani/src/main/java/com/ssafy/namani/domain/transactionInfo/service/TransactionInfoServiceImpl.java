@@ -19,6 +19,8 @@ import com.ssafy.namani.domain.avgConsumptionAmount.entity.AvgConsumptionAmount;
 import com.ssafy.namani.domain.avgConsumptionAmount.repository.AvgConsumptionAmountRepository;
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.category.repository.CategoryRepository;
+import com.ssafy.namani.domain.emotion.entity.Emotion;
+import com.ssafy.namani.domain.emotion.repository.EmotionRepository;
 import com.ssafy.namani.domain.transactionInfo.dto.request.TransactionInfoListRequestDto;
 import com.ssafy.namani.domain.transactionInfo.dto.request.TransactionInfoRegistRequestDto;
 import com.ssafy.namani.domain.transactionInfo.dto.request.TransactionInfoTodayListRequestDto;
@@ -40,18 +42,21 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 	private final CategoryRepository categoryRepository;
 	private final AgeSalaryRepository ageSalaryRepository;
 	private final AvgConsumptionAmountRepository avgConsumptionAmountRepository;
+	private final EmotionRepository emotionRepository;
 
 	@Autowired
 	public TransactionInfoServiceImpl(TransactionInfoRepository transactionInfoRepository,
 		AccountInfoRepository accountInfoRepository,
 		CategoryRepository categoryRepository,
 		AgeSalaryRepository ageSalaryRepository,
-		AvgConsumptionAmountRepository avgConsumptionAmountRepository) {
+		AvgConsumptionAmountRepository avgConsumptionAmountRepository,
+		EmotionRepository emotionRepository) {
 		this.transactionInfoRepository = transactionInfoRepository;
 		this.accountInfoRepository = accountInfoRepository;
 		this.categoryRepository = categoryRepository;
 		this.ageSalaryRepository = ageSalaryRepository;
 		this.avgConsumptionAmountRepository = avgConsumptionAmountRepository;
+		this.emotionRepository = emotionRepository;
 	}
 
 	/**
@@ -77,9 +82,11 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 		// 출금인 경우
 		if (transactionInfoRegistRequestDto.getCategoryId() != null) {
 			Optional<Category> category = categoryRepository.findById(transactionInfoRegistRequestDto.getCategoryId());
+			Optional<Emotion> emotion = emotionRepository.findById(3);
 			transactionInfo = TransactionInfo.builder()
 				.accountInfo(accountInfo)
 				.category(category.get())
+				.emotion(emotion.get())
 				.transactionName(transactionInfoRegistRequestDto.getTransactionName())
 				.transactionAmount(transactionInfoRegistRequestDto.getTransactionAmount())
 				.transactionType(transactionInfoRegistRequestDto.getTransactionType())
@@ -104,14 +111,25 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 				Optional<AvgConsumptionAmount> avgConsumptionAmountOptional = avgConsumptionAmountRepository.findByAgeSalaryIdCategoryId(
 					ageSalary.getId(), category.get().getId(), Timestamp.valueOf(LocalDateTime.now()));
 
+				AvgConsumptionAmount avgConsumptionAmount;
 				// 나이-소득 구간, 카테고리, 현재 연월에 해당하는 평균 소비 정보 없음
 				if (!avgConsumptionAmountOptional.isPresent()) {
-					throw new BaseException(
-						BaseResponseStatus.NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_CATEGORY_ID_AND_REG_DATE);
+					// throw new BaseException(
+					// 	BaseResponseStatus.NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_CATEGORY_ID_AND_REG_DATE);
+
+
+					avgConsumptionAmount = AvgConsumptionAmount.builder()
+						.ageSalary(ageSalary)
+						.category(category.get())
+						.sumAmount(0)
+						.regDate(Timestamp.valueOf(LocalDateTime.now()))
+						.build();
+
+					avgConsumptionAmountRepository.save(avgConsumptionAmount);
 				}
 
 				// 평균 소비 정보 총합 수정
-				AvgConsumptionAmount avgConsumptionAmount = avgConsumptionAmountOptional.get();
+				avgConsumptionAmount = avgConsumptionAmountOptional.get();
 				newAvgConsumptionAmount = AvgConsumptionAmount.builder()
 					.id(avgConsumptionAmount.getId())
 					.ageSalary(avgConsumptionAmount.getAgeSalary())
