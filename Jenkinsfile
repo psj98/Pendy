@@ -45,7 +45,7 @@ pipeline{
 
         stage('BE-Deploy'){
             steps{
-                sshagent(credentials:['ubuntu']){
+                sshagent(credentials:['ec2-user']){
                     sh "echo '##### BE DEPLOY START #####'"
                     dir('backend/namani/build/libs'){
                         sh "scp -o StrictHostKeyChecking=no -i ${env.BACK_KEY_FILE} ubuntu@${env.DEV_BACK_IP}:/home/ubuntu/namani"
