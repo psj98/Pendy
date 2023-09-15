@@ -22,11 +22,13 @@ const MenuListUser = () => {
 
   //로그아웃 클릭
   const onClickLogout = () => {
+    console.log('logout');
     localStorage.removeItem('accessToken');
     sessionStorage.removeItem('email');
     sessionStorage.removeItem('name');
     sessionStorage.removeItem('age');
     sessionStorage.removeItem('salary');
+    sessionStorage.removeItem('accountList');
     navigate('/', { replace: true });
   };
 

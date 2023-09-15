@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './BarChart.css';
-
 import ReactApexChart from 'react-apexcharts';
 
 const BarChart = () => {
@@ -28,19 +27,23 @@ const BarChart = () => {
     ],
   });
 
-  const options = {
-    chart: {
-      type: 'bar',
-    },
-    xaxis: {
-      categories: chartData.categories,
-    },
-    colors: ['#0076BE', '#AADAFF'],
-  };
-
   return (
-    <div className="bar-chart">
-      <ReactApexChart options={options} series={chartData.series} type="bar" />
+    <div className="bar-chart-container">
+      <div className="bar-chart-wrapper">
+        <ReactApexChart
+          options={{
+            chart: {
+              type: 'bar',
+            },
+            xaxis: {
+              categories: chartData.categories,
+            },
+            colors: ['#0076BE', '#AADAFF'],
+          }}
+          series={chartData.series}
+          type="bar"
+        />
+      </div>
     </div>
   );
 };

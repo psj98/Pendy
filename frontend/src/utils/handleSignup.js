@@ -11,8 +11,8 @@ const handleSignup = (email, password, name, age, salary, accounts) => {
     salary: salary,
     accounts: accounts,
   };
-  console.log(data);
-  console.log(data.accounts);
+  // console.log(data);
+  // console.log(data.accounts);
   const serverUrl = '/api/members/join';
 
   return axiosCreate.post(serverUrl, data);
