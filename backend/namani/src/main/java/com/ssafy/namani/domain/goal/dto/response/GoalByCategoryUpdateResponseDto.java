@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
-public class GoalByCategoryDetailResponseDto {
+public class GoalByCategoryUpdateResponseDto {
 
     @NotNull
     private Integer categoryId; // 카테고리 id
