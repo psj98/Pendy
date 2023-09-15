@@ -31,6 +31,8 @@ const BarChart = () => {
   const options = {
     chart: {
       type: 'bar',
+      width: '100%',
+      height: '100%',
     },
     xaxis: {
       categories: chartData.categories,
