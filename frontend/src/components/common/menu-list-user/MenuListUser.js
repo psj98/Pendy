@@ -22,6 +22,7 @@ const MenuListUser = () => {
 
   //로그아웃 클릭
   const onClickLogout = () => {
+    console.log('logout');
     localStorage.removeItem('accessToken');
     sessionStorage.removeItem('email');
     sessionStorage.removeItem('name');
