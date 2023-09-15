@@ -1,7 +1,7 @@
 package com.ssafy.namani.domain.statistic.controller;
 
-import com.ssafy.namani.domain.goal.dto.response.GoalCheckResponseDto;
 import com.ssafy.namani.domain.jwt.service.JwtService;
+import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticAmountByCategoryResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
 import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.global.response.BaseException;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -39,6 +40,23 @@ public class StatisticController {
             MonthlyStatisticDetailByRegDateResponseDto monthlyStatistic = statisticService.getMonthlyStatisticByRegDate(memberId, Timestamp.valueOf(LocalDateTime.now()));
 
             return baseResponseService.getSuccessResponse(monthlyStatistic);
+        } catch (BaseException e) {
+            return baseResponseService.getFailureResponse(e.status);
+        }
+    }
+
+    @GetMapping("/monthly-sum")
+    public BaseResponse<Object> getMonthlyStatisticByThreeMonth(@RequestHeader(value = "accessToken", required = false) String token) {
+        try {
+            // 토큰 정보 체크
+            if (token == null || token.equals("")) {
+                throw new BaseException(BaseResponseStatus.SESSION_EXPIRATION);
+            }
+
+            UUID memberId = jwtService.getMemberIdFromToken(token); // token으로 memberId 조회
+            List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategory = statisticService.getMonthlyStatisticBeforeThreeMonth(memberId, Timestamp.valueOf(LocalDateTime.now()));
+
+            return baseResponseService.getSuccessResponse(amountByCategory);
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);
         }

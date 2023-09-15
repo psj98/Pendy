@@ -6,6 +6,7 @@ import com.ssafy.namani.domain.member.entity.Member;
 import com.ssafy.namani.domain.member.repository.MemberRepository;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticAmountByCategoryResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
+import com.ssafy.namani.domain.statistic.entity.IMonthlyStatisticAvg;
 import com.ssafy.namani.domain.statistic.entity.MonthlyStatistic;
 import com.ssafy.namani.domain.statistic.repository.DailyStatisticRepository;
 import com.ssafy.namani.domain.statistic.repository.MonthlyStatisticRepository;
@@ -15,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +26,7 @@ public class StatisticServiceImpl implements StatisticService {
     private final MonthlyStatisticRepository monthlyStatisticRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+
 
     /**
      * 로그인 한 사용자의 아이디 + 특정 날짜에 해당하는 월간 통계 정보 조회
@@ -105,5 +104,57 @@ public class StatisticServiceImpl implements StatisticService {
                 .build();
 
         return monthlyStatistic;
+    }
+
+    /**
+     * 사용자 + 카테고리 + 특정 연월로 이전 3달간의 통계 정보를 가져오는 메서드
+     *
+     * @param memberId
+     * @param curDate
+     * @return List<MonthlyStatisticAmountByCategoryResponseDto>
+     * @throws BaseException
+     */
+    @Override
+    public List<MonthlyStatisticAmountByCategoryResponseDto> getMonthlyStatisticBeforeThreeMonth(UUID memberId, Timestamp curDate) throws BaseException {
+        List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategoryList = new ArrayList<>();
+        List<Category> categoryList = categoryRepository.findAll();
+
+        // 사용자 정보 체크
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        if (!memberOptional.isPresent()) {
+            throw new BaseException(BaseResponseStatus.INVALID_MEMBER);
+        }
+
+        // 월간 통계 정보 체크
+        Optional<List<IMonthlyStatisticAvg>> monthlyStatisticAvgListOptional = monthlyStatisticRepository.findByMemberIdRegDateBeforeThreeMonth(memberId, curDate);
+        if (!monthlyStatisticAvgListOptional.isPresent()) { // 모든 카테고리에 대해 0으로 반환
+            for (Category category : categoryList) {
+                MonthlyStatisticAmountByCategoryResponseDto amountByCategory
+                        = MonthlyStatisticAmountByCategoryResponseDto.builder()
+                        .categoryId(category.getId())
+                        .categoryName(category.getName())
+                        .amount(0)
+                        .build();
+
+                amountByCategoryList.add(amountByCategory);
+            }
+
+            return amountByCategoryList;
+        }
+
+        // 카테고리 별로 모두 더해서 반환
+        List<IMonthlyStatisticAvg> monthlyStatisticAvgList = monthlyStatisticAvgListOptional.get();
+        for (IMonthlyStatisticAvg iMonthlyStatisticAvg : monthlyStatisticAvgList) {
+            MonthlyStatisticAmountByCategoryResponseDto amountByCategory
+                    = MonthlyStatisticAmountByCategoryResponseDto.builder()
+                    .categoryId(iMonthlyStatisticAvg.getCategoryId())
+                    .categoryName(iMonthlyStatisticAvg.getCategoryName())
+                    .amount(iMonthlyStatisticAvg.getAmount())
+                    .build();
+
+            amountByCategoryList.add(amountByCategory);
+        }
+
+        return amountByCategoryList;
     }
 }
