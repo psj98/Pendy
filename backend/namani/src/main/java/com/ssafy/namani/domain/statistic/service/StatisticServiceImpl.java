@@ -115,7 +115,7 @@ public class StatisticServiceImpl implements StatisticService {
      * @throws BaseException
      */
     @Override
-    public List<MonthlyStatisticAmountByCategoryResponseDto> getMonthlyStatisticBeforeThreeMonth(UUID memberId, Timestamp curDate) throws BaseException {
+    public List<MonthlyStatisticAmountByCategoryResponseDto> getMonthlyStatisticAvgForThreeMonth(UUID memberId, Timestamp curDate) throws BaseException {
         List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategoryList = new ArrayList<>();
         List<Category> categoryList = categoryRepository.findAll();
 
@@ -126,7 +126,7 @@ public class StatisticServiceImpl implements StatisticService {
         }
 
         // 월간 통계 정보 체크
-        Optional<List<IMonthlyStatisticAvg>> monthlyStatisticAvgListOptional = monthlyStatisticRepository.findByMemberIdRegDateBeforeThreeMonth(memberId, curDate);
+        Optional<List<IMonthlyStatisticAvg>> monthlyStatisticAvgListOptional = monthlyStatisticRepository.findByMemberIdRegDateForThreeMonth(memberId, curDate);
         if (!monthlyStatisticAvgListOptional.isPresent()) { // 모든 카테고리에 대해 0으로 반환
             for (Category category : categoryList) {
                 MonthlyStatisticAmountByCategoryResponseDto amountByCategory
