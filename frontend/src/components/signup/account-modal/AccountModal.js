@@ -1,31 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AccountModal.css';
 
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { InputLabel, MenuItem } from '@mui/material';
 
-const AccountModal = ({ accountList, closeModal, handleAccountChange }) => {
+const AccountModal = ({ index, closeModal, handleAccountChange }) => {
+  const [accountNumber, setAccountNumber] = useState('');
+  const [bankCode, setBankCode] = useState('');
+
   const handleAccountNumberChange = (e) => {
-    const newValue = e.target.value;
-    handleAccountChange(accountList.length - 1, 'accountNumber', newValue);
+    setAccountNumber(e.target.value);
   };
 
-  const handleBankChange = (e) => {
-    const newValue = e.target.value;
-    handleAccountChange(accountList.length - 1, 'bankCode', newValue);
+  const handleBankCodeChange = (e) => {
+    const selectedBankCode = e.target.value;
+    setBankCode(selectedBankCode);
   };
-  console.log('modal' + accountList);
+
+  const onSaveClick = () => {
+    handleAccountChange(accountNumber, bankCode);
+    closeModal();
+  };
+
   return (
     <div className="modal">
       <div className="modal-content">
         <h2>계좌 인증</h2>
         <input
-          type="text"
-          className="input"
+          type="number"
+          name="accountNumber"
           placeholder="계좌 번호"
-          value={accountList[accountList.length - 1].accountNumber}
+          value={accountNumber}
           onChange={handleAccountNumberChange}
+          inputProps={{ inputMode: 'numeric' }}
         />
         <div className="input-container">
           <FormControl fullWidth size="small">
@@ -33,9 +41,9 @@ const AccountModal = ({ accountList, closeModal, handleAccountChange }) => {
             <Select
               labelId="select-label"
               id="simple-select"
-              value={accountList[accountList.length - 1].bankCode}
+              value={bankCode}
               label="은행 선택"
-              onChange={handleBankChange}
+              onChange={handleBankCodeChange}
               fullWidth={true}
             >
               <MenuItem value="">은행 선택</MenuItem>
@@ -62,7 +70,7 @@ const AccountModal = ({ accountList, closeModal, handleAccountChange }) => {
             </Select>
           </FormControl>
         </div>
-        <button onClick={closeModal}>닫기</button>
+        <button onClick={onSaveClick}>등록</button>
       </div>
     </div>
   );
