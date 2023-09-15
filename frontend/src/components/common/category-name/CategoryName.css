@@ -1,0 +1,11 @@
+/* CategoryName.css */
+
+.category-name {
+  display: flex;
+  flex-direction: row;
+}
+
+.square {
+  width: 20px;
+  height: 20px;
+}

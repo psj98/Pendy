@@ -1,0 +1,75 @@
+/* UserInfoTemplate.css */
+
+/* 로그인 스타일 */
+.signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+/* 제목 스타일 */
+.signup-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+/* 입력 필드 스타일 */
+.signup-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  width: 80%;
+  position: relative;
+}
+
+.signup-input-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  width: 80%;
+  position: relative;
+}
+
+.signup-input-sub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  position: relative;
+}
+
+/* 버튼 스타일 */
+.signup-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 80%;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.signup-button:hover {
+  background-color: #0056b3;
+}
+
+/* 링크 스타일 */
+.signup-link {
+  color: black;
+  text-decoration: none;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
