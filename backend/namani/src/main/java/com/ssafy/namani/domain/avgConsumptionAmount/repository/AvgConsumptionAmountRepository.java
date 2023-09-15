@@ -1,6 +1,7 @@
 package com.ssafy.namani.domain.avgConsumptionAmount.repository;
 
 import com.ssafy.namani.domain.avgConsumptionAmount.entity.AvgConsumptionAmount;
+import com.ssafy.namani.domain.avgConsumptionAmount.entity.IAvgConsumptionAmountAvg;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -35,4 +36,19 @@ public interface AvgConsumptionAmountRepository extends JpaRepository<AvgConsump
             " WHERE a.age_salary_id = ?1 AND a.category_id = ?2" +
             " AND DATE_FORMAT(a.reg_date, '%Y-%m') = DATE_FORMAT(?3, '%Y-%m')", nativeQuery = true)
     Optional<AvgConsumptionAmount> findByAgeSalaryIdCategoryId(Integer ageSalaryId, Integer categoryId, Timestamp curDate);
+
+    /**
+     * 연령대 + 연봉대 + 카테고리 + 특정 연월로 이전 3달간의 평균 소비 정보를 가져오는 메서드
+     *
+     * @param peopleNum
+     * @param ageSalaryId
+     * @param curDate
+     * @return Optional<List<IAvgConsumptionAmountAvg>>
+     */
+    @Query(value = "SELECT a.category_id AS categoryId, c.name AS categoryName, SUM(a.sum_amount) / 30000 / ?1 AS amount " +
+            "FROM avg_consumption_amount a, category c " +
+            "WHERE a.category_id = c.id " +
+            "AND a.age_salary_id = ?2 AND DATE_FORMAT(a.reg_date, '%Y-%m') BETWEEN DATE_FORMAT(DATE_SUB(?3, INTERVAL 3 MONTH), '%Y-%m') AND DATE_FORMAT(DATE_SUB(?3, INTERVAL 1 MONTH), '%Y-%m') " +
+            "GROUP BY a.category_id", nativeQuery = true)
+    Optional<List<IAvgConsumptionAmountAvg>> findByAgeSalaryIdRegDateForThreeMonth(Integer peopleNum, Integer ageSalaryId, Timestamp curDate);
 }

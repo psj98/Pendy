@@ -1,6 +1,7 @@
 package com.ssafy.namani.domain.avgConsumptionAmount.service;
 
 import com.ssafy.namani.domain.avgConsumptionAmount.dto.response.AvgConsumptionAmountDetailResponseDto;
+import com.ssafy.namani.domain.avgConsumptionAmount.dto.response.AvgConsumptionAmountForThreeMonthResponseDto;
 import com.ssafy.namani.global.response.BaseException;
 
 import java.sql.Timestamp;
@@ -33,4 +34,15 @@ public interface AvgConsumptionAmountService {
      * @throws BaseException
      */
     void updateAvgConsumptionAmountByMemberJoin(String accountNumber, Integer age, Integer salary) throws BaseException;
+
+    /**
+     * 연령대 + 연봉대 + 카테고리 + 특정 연월로 이전 3달간의 평균 소비 정보를 가져오는 메서드
+     *
+     * @param age
+     * @param salary
+     * @param curDate
+     * @return List<AvgConsumptionAmountForThreeMonthResponseDto>
+     * @throws BaseException
+     */
+    List<AvgConsumptionAmountForThreeMonthResponseDto> getAvgConsumptionAmountForThreeMonth(Integer age, Integer salary, Timestamp curDate) throws BaseException;
 }

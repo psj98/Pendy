@@ -45,8 +45,8 @@ public class StatisticController {
         }
     }
 
-    @GetMapping("/monthly-sum")
-    public BaseResponse<Object> getMonthlyStatisticByThreeMonth(@RequestHeader(value = "accessToken", required = false) String token) {
+    @GetMapping("/monthly-avg")
+    public BaseResponse<Object> getMonthlyStatisticAvgForThreeMonth(@RequestHeader(value = "accessToken", required = false) String token) {
         try {
             // 토큰 정보 체크
             if (token == null || token.equals("")) {
@@ -54,7 +54,7 @@ public class StatisticController {
             }
 
             UUID memberId = jwtService.getMemberIdFromToken(token); // token으로 memberId 조회
-            List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategory = statisticService.getMonthlyStatisticBeforeThreeMonth(memberId, Timestamp.valueOf(LocalDateTime.now()));
+            List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategory = statisticService.getMonthlyStatisticAvgForThreeMonth(memberId, Timestamp.valueOf(LocalDateTime.now()));
 
             return baseResponseService.getSuccessResponse(amountByCategory);
         } catch (BaseException e) {
