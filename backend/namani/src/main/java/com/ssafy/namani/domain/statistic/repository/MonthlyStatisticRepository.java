@@ -19,7 +19,7 @@ public interface MonthlyStatisticRepository extends JpaRepository<MonthlyStatist
      *
      * @param memberId
      * @param curDate
-     * @return Optional<List < MonthlyStatistic>>
+     * @return Optional<List<MonthlyStatistic>>
      */
     @Query(value = "SELECT * FROM monthly_statistic m " +
             "WHERE m.member_id = ?1 AND DATE_FORMAT(m.reg_date, '%Y-%m') = DATE_FORMAT(?2, '%Y-%m')", nativeQuery = true)
@@ -48,5 +48,5 @@ public interface MonthlyStatisticRepository extends JpaRepository<MonthlyStatist
             "WHERE m.category_id = c.id " +
             "AND m.member_id = ?1 AND DATE_FORMAT(m.reg_date, '%Y-%m') BETWEEN DATE_FORMAT(DATE_SUB(?2, INTERVAL 3 MONTH), '%Y-%m') AND DATE_FORMAT(DATE_SUB(?2, INTERVAL 1 MONTH), '%Y-%m') " +
             "GROUP BY m.category_id", nativeQuery = true)
-    Optional<List<IMonthlyStatisticAvg>> findByMemberIdRegDateBeforeThreeMonth(UUID memberId, Timestamp curDate);
+    Optional<List<IMonthlyStatisticAvg>> findByMemberIdRegDateForThreeMonth(UUID memberId, Timestamp curDate);
 }

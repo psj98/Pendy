@@ -28,5 +28,5 @@ public interface StatisticService {
      * @return List<IMonthlyStatisticSum>
      * @throws BaseException
      */
-    List<MonthlyStatisticAmountByCategoryResponseDto> getMonthlyStatisticBeforeThreeMonth(UUID memberId, Timestamp curDate) throws BaseException;
+    List<MonthlyStatisticAmountByCategoryResponseDto> getMonthlyStatisticAvgForThreeMonth(UUID memberId, Timestamp curDate) throws BaseException;
 }
