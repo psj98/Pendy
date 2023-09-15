@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import './SignUpTemplate.css';
+import './UserInfoTemplate.css';
 import { Icon } from '@iconify/react';
 import handleSignup from '../../utils/handleSignup';
+import { useNavigate } from 'react-router-dom';
 import AccountModal from '../../components/signup/account-modal/AccountModal';
 
-const SignUpTemplate = () => {
+const UserInfoTemplate = () => {
   const [state, setState] = useState({
     email: '',
     password: '',
@@ -15,16 +16,22 @@ const SignUpTemplate = () => {
     accounts: [{ accountNumber: '', bankCode: '' }],
   });
 
-  const accountList = JSON.stringify(state.accounts);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAccountIndex, setSelectedAccountIndex] = useState(null);
+  const navigate = useNavigate();
+
+  //모달창 열기
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   //계좌 개수 증가
   const handleAddAccount = () => {
-    setState({
-      ...state,
-      accounts: [...state.accounts, { accountNumber: '', bankCode: '' }],
-    });
+    setState({ ...state, accounts: [...state.accounts, ''] });
   };
 
   //계좌 삭제
@@ -35,9 +42,9 @@ const SignUpTemplate = () => {
   };
 
   //계좌 index 변경
-  const handleAccountChange = (index, key, value) => {
+  const handleAccountChange = (index, value) => {
     const updatedAccounts = [...state.accounts];
-    updatedAccounts[index][key] = value;
+    updatedAccounts[index] = value;
     setState({ ...state, accounts: updatedAccounts });
   };
 
@@ -60,7 +67,7 @@ const SignUpTemplate = () => {
         const token = response.data.token;
         console.log('SignUp success', token);
         alert('회원가입에 성공하셨습니다.');
-        navigator('/login');
+        navigate('/login', { replace: true });
       } catch (error) {
         console.error('SignUp failed:', error);
         alert('회원가입에 실패하셨습니다.');
@@ -68,17 +75,6 @@ const SignUpTemplate = () => {
     } else {
       alert('비밀번호가 일치하지 않습니다');
     }
-  };
-
-  //모달창 열기
-  const openModal = (index) => {
-    setSelectedAccountIndex(index);
-    setIsModalOpen(true);
-  };
-
-  // 모달 닫기
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
@@ -165,32 +161,22 @@ const SignUpTemplate = () => {
         </div>
       </div>
 
-      {state.accounts.map((account, index) => (
-        <div key={index} className="signup-input-main">
-          {/* 계좌 입력 */}
-          <div className="signup-input-sub">
+      <div className="signup-input-main">
+        {/* 계좌 입력 */}
+        {state.accounts.map((account, index) => (
+          <div key={index} className="signup-input-sub">
             <input
               type="number"
               className="input"
-              placeholder={`계좌 ${index + 1}`}
+              placeholder={`계좌 ${index + 1} 계좌번호`}
               variant="outlined"
               value={account.accountNumber}
-              onClick={() => openModal(index)}
+              onChange={(e) =>
+                handleAccountChange(index, 'accountNumber', e.target.value)
+              }
             />
             <span className="border"></span>
-          </div>
-          &nbsp;&nbsp;
-          {/* 은행 선택 */}
-          <div className="signup-input-sub">
-            <input
-              type="number"
-              className="input"
-              placeholder={'은행'}
-              variant="outlined"
-              value={account.bankCode}
-              onClick={() => openModal(index)}
-            />
-            <span className="border"></span>
+
             {/* 계좌 제거 버튼 */}
             {index > 0 && (
               <Icon
@@ -202,8 +188,24 @@ const SignUpTemplate = () => {
               />
             )}
           </div>
-        </div>
-      ))}
+        ))}
+        {/* 은행 선택 */}
+        {state.accounts.map((account, index) => (
+          <div key={index} className="signup-input-sub">
+            <input
+              type="number"
+              className="input"
+              placeholder={`은행 ${index + 1} 코드`}
+              variant="outlined"
+              value={account.bankCode}
+              onChange={(e) =>
+                handleAccountChange(index, 'bankCode', e.target.value)
+              }
+            />
+            <span className="border"></span>
+          </div>
+        ))}
+      </div>
 
       {/* 계좌 추가 버튼 */}
       <div className="signup-input">
@@ -221,17 +223,17 @@ const SignUpTemplate = () => {
           가입하기
         </button>
       </div>
+
       {/* 모달 창 */}
       {isModalOpen && (
         <AccountModal
-          accountList={accountList}
+          state={state}
           closeModal={closeModal}
           handleAccountChange={handleAccountChange}
-          index={selectedAccountIndex}
         />
       )}
     </div>
   );
 };
 
-export default SignUpTemplate;
+export default UserInfoTemplate;
