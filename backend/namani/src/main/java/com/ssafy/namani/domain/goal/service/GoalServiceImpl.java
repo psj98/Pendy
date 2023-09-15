@@ -1,27 +1,30 @@
 package com.ssafy.namani.domain.goal.service;
 
+import com.ssafy.namani.domain.avgConsumptionAmount.dto.response.AvgConsumptionAmountForThreeMonthResponseDto;
+import com.ssafy.namani.domain.avgConsumptionAmount.service.AvgConsumptionAmountService;
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.category.repository.CategoryRepository;
 import com.ssafy.namani.domain.goal.dto.request.GoalDetailRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalRegistRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalUpdateRequestDto;
-import com.ssafy.namani.domain.goal.dto.response.GoalByCategoryDetailResponseDto;
-import com.ssafy.namani.domain.goal.dto.response.GoalCheckResponseDto;
-import com.ssafy.namani.domain.goal.dto.response.GoalDetailResponseDto;
+import com.ssafy.namani.domain.goal.dto.response.*;
 import com.ssafy.namani.domain.goal.entity.GoalByCategory;
 import com.ssafy.namani.domain.goal.entity.TotalGoal;
 import com.ssafy.namani.domain.goal.repository.GoalByCategoryRepository;
 import com.ssafy.namani.domain.goal.repository.TotalGoalRepository;
 import com.ssafy.namani.domain.member.entity.Member;
 import com.ssafy.namani.domain.member.repository.MemberRepository;
+import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticAmountByCategoryResponseDto;
+import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
+import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,6 +37,8 @@ public class GoalServiceImpl implements GoalService {
     private final GoalByCategoryRepository goalByCategoryRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final StatisticService statisticService;
+    private final AvgConsumptionAmountService avgConsumptionAmountService;
 
     /**
      * 로그인한 사용자 및 현재 연월에 해당하는 목표 정보가 있는지 체크하는 메서드
@@ -88,7 +93,7 @@ public class GoalServiceImpl implements GoalService {
 
         // 월별 목표 정보 저장
         Integer goalAmount = goalRegistRequestDto.getGoalAmount();
-        List<GoalByCategoryDetailResponseDto> goalByCategoryList = goalRegistRequestDto.getGoalByCategoryList();
+        List<GoalByCategoryRegistResponseDto> goalByCategoryList = goalRegistRequestDto.getGoalByCategoryList();
 
         TotalGoal totalGoal = TotalGoal.builder()
                 .member(memberOptional.get())
@@ -99,8 +104,8 @@ public class GoalServiceImpl implements GoalService {
         totalGoalRepository.save(totalGoal);
 
         // 카테고리 별로 목표 저장
-        for (GoalByCategoryDetailResponseDto goalByCategoryDetailResponseDto : goalByCategoryList) {
-            Optional<Category> categoryOptional = categoryRepository.findById(goalByCategoryDetailResponseDto.getCategoryId());
+        for (GoalByCategoryRegistResponseDto goalByCategoryRegistResponseDto : goalByCategoryList) {
+            Optional<Category> categoryOptional = categoryRepository.findById(goalByCategoryRegistResponseDto.getCategoryId());
 
             // 카테고리 정보 체크
             if (!categoryOptional.isPresent()) {
@@ -110,7 +115,7 @@ public class GoalServiceImpl implements GoalService {
             GoalByCategory goalByCategory = GoalByCategory.builder()
                     .totalGoal(totalGoal)
                     .category(categoryOptional.get())
-                    .categoryGoalAmount(goalByCategoryDetailResponseDto.getCategoryGoalAmount())
+                    .categoryGoalAmount(goalByCategoryRegistResponseDto.getCategoryGoalAmount())
                     .build();
 
             goalByCategoryRepository.save(goalByCategory);
@@ -127,7 +132,63 @@ public class GoalServiceImpl implements GoalService {
      */
     @Override
     public GoalDetailResponseDto detailGoal(UUID memberId, GoalDetailRequestDto goalDetailRequestDto) throws BaseException {
-        return null;
+        Integer age = goalDetailRequestDto.getAge();
+        Integer salary = goalDetailRequestDto.getSalary();
+        Timestamp curDate = goalDetailRequestDto.getCurDate();
+
+        /* 월별 목표 조회 */
+        Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, curDate);
+        if (!totalGoalOptional.isPresent()) {
+            throw new BaseException(BaseResponseStatus.TOTAL_GOAL_NOT_FOUND);
+        }
+
+        TotalGoal newTotalGoal = totalGoalOptional.get();
+        TotalGoalDetailResponseDto totalGoal = TotalGoalDetailResponseDto.builder()
+                .id(newTotalGoal.getId())
+                .goalAmount(newTotalGoal.getGoalAmount())
+                .build();
+
+        /* 카테고리 별 목표 조회 */
+        List<GoalByCategoryDetailResponseDto> goalByCategoryList = new ArrayList<>();
+        List<Category> categoryList = categoryRepository.findAll();
+        for (Category category : categoryList) {
+            Optional<GoalByCategory> goalByCategoryOptional = goalByCategoryRepository.findByTotalGoalIdCategoryId(totalGoal.getId(), category.getId());
+
+            // 카테고리 별 목표 체크
+            if (!goalByCategoryOptional.isPresent()) {
+                throw new BaseException(BaseResponseStatus.GOAL_BY_CATEGORY_NOT_FOUND);
+            }
+
+            GoalByCategory goalByCategory = goalByCategoryOptional.get();
+            GoalByCategoryDetailResponseDto goalByCategoryDetailResponseDto =
+                    GoalByCategoryDetailResponseDto.builder()
+                            .categoryId(category.getId())
+                            .categoryName(category.getName())
+                            .categoryGoalAmount(goalByCategory.getCategoryGoalAmount())
+                            .build();
+
+            goalByCategoryList.add(goalByCategoryDetailResponseDto);
+        }
+
+        /* 현재 달 월간 소비 통계 조회 */
+        MonthlyStatisticDetailByRegDateResponseDto monthlyStatistic = statisticService.getMonthlyStatisticByRegDate(memberId, curDate);
+
+        /* 이전 3달간 월간 소비 통계 조회 */
+        List<MonthlyStatisticAmountByCategoryResponseDto> monthlyStatisticAvg = statisticService.getMonthlyStatisticAvgForThreeMonth(memberId, curDate);
+
+        /* 이전 3달간 연령대 + 연봉대에 맞는 평균 소비 조회 */
+        List<AvgConsumptionAmountForThreeMonthResponseDto> avgConsumptionAmountAvg = avgConsumptionAmountService.getAvgConsumptionAmountForThreeMonth(age, salary, curDate);
+
+        /* 목표 조회 데이터 정보 저장 및 반환 */
+        GoalDetailResponseDto goalDetailResponseDto = GoalDetailResponseDto.builder()
+                .totalGoal(totalGoal)
+                .goalByCategoryList(goalByCategoryList)
+                .monthlyStatistic(monthlyStatistic)
+                .monthlyStatisticAvg(monthlyStatisticAvg)
+                .avgConsumptionAmountAvg(avgConsumptionAmountAvg)
+                .build();
+
+        return goalDetailResponseDto;
     }
 
     /**
@@ -158,10 +219,10 @@ public class GoalServiceImpl implements GoalService {
         totalGoalRepository.save(newTotalGoal);
 
         // 카테고리 별 목표 수정
-        List<GoalByCategoryDetailResponseDto> goalByCategoryList = goalUpdateRequestDto.getGoalByCategoryList();
-        for (GoalByCategoryDetailResponseDto goalByCategoryDetailResponseDto : goalByCategoryList) {
-            Integer categoryId = goalByCategoryDetailResponseDto.getCategoryId();
-            Integer categoryGoalAmount = goalByCategoryDetailResponseDto.getCategoryGoalAmount();
+        List<GoalByCategoryUpdateResponseDto> goalByCategoryList = goalUpdateRequestDto.getGoalByCategoryList();
+        for (GoalByCategoryUpdateResponseDto goalByCategoryUpdateResponseDto : goalByCategoryList) {
+            Integer categoryId = goalByCategoryUpdateResponseDto.getCategoryId();
+            Integer categoryGoalAmount = goalByCategoryUpdateResponseDto.getCategoryGoalAmount();
 
             Optional<Category> category = categoryRepository.findById(categoryId);
 

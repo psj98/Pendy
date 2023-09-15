@@ -5,6 +5,7 @@ import com.ssafy.namani.domain.goal.dto.request.GoalRegistRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalUpdateRequestDto;
 import com.ssafy.namani.domain.goal.dto.response.GoalCheckResponseDto;
 import com.ssafy.namani.domain.goal.dto.response.GoalDetailResponseDto;
+import com.ssafy.namani.domain.goal.dto.response.TotalGoalDetailResponseDto;
 import com.ssafy.namani.global.response.BaseException;
 
 import java.util.UUID;
