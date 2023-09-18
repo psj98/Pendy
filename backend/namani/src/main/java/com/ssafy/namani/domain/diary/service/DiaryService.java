@@ -1,11 +1,15 @@
 package com.ssafy.namani.domain.diary.service;
 
-import com.ssafy.namani.domain.diary.dto.*;
+import com.ssafy.namani.domain.diary.dto.request.DiaryDetailRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryListRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryMonthlyAnalysisRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryRegistRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryUpdateContentRequestDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryResponseDto;
 import com.ssafy.namani.global.response.BaseException;
-import com.ssafy.namani.global.response.BaseResponse;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.ssafy.namani.domain.diary.dto;
+package com.ssafy.namani.domain.diary.dto.response;
 
 import com.ssafy.namani.domain.diary.entity.Diary;
 import lombok.Getter;
