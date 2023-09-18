@@ -1,7 +1,10 @@
 package com.ssafy.namani.domain.diary.controller;
 
-import com.ssafy.namani.domain.diary.dto.*;
-import com.ssafy.namani.domain.diary.entity.Diary;
+import com.ssafy.namani.domain.diary.dto.request.*;
+import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryResponseDto;
 import com.ssafy.namani.domain.diary.service.DiaryServiceImpl;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
@@ -10,11 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/diary")
+@RequestMapping("/diaries")
 public class DiaryController {
 
     private final DiaryServiceImpl diaryService;
@@ -27,7 +29,7 @@ public class DiaryController {
      * @param diaryListRequestDto
      * @return diaryListResponseDto
      */
-    @PostMapping("calendar")
+    @PostMapping("/calendar")
     public BaseResponse<Object> getCalendar(String accessToken, @RequestBody DiaryListRequestDto diaryListRequestDto) {
         try {
             DiaryListResponseDto diaryListResponseDto = diaryService.getCalendar(accessToken, diaryListRequestDto);
@@ -62,7 +64,7 @@ public class DiaryController {
      * @return diaryDetailResponseDto
      */
     @PostMapping("/after")
-    public BaseResponse<Object> detailDiary(String accessToken, @RequestBody DiaryDetailRequestDto diaryDetailRequestDto) {
+    public BaseResponse<Object> detailDiary(@RequestHeader(value = "accessToken") String accessToken, @RequestBody DiaryDetailRequestDto diaryDetailRequestDto) {
         try {
             DiaryDetailResponseDto diaryDetailResponseDto = diaryService.detailDiary(accessToken, diaryDetailRequestDto);
             return baseResponseService.getSuccessResponse(diaryDetailResponseDto);
@@ -78,7 +80,7 @@ public class DiaryController {
      * @param diaryUpdateContentRequestDto
      * @return diaryResponseDto
      */
-    @PutMapping("/${id}")
+    @PutMapping("/{id}")
     public BaseResponse<Object> updateDiary(@PathVariable("id") Long id, @RequestBody DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) {
         try {
             DiaryResponseDto diaryResponseDto = diaryService.updateDiary(id, diaryUpdateContentRequestDto);
