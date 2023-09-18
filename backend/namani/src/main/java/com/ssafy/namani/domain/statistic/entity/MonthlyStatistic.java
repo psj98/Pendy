@@ -2,20 +2,16 @@ package com.ssafy.namani.domain.statistic.entity;
 
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.member.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class MonthlyStatistic {
 
     @Id
@@ -23,7 +19,7 @@ public class MonthlyStatistic {
     @Column(name = "id")
     private Long id; // 월간 통계 id
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -35,5 +31,14 @@ public class MonthlyStatistic {
     private Integer amount; // 통계값
 
     @NotNull
-    private Date regDate; // 통계 등록 날짜
+    private Timestamp regDate; // 통계 등록 날짜
+
+    @Builder(toBuilder = true)
+    public MonthlyStatistic(Long id, Member member, Category category, Integer amount, Timestamp regDate) {
+        this.id = id;
+        this.member = member;
+        this.category = category;
+        this.amount = amount;
+        this.regDate = regDate;
+    }
 }

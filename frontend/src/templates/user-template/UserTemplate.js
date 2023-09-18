@@ -5,7 +5,8 @@ import { addMonths, subMonths } from 'date-fns';
 import CalenderHeader from '../../components/main/calender-header/CalenderHeader';
 import CalenderDays from '../../components/main/calender-days/CalenderDays';
 import CalenderCells from '../../components/main/calender-cells/CalenderCells';
-import DoughnutChart from '../../components/common/doughnut-chart/DoughnutChart';
+import DonutChart from '../../components/common/donut-chart/DonutChart';
+import GoalBar from '../../components/common/goal-bar/GoalBar';
 
 //유저 전용 메인 페이지
 const UserTemplate = () => {
@@ -36,8 +37,31 @@ const UserTemplate = () => {
         </div>
       </div>
       <div className="chart-container">
+        <div className="chart-button">
+          <label>
+            <input
+              type="radio"
+              name="chart-option"
+              value="option1"
+              defaultChecked
+            />
+            오늘
+          </label>
+          <label>
+            <input type="radio" name="chart-option" value="option2" /> 월간
+          </label>
+        </div>
         <div className="chart-content">
-          <DoughnutChart />
+          <DonutChart />
+        </div>
+        <div className="bar-content">
+          <div className="spend">
+            <div className="spend-text-blue">현재 소비 금액 /</div>&nbsp;
+            <div className="spend-text-black">목표 소비 금액</div>
+          </div>
+          <GoalBar />
+          <br />
+          <div className="spend-text-black">오늘의 고정 지출</div>
         </div>
       </div>
     </div>

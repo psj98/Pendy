@@ -18,12 +18,15 @@ import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.emotion.entity.Emotion;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class TransactionInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,4 +52,17 @@ public class TransactionInfo {
 	@CreationTimestamp
 	private Timestamp tradeDate; // 거래 일자
 
+	@Builder
+	public TransactionInfo(Long id, AccountInfo accountInfo, Category category, Emotion emotion, String transactionName,
+		Integer transactionAmount, Integer transactionType, Integer afterBalance, Timestamp tradeDate) {
+		this.id = id;
+		this.accountInfo = accountInfo;
+		this.category = category;
+		this.emotion = emotion;
+		this.transactionName = transactionName;
+		this.transactionAmount = transactionAmount;
+		this.transactionType = transactionType;
+		this.afterBalance = afterBalance;
+		this.tradeDate = tradeDate;
+	}
 }

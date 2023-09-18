@@ -1,0 +1,22 @@
+/* GoalBar.css */
+
+.goal-bar {
+  width: 80%;
+  height: 35px;
+  background: linear-gradient(
+    to right,
+    #2a4ffa 0%,
+    #2a4ffa calc(var(--midpoint) - 5%),
+    #94a7fc var(--midpoint),
+    #fff calc(var(--midpoint) + 5%),
+    #fff 100%
+  );
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+}

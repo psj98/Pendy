@@ -13,6 +13,16 @@ const LoginTemplate = () => {
     try {
       //eslint-disable-next-line
       const response = await handleLogin(state.email, state.password);
+      // console.log(response.data.data.accountListResponseDtoList);
+      const accountList = JSON.stringify(
+        response.data.data.accountListResponseDtoList,
+      );
+      localStorage.setItem('accessToken', response.data.data.accessToken);
+      sessionStorage.setItem('email', response.data.data.email);
+      sessionStorage.setItem('name', response.data.data.name);
+      sessionStorage.setItem('age', response.data.data.age);
+      sessionStorage.setItem('salary', response.data.data.salary);
+      sessionStorage.setItem('accountList', accountList);
       console.log('Login success');
       alert('로그인에 성공하셨습니다.');
       navigate('/', { replace: true });
