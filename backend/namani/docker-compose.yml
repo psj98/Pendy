@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  backend:
+    image: pohangman/backend:latest
+    build:
+      context: ./backend/namani
+      dockerfile: Dockerfile
+
+  frontend:
+    image: pohangman/frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
