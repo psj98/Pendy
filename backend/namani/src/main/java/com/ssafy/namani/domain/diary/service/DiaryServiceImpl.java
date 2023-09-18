@@ -1,9 +1,21 @@
 package com.ssafy.namani.domain.diary.service;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
+import com.ssafy.namani.domain.diary.dto.request.DiaryDetailRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryListRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryMonthlyAnalysisRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryRegistRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryUpdateContentRequestDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryCalendarResponseDto;
-import com.ssafy.namani.domain.diary.dto.request.*;
 import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
@@ -23,23 +35,17 @@ import com.ssafy.namani.domain.member.entity.Member;
 import com.ssafy.namani.domain.member.repository.MemberRepository;
 import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticDetailByRegDateResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
-import com.ssafy.namani.domain.statistic.entity.DailyStatistic;
+import com.ssafy.namani.domain.statistic.entity.MonthlyStatistic;
 import com.ssafy.namani.domain.statistic.repository.DailyStatisticRepository;
+import com.ssafy.namani.domain.statistic.repository.MonthlyStatisticRepository;
 import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
 import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -55,7 +61,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final TotalGoalRepository totalGoalRepository;
     private final GoalByCategoryRepository goalByCategoryRepository;
     private final DailyStatisticRepository dailyStatisticRepository;
-
+	private final MonthlyStatisticRepository monthlyStatisticRepository;
     private final GoalService goalService;
     private final StatisticService statisticService;
 
@@ -253,28 +259,75 @@ public class DiaryServiceImpl implements DiaryService {
         diaryRepository.save(diary1);
     }
 
-    @Override
-    public DiaryMonthlyAnalysisResponseDto getMonthlyAnalysis(String accessToken, DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) throws BaseException {
-        // accessToken decode => UUID
-        Timestamp curMonth = diaryMonthlyAnalysisRequestDto.getCurMonth();
+	@Override
+	public DiaryMonthlyAnalysisResponseDto getMonthlyAnalysis(UUID memberId,
+		DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) throws BaseException {
+		// accessToken decode => UUID
+		Timestamp curMonth = diaryMonthlyAnalysisRequestDto.getCurMonth();
+		log.debug("현재 연월 : " + curMonth);
 
-        // TotalGoal 조회 => UUID와 curMonth로 조회
-        // 목표 없음 ERROR
+		// TotalGoal 조회 => UUID와 curMonth로 조회
+		Optional<TotalGoal> totalGoal = totalGoalRepository.findByCurDate(memberId, curMonth);
+		// 목표 없음 ERROR
+		if (totalGoal.isEmpty()) {
+			throw new BaseException(BaseResponseStatus.TOTAL_GOAL_NOT_FOUND);
+		}
 
-        // GoalByCategory 조회 => totalGoalId로 조회
-        // 목표 없음 ERROR
+		TotalGoalDetailResponseDto totalGoalDetailResponseDto = TotalGoalDetailResponseDto.builder()
+			.id(totalGoal.get().getId())
+			.goalAmount(totalGoal.get().getGoalAmount())
+			.aiAnlaysis(totalGoal.get().getAiAnalysis())
+			.build();
+		// GoalByCategory 조회 => totalGoalId로 조회
+		// 목표 없음 ERROR
+		List<GoalByCategory> goalByCategories = new ArrayList<>();
+		Long totalGoalId = totalGoal.get().getId();
+		for (int i = 1; i <= 8; i++) {
+			Optional<GoalByCategory> goalByCategory = goalByCategoryRepository.findByTotalGoalIdCategoryId(
+				totalGoalId, i);
+			goalByCategory.ifPresent(goalByCategories::add);
+		}
 
-        // DailyStatistic 조회 => UUID와 curMonth로 조회
-        // 일간 통계 없음 ERROR
+		// MonthlyStatistic 조회 => UUID와 curMonth로 조회
+		// 월간 통계 없음 ERROR
+		Optional<List<MonthlyStatistic>> allByMemberIdRegDate = monthlyStatisticRepository.findAllByMemberIdRegDate(
+			memberId, curMonth);
+		if (allByMemberIdRegDate.isEmpty()) {
+			throw new BaseException(BaseResponseStatus.MONTHLY_STATISTIC_NOT_FOUND);
+		}
+		// Query 생성 : select date_sub(curMonth, interval 1 month);
+		// 이전 달 목표 체크
+		// totalGoalRepository로 이전 달 목표 있는지 체크
+		String beforeMonth = totalGoalRepository.findBeforeMonth(memberId, curMonth) + "-01 00:00:00.0";
+		log.debug("이전 달 정보:" + beforeMonth);
+		Timestamp beforeMonthTimestamp = Timestamp.valueOf(beforeMonth);
+		log.debug("이전 달 정보:" + beforeMonthTimestamp);
 
-        // Query 생성 : select date_sub(curMonth, interval 1 month);
-        // 이전 달 목표 체크
-        // totalGoalRepository로 이전 달 목표 있는지 체크
+		Boolean hasBeforeMonthlyGoal = true;
+		Optional<TotalGoal> beforeMonthGoal = totalGoalRepository.findByCurDate(memberId, beforeMonthTimestamp);
+		// 목표 없음 ERROR
+		if (beforeMonthGoal.isEmpty()) {
+			hasBeforeMonthlyGoal = false;
+		}
 
-        // Query 생성 : select date_add(curMonth, interval 1 month);
-        // 다음 달 목표 체크
-        // totalGoalRepository로 다음 달 목표 있는지 체크
+		// Query 생성 : select date_add(curMonth, interval 1 month);
+		// 다음 달 목표 체크
+		// totalGoalRepository로 다음 달 목표 있는지 체크
+		String afterMonth = totalGoalRepository.findAfterMonth(memberId, curMonth) + "-01 00:00:00.0";
+		Timestamp afterMonthTimestamp = Timestamp.valueOf(afterMonth);
+		log.debug("다음 달 정보:" + afterMonth);
+		log.debug("다음 달 정보:" + afterMonthTimestamp);
 
-        return new DiaryMonthlyAnalysisResponseDto(); // totalGoal, goalByCategory, DailyStatistic, boolean, boolean
-    }
+		Boolean hasAfterMonthlyGoal = true;
+		Optional<TotalGoal> afterMonthGoal = totalGoalRepository.findByCurDate(memberId, afterMonthTimestamp);
+		// 목표 없음 ERROR
+		if (afterMonthGoal.isEmpty()) {
+			hasAfterMonthlyGoal = false;
+		}
+
+		return new DiaryMonthlyAnalysisResponseDto(
+			totalGoalDetailResponseDto, goalByCategories,
+			allByMemberIdRegDate.get(), hasBeforeMonthlyGoal,
+			hasAfterMonthlyGoal); // totalGoal, goalByCategory, DailyStatistic, boolean, boolean
+	}
 }

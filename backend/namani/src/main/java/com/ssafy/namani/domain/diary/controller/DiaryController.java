@@ -1,6 +1,21 @@
 package com.ssafy.namani.domain.diary.controller;
 
-import com.ssafy.namani.domain.diary.dto.request.*;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.namani.domain.diary.dto.request.DiaryDetailRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryListRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryMonthlyAnalysisRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryRegistRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryUpdateContentRequestDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
@@ -10,11 +25,9 @@ import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -117,11 +130,12 @@ public class DiaryController {
 	 * @return diaryMonthlyAnalysisResponseDto
 	 */
 	@PostMapping("/monthly-analysis")
-	public BaseResponse<Object> getMonthlyAnalysis(String accessToken,
+	public BaseResponse<Object> getMonthlyAnalysis(@RequestHeader(value = "accessToken") String accessToken,
 		@RequestBody DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) {
+		UUID memberIdFromToken = jwtService.getMemberIdFromToken(accessToken);
 		try {
 			DiaryMonthlyAnalysisResponseDto diaryMonthlyAnalysisResponseDto = diaryService.getMonthlyAnalysis(
-				accessToken, diaryMonthlyAnalysisRequestDto);
+				memberIdFromToken, diaryMonthlyAnalysisRequestDto);
 			return baseResponseService.getSuccessResponse(diaryMonthlyAnalysisResponseDto);
 		} catch (BaseException e) {
 			return baseResponseService.getFailureResponse(e.status);
