@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import com.ssafy.namani.domain.goal.dto.response.TotalGoalDetailResponseDto;
 import com.ssafy.namani.domain.goal.entity.GoalByCategory;
+import com.ssafy.namani.domain.goal.entity.TotalGoal;
 import com.ssafy.namani.domain.statistic.entity.MonthlyStatistic;
 
 import lombok.Getter;

@@ -1,9 +1,14 @@
 package com.ssafy.namani.domain.diary.service;
 
-import com.ssafy.namani.domain.diary.dto.request.*;
+import com.ssafy.namani.domain.diary.dto.request.DiaryDetailRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryListRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryMonthlyAnalysisRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryRegistRequestDto;
+import com.ssafy.namani.domain.diary.dto.request.DiaryUpdateContentRequestDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryResponseDto;
 import com.ssafy.namani.global.response.BaseException;
 
 import java.util.List;
@@ -13,7 +18,7 @@ public interface DiaryService {
 
     DiaryListResponseDto getCalendar(UUID memberId, DiaryListRequestDto diaryListRequestDto) throws BaseException;
 
-    void registDiary(UUID memberId, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException;
+    DiaryResponseDto registDiary(String accessToken, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException;
 
     DiaryDetailResponseDto detailDiary(String accessToken, DiaryDetailRequestDto diaryDetailRequestDto) throws BaseException;
 
