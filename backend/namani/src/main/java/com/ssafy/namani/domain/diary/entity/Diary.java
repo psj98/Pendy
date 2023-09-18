@@ -33,6 +33,7 @@ public class Diary {
 	@NotNull
 	private Integer stampType; // 일기 도장 종류
 
+	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp regDate; // 일기 등록 날짜
 
     @Builder(toBuilder = true)

@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 public class DailyStatisticAmountByCategoryResponseDto {
+
     @NotNull
     private Integer categoryId; // 카테고리 id
 

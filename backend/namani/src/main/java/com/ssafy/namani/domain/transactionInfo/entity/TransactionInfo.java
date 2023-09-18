@@ -52,7 +52,7 @@ public class TransactionInfo {
 	@CreationTimestamp
 	private Timestamp tradeDate; // 거래 일자
 
-	@Builder
+	@Builder(toBuilder = true)
 	public TransactionInfo(Long id, AccountInfo accountInfo, Category category, Emotion emotion, String transactionName,
 		Integer transactionAmount, Integer transactionType, Integer afterBalance, Timestamp tradeDate) {
 		this.id = id;

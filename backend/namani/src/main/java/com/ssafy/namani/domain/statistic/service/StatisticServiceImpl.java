@@ -4,8 +4,11 @@ import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.category.repository.CategoryRepository;
 import com.ssafy.namani.domain.member.entity.Member;
 import com.ssafy.namani.domain.member.repository.MemberRepository;
+import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticAmountByCategoryResponseDto;
+import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticDetailByRegDateResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticAmountByCategoryResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
+import com.ssafy.namani.domain.statistic.entity.DailyStatistic;
 import com.ssafy.namani.domain.statistic.entity.IMonthlyStatisticAvg;
 import com.ssafy.namani.domain.statistic.entity.MonthlyStatistic;
 import com.ssafy.namani.domain.statistic.repository.DailyStatisticRepository;
@@ -27,31 +30,59 @@ public class StatisticServiceImpl implements StatisticService {
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
 
+    @Override
+    public void checkDailyStatistic(UUID memberId, Timestamp curDate) {
+        List<Category> categoryList = categoryRepository.findAll();
+        Member member = memberRepository.findById(memberId).get();
+
+        // 월간 통계 정보 체크
+        Optional<List<DailyStatistic>> dailyStatisticListOptional = dailyStatisticRepository.findAllByMemberIdRegDate(memberId, curDate);
+        if (!dailyStatisticListOptional.isPresent()) {
+            for (Category category : categoryList) {
+                DailyStatistic dailyStatistic = DailyStatistic.builder()
+                        .member(member)
+                        .category(category)
+                        .amount(0)
+                        .regDate(curDate)
+                        .build();
+
+                dailyStatisticRepository.save(dailyStatistic);
+            }
+        } else {
+            for (Category category : categoryList) {
+                // 사용자 + 카테고리 + 연월로 통계 정보 체크
+                Optional<DailyStatistic> dailyStatisticOptional = dailyStatisticRepository.findByMemberIdCategoryIdRegDate(memberId, category.getId(), curDate);
+                if (!dailyStatisticOptional.isPresent()) {
+                    DailyStatistic dailyStatistic = DailyStatistic.builder()
+                            .member(member)
+                            .category(category)
+                            .amount(0)
+                            .regDate(curDate)
+                            .build();
+
+                    dailyStatisticRepository.save(dailyStatistic);
+                }
+            }
+        }
+    }
 
     /**
-     * 로그인 한 사용자의 아이디 + 특정 날짜에 해당하는 월간 통계 정보 조회
+     * 월간 통계 존재 여부 체크
      *
      * @param memberId
      * @param curDate
-     * @return MonthlyStatisticDetailByRegDateResponseDto
-     * @throws BaseException
      */
     @Override
-    public MonthlyStatisticDetailByRegDateResponseDto getMonthlyStatisticByRegDate(UUID memberId, Timestamp curDate) throws BaseException {
+    public void checkMonthlyStatistic(UUID memberId, Timestamp curDate) {
         List<Category> categoryList = categoryRepository.findAll();
-
-        // 사용자 정보 체크
-        Optional<Member> memberOptional = memberRepository.findById(memberId);
-        if (!memberOptional.isPresent()) {
-            throw new BaseException(BaseResponseStatus.INVALID_MEMBER);
-        }
+        Member member = memberRepository.findById(memberId).get();
 
         // 월간 통계 정보 체크
         Optional<List<MonthlyStatistic>> monthlyStatisticListOptional = monthlyStatisticRepository.findAllByMemberIdRegDate(memberId, curDate);
         if (!monthlyStatisticListOptional.isPresent()) {
             for (Category category : categoryList) {
                 MonthlyStatistic monthlyStatistic = MonthlyStatistic.builder()
-                        .member(memberOptional.get())
+                        .member(member)
                         .category(category)
                         .amount(0)
                         .regDate(curDate)
@@ -65,7 +96,7 @@ public class StatisticServiceImpl implements StatisticService {
                 Optional<MonthlyStatistic> monthlyStatisticOptional = monthlyStatisticRepository.findByMemberIdCategoryIdRegDate(memberId, category.getId(), curDate);
                 if (!monthlyStatisticOptional.isPresent()) {
                     MonthlyStatistic monthlyStatistic = MonthlyStatistic.builder()
-                            .member(memberOptional.get())
+                            .member(member)
                             .category(category)
                             .amount(0)
                             .regDate(curDate)
@@ -75,12 +106,73 @@ public class StatisticServiceImpl implements StatisticService {
                 }
             }
         }
+    }
 
-        // 수정된 정보가 있을 수도 있기 때문에 다시 조회
-        monthlyStatisticListOptional = monthlyStatisticRepository.findAllByMemberIdRegDate(memberId, curDate);
+    /**
+     * 로그인 한 사용자의 아이디 + 특정 날짜에 해당하는 일간 통계 정보 조회
+     *
+     * @param memberId
+     * @param curDate
+     * @return DailyStatisticDetailByRegDateResponseDto
+     * @throws BaseException
+     */
+    @Override
+    public DailyStatisticDetailByRegDateResponseDto getDailyStatisticByRegDate(UUID memberId, Timestamp curDate) throws BaseException {
+        // 사용자 정보 체크
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        if (!memberOptional.isPresent()) {
+            throw new BaseException(BaseResponseStatus.INVALID_MEMBER);
+        }
+
+        checkDailyStatistic(memberId, curDate);
 
         // 월간 통계 정보 저장
-        List<MonthlyStatistic> monthlyStatisticList = monthlyStatisticListOptional.get();
+        List<DailyStatistic> dailyStatisticList = dailyStatisticRepository.findAllByMemberIdRegDate(memberId, curDate).get();
+        List<DailyStatisticAmountByCategoryResponseDto> amountByCategory = new ArrayList<>();
+        Integer totalAmount = 0;
+
+        for (DailyStatistic dailyStatistic : dailyStatisticList) {
+            DailyStatisticAmountByCategoryResponseDto newAmountByCategory
+                    = DailyStatisticAmountByCategoryResponseDto.builder()
+                    .categoryId(dailyStatistic.getCategory().getId())
+                    .categoryName(dailyStatistic.getCategory().getName())
+                    .amount(dailyStatistic.getAmount())
+                    .build();
+
+            amountByCategory.add(newAmountByCategory);
+
+            totalAmount += dailyStatistic.getAmount();
+        }
+
+        DailyStatisticDetailByRegDateResponseDto dailyStatistic
+                = DailyStatisticDetailByRegDateResponseDto.builder()
+                .amountByCategory(amountByCategory)
+                .totalAmount(totalAmount)
+                .build();
+
+        return dailyStatistic;
+    }
+
+    /**
+     * 로그인 한 사용자의 아이디 + 특정 날짜에 해당하는 월간 통계 정보 조회
+     *
+     * @param memberId
+     * @param curDate
+     * @return MonthlyStatisticDetailByRegDateResponseDto
+     * @throws BaseException
+     */
+    @Override
+    public MonthlyStatisticDetailByRegDateResponseDto getMonthlyStatisticByRegDate(UUID memberId, Timestamp curDate) throws BaseException {
+        // 사용자 정보 체크
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        if (!memberOptional.isPresent()) {
+            throw new BaseException(BaseResponseStatus.INVALID_MEMBER);
+        }
+
+        checkMonthlyStatistic(memberId, curDate);
+
+        // 월간 통계 정보 저장
+        List<MonthlyStatistic> monthlyStatisticList = monthlyStatisticRepository.findAllByMemberIdRegDate(memberId, curDate).get();
         List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategory = new ArrayList<>();
         Integer totalAmount = 0;
 
