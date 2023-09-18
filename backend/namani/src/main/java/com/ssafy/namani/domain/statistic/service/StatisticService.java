@@ -1,5 +1,6 @@
 package com.ssafy.namani.domain.statistic.service;
 
+import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticDetailByRegDateResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticAmountByCategoryResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
 import com.ssafy.namani.global.response.BaseException;
@@ -9,6 +10,32 @@ import java.util.List;
 import java.util.UUID;
 
 public interface StatisticService {
+
+    /**
+     * 일간 통계 존재 여부 체크
+     *
+     * @param memberId
+     * @param curDate
+     */
+    void checkDailyStatistic(UUID memberId, Timestamp curDate);
+
+    /**
+     * 월간 통계 존재 여부 체크
+     * 
+     * @param memberId
+     * @param curDate
+     */
+    void checkMonthlyStatistic(UUID memberId, Timestamp curDate);
+
+    /**
+     * 로그인 한 사용자의 아이디 + 특정 날짜에 해당하는 일간 통계 정보 조회
+     * 
+     * @param memberId
+     * @param curDate
+     * @return DailyStatisticDetailByRegDateResponseDto
+     * @throws BaseException
+     */
+    DailyStatisticDetailByRegDateResponseDto getDailyStatisticByRegDate(UUID memberId, Timestamp curDate) throws BaseException;
 
     /**
      * 로그인 한 사용자의 아이디 + 특정 날짜에 해당하는 월간 통계 정보 조회
