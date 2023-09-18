@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +34,15 @@ public interface TransactionInfoRepository extends JpaRepository<TransactionInfo
 		"WHERE t.account_number = ?1", nativeQuery = true)
 	Optional<List<TransactionInfo>> findAllByAccountNumber(String accountNumber);
 
+	/**
+	 * 계좌번호 + 등록 시간으로 추가된 거래내역을 가져오는 메서드
+	 * 
+	 * @param accountNumber
+	 * @param transactionType
+	 * @param lastRegDate
+	 * @param curDate
+	 * @return
+	 */
 	@Query(value = "SELECT * FROM transaction_info t " +
 		"WHERE t.account_number = ?1 AND t.transaction_type = ?2 " +
 		"AND t.trade_date between ?3 and ?4", nativeQuery = true)
