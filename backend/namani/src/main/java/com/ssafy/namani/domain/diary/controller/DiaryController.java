@@ -5,10 +5,12 @@ import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryResponseDto;
+import com.ssafy.namani.domain.diary.service.DiaryService;
 import com.ssafy.namani.domain.diary.service.DiaryServiceImpl;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
+import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +21,7 @@ import java.util.List;
 @RequestMapping("/diaries")
 public class DiaryController {
 
-    private final DiaryServiceImpl diaryService;
+    private final DiaryService diaryService;
     private final BaseResponseService baseResponseService;
 
     /**
@@ -83,8 +85,8 @@ public class DiaryController {
     @PutMapping("/{id}")
     public BaseResponse<Object> updateDiary(@PathVariable("id") Long id, @RequestBody DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) {
         try {
-            DiaryResponseDto diaryResponseDto = diaryService.updateDiary(id, diaryUpdateContentRequestDto);
-            return baseResponseService.getSuccessResponse(diaryResponseDto);
+            diaryService.updateDiary(id, diaryUpdateContentRequestDto);
+            return baseResponseService.getSuccessResponse(BaseResponseStatus.SUCCESS);
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);
         }
