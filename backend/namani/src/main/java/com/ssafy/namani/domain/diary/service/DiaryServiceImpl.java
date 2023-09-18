@@ -1,84 +1,195 @@
 package com.ssafy.namani.domain.diary.service;
 
+import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
+import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
+import com.ssafy.namani.domain.category.entity.Category;
+import com.ssafy.namani.domain.category.repository.CategoryRepository;
 import com.ssafy.namani.domain.diary.dto.*;
 import com.ssafy.namani.domain.diary.entity.Diary;
 import com.ssafy.namani.domain.diary.repository.DiaryRepository;
+import com.ssafy.namani.domain.emotion.entity.Emotion;
+import com.ssafy.namani.domain.emotion.repository.EmotionRepository;
+import com.ssafy.namani.domain.goal.dto.response.GoalByCategoryDetailResponseDto;
+import com.ssafy.namani.domain.goal.dto.response.TotalGoalDetailResponseDto;
+import com.ssafy.namani.domain.goal.entity.GoalByCategory;
+import com.ssafy.namani.domain.goal.entity.TotalGoal;
+import com.ssafy.namani.domain.goal.repository.GoalByCategoryRepository;
+import com.ssafy.namani.domain.goal.repository.TotalGoalRepository;
+import com.ssafy.namani.domain.goal.service.GoalService;
+import com.ssafy.namani.domain.member.entity.Member;
+import com.ssafy.namani.domain.member.repository.MemberRepository;
+import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticDetailByRegDateResponseDto;
+import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
+import com.ssafy.namani.domain.statistic.service.StatisticService;
+import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
+import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
 import com.ssafy.namani.global.response.BaseException;
+import com.ssafy.namani.global.response.BaseResponseStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
 
-    private DiaryService diaryService;
-    private static DiaryService instance = new DiaryServiceImpl();
+    private final MemberRepository memberRepository;
+    private final DiaryRepository diaryRepository;
+    private final EmotionRepository emotionRepository;
+    private final TransactionInfoRepository transactionInfoRepository;
+    private final AccountInfoRepository accountInfoRepository;
 
-    private DiaryRepository diaryRepository;
+    private final GoalService goalService;
+    private final StatisticService statisticService;
 
-    private DiaryServiceImpl() {
-        diaryService = DiaryServiceImpl.getInstance();
-    }
-
-    public static DiaryService getInstance() {
-        return instance;
-    }
-
+    /**
+     * 달력 조회
+     *
+     * @param memberId
+     * @param diaryListRequestDto
+     * @return DiaryListResponseDto
+     * @throws BaseException
+     */
     @Override
-    public DiaryListResponseDto getCalendar(String accessToken, DiaryListRequestDto diaryListRequestDto) throws BaseException {
-        // accessToken decode => UUID
+    public DiaryListResponseDto getCalendar(UUID memberId, DiaryListRequestDto diaryListRequestDto) throws BaseException {
+        // 사용자 정보 체크
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        if (!memberOptional.isPresent()) {
+            throw new BaseException(BaseResponseStatus.NOT_FOUND_MEMBER);
+        }
 
-        Timestamp todayDate = diaryListRequestDto.getTodayDate();
-        Timestamp todayMonth = diaryListRequestDto.getTodayMonth();
+        Timestamp todayDate = diaryListRequestDto.getTodayDate(); // 현재 일자 (now)
+        Timestamp todayMonth = diaryListRequestDto.getTodayMonth(); // 현재 연월 (화면에 표기되는 연월)
 
+        /* 현재 연월로 일기 목록 가져오기 */
+        List<Diary> diaryList = diaryRepository.findAllByMemberIdTodayMonth(memberId, todayMonth).get();
+        List<DiaryCalendarResponseDto> diaryCalendarList = new ArrayList<>();
+        for (Diary diary : diaryList) {
+            DiaryCalendarResponseDto diaryCalendarResponseDto =
+                    DiaryCalendarResponseDto.builder()
+                            .id(diary.getId())
+                            .stampType(diary.getStampType())
+                            .regDate(diary.getRegDate())
+                            .build();
 
-        // DiaryList - UUID와 todayMonth로 일기 정보 가져옴
-        // 없으면 빈 배열 가져옴
+            diaryCalendarList.add(diaryCalendarResponseDto);
+        }
 
-        // TotalGoal - UUID와 todayMonth로 가져옴
+        /* 월간 목표 조회 */
+        TotalGoalDetailResponseDto totalGoal = goalService.getTotalGoal(memberId, todayMonth);
 
-        // DailyStatistic - UUID와 todayDate로 가져옴
-        // 없으면 다 0으로 가져옴
+        /* 카테고리 별 목표 조회 */
+        List<GoalByCategoryDetailResponseDto> goalByCategoryList = goalService.getGoalByCategoryList(totalGoal.getId());
 
-        // MonthlyStatistic - UUID와 todayDate로 가져옴
-        // 없으면 다 0으로 가져옴
+        /* 특정 일에 해당하는 DailyStatistic 조회 */
+        DailyStatisticDetailByRegDateResponseDto dailyStatistic = statisticService.getDailyStatisticByRegDate(memberId, todayDate);
 
-        return new DiaryListResponseDto();
+        /* 특정 월에 해당하는 MonthlyStatistic 조회 */
+        MonthlyStatisticDetailByRegDateResponseDto monthlyStatistic = statisticService.getMonthlyStatisticByRegDate(memberId, todayMonth);
+
+        // 마지막으로 일기가 작성된 시각 ~ 현재 시각 사이 거래 내역이 있으면 true, 없으면 false
+        // 일기 있는지 체크
+        boolean newDailyTransaction = false;
+        Optional<Diary> diaryOptional = diaryRepository.findByMemberIdTodayDate(memberId, todayDate);
+        if (diaryOptional.isPresent()) { // 일기가 생성되어 있는 경우
+            Diary diary = diaryOptional.get();
+            Timestamp regDate = diary.getRegDate();
+
+            // 계좌 내에서 시각 사이에 거래 내역 존재 체크
+            List<AccountInfo> accountInfoList = accountInfoRepository.findByMember_Id(memberId);
+            for (AccountInfo accountInfo : accountInfoList) {
+                Optional<List<TransactionInfo>> transactionInfoListOptional = transactionInfoRepository.findAllWithdrawalsByAccountNumber(accountInfo.getAccountNumber(), 2, regDate, todayDate);
+                if (transactionInfoListOptional.isPresent()) {
+                    newDailyTransaction = true;
+                    break;
+                }
+            }
+        }
+
+        /* 일기 목록 전달 */
+        DiaryListResponseDto diaryListResponseDto = DiaryListResponseDto.builder()
+                .diaryList(diaryCalendarList)
+                .totalGoal(totalGoal)
+                .goalByCategoryList(goalByCategoryList)
+                .monthlyStatistic(monthlyStatistic)
+                .dailyStatistic(dailyStatistic)
+                .newDailyTransaction(newDailyTransaction)
+                .build();
+
+        return diaryListResponseDto;
     }
 
+    /**
+     * 일기 생성
+     *
+     * @param memberId
+     * @param diaryRegistRequestDtoList
+     * @throws BaseException
+     */
     @Override
-    public DiaryResponseDto registDiary(String accessToken, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException {
-        // accessToken decode => UUID
+    public void registDiary(UUID memberId, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException {
+        // 사용자 정보 체크
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        if (!memberOptional.isPresent()) {
+            throw new BaseException(BaseResponseStatus.NOT_FOUND_MEMBER);
+        }
 
-        // for문 진행
+        Member member = memberOptional.get();
+
+        // 감정 등록
+        List<TransactionInfo> transactionInfoList = new ArrayList<>();
         for (DiaryRegistRequestDto diaryRegistRequestDto : diaryRegistRequestDtoList) {
             Integer emotionId = diaryRegistRequestDto.getEmotionId();
             Long transactionId = diaryRegistRequestDto.getTransactionId();
 
-            // transactionRepository로 감정 등록
+            // 거래 내역 존재 체크
+            Optional<TransactionInfo> transactionInfoOptional = transactionInfoRepository.findById(transactionId);
+            if (!transactionInfoOptional.isPresent()) {
+                throw new BaseException(BaseResponseStatus.TRANSACTION_INFO_NOT_FOUND);
+            }
+
+            TransactionInfo transactionInfo = transactionInfoOptional.get();
+
+            // 사용자가 가진 계좌에 거래 내역이 있는지 체크
+            AccountInfo accountInfo = transactionInfo.getAccountInfo(); // 계좌 정보
+            if (!accountInfo.getMember().getId().equals(memberId)) {
+                throw new BaseException(BaseResponseStatus.TRANSACTION_INFO_NOT_FOUND_IN_MEMBERS_ACCOUNT);
+            }
+
+            Emotion emotion = emotionRepository.findById(emotionId).get(); // 감정 조회
+
+            // 거래 내역에 감정 등록
+            TransactionInfo newTransactionInfo = transactionInfo.toBuilder()
+                    .id(transactionId)
+                    .emotion(emotion)
+                    .build();
+
+            transactionInfoList.add(newTransactionInfo);
         }
 
-        // AI에게 일기 생성 요청
+        transactionInfoRepository.saveAll(transactionInfoList); // 오류가 없으면 거래 내역 전체 저장
 
-        // 생성된 일기, 코멘트, 도장, 유저 아이디 등록
-        // content
-        // comment
-        // stampType
+        /* -------------- AI에게 일기 생성 요청 -------------- */
 
-//        Diary diary = Diary.builder()
-//                .content()
-//                .comment()
-//                .stampType()
-//                .build();
 
-        // 저장
-//        diaryRepository.save(diary);
+        /* -------------- 생성된 일기 데이터 반환 -------------- */
 
-//        return new DiaryResponseDto(diary);
-        return new DiaryResponseDto();
+
+        /* 일기 저장
+            Diary diary = Diary.builder()
+                    .member(member)
+                    .content()
+                    .comment()
+                    .stampType()
+                    .build();
+
+            diaryRepository.save(diary);
+         */
     }
 
     @Override
@@ -105,19 +216,21 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public DiaryResponseDto updateDiary(Long id, DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) throws BaseException {
+    public void updateDiary(Long id, DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) throws BaseException {
         String content = diaryUpdateContentRequestDto.getContent();
 
-        Optional<Diary> diary = diaryRepository.findById(id);
-        if (!diary.isPresent()) {
+        Optional<Diary> diaryOptional = diaryRepository.findById(id);
+        if (!diaryOptional.isPresent()) {
             // 일기 정보 없음 ERROR
+            throw new BaseException(BaseResponseStatus.NOT_FOUND_MEMBER);
         }
 
-        diaryRepository.updateDiary(id, content);
+        Diary diary = diaryOptional.get();
+        Diary newDiary = diary.toBuilder()
+                .content(content)
+                .build();
 
-        diary = diaryRepository.findById(id); // 재확인
-
-        return null;
+        diaryRepository.save(newDiary);
     }
 
     @Override

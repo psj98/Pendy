@@ -1,36 +1,48 @@
 package com.ssafy.namani.domain.diary.controller;
 
 import com.ssafy.namani.domain.diary.dto.*;
-import com.ssafy.namani.domain.diary.entity.Diary;
-import com.ssafy.namani.domain.diary.service.DiaryServiceImpl;
+import com.ssafy.namani.domain.diary.service.DiaryService;
+import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
+import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/diary")
+@RequestMapping("/diaries")
 public class DiaryController {
 
-    private final DiaryServiceImpl diaryService;
+    private final DiaryService diaryService;
+    private final JwtService jwtService;
     private final BaseResponseService baseResponseService;
 
     /**
      * 해당 월의 달력 정보를 불러오는 API
      *
-     * @param accessToken
+     * @param token
      * @param diaryListRequestDto
      * @return diaryListResponseDto
      */
-    @PostMapping("calendar")
-    public BaseResponse<Object> getCalendar(String accessToken, @RequestBody DiaryListRequestDto diaryListRequestDto) {
+    @PostMapping("/calendar")
+    public BaseResponse<Object> getCalendar(@RequestHeader(value = "accessToken", required = false) String token,
+                                            @RequestBody DiaryListRequestDto diaryListRequestDto) {
         try {
-            DiaryListResponseDto diaryListResponseDto = diaryService.getCalendar(accessToken, diaryListRequestDto);
+            // 토큰 정보 체크
+            if (token == null || token.equals("")) {
+                throw new BaseException(BaseResponseStatus.SESSION_EXPIRATION);
+            }
+
+            UUID memberId = jwtService.getMemberIdFromToken(token); // token으로 memberId 조회
+            DiaryListResponseDto diaryListResponseDto = diaryService.getCalendar(memberId, diaryListRequestDto);
+
             return baseResponseService.getSuccessResponse(diaryListResponseDto);
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);
@@ -40,15 +52,23 @@ public class DiaryController {
     /**
      * 감정 등록 -> 일기 생성 -> 일기 등록을 하는 API
      *
-     * @param accessToken
+     * @param token
      * @param diaryRegistRequestDtoList
      * @return diaryResponseDto
      */
     @PostMapping("/regist")
-    public BaseResponse<Object> registDiary(String accessToken, @RequestBody List<DiaryRegistRequestDto> diaryRegistRequestDtoList) {
+    public BaseResponse<Object> registDiary(@RequestHeader(value = "accessToken", required = false) String token,
+                                            @RequestBody List<DiaryRegistRequestDto> diaryRegistRequestDtoList) {
         try {
-            DiaryResponseDto diaryResponseDto = diaryService.registDiary(accessToken, diaryRegistRequestDtoList);
-            return baseResponseService.getSuccessResponse(diaryResponseDto);
+            // 토큰 정보 체크
+            if (token == null || token.equals("")) {
+                throw new BaseException(BaseResponseStatus.SESSION_EXPIRATION);
+            }
+
+            UUID memberId = jwtService.getMemberIdFromToken(token); // token으로 memberId 조회
+            diaryService.registDiary(memberId, diaryRegistRequestDtoList);
+
+            return baseResponseService.getSuccessNoDataResponse();
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);
         }
@@ -78,11 +98,11 @@ public class DiaryController {
      * @param diaryUpdateContentRequestDto
      * @return diaryResponseDto
      */
-    @PutMapping("/${id}")
+    @PutMapping("/{id}")
     public BaseResponse<Object> updateDiary(@PathVariable("id") Long id, @RequestBody DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) {
         try {
-            DiaryResponseDto diaryResponseDto = diaryService.updateDiary(id, diaryUpdateContentRequestDto);
-            return baseResponseService.getSuccessResponse(diaryResponseDto);
+            diaryService.updateDiary(id, diaryUpdateContentRequestDto);
+            return baseResponseService.getSuccessNoDataResponse();
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);
         }

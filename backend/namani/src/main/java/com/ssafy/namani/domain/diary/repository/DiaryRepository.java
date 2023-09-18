@@ -6,16 +6,43 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     /**
      * 일기 내용을 수정하는 메서드
-     * 
+     *
      * @param id
      * @param content
      */
     @Modifying
     @Query(value = "UPDATE Diary d SET d.content = ?2 WHERE d.id = ?1")
     void updateDiary(Long id, String content);
+
+    /**
+     * 사용자와 현재 월로 일기 목록을 조회하는 메서드
+     *
+     * @param memberId
+     * @param curDate
+     * @return Optional<List<Diary>>
+     */
+    @Query(value = "SELECT * FROM diary d " +
+            "WHERE d.member_id = ?1 AND DATE_FORMAT(d.reg_date, '%Y-%m') = DATE_FORMAT(?2, '%Y-%m')", nativeQuery = true)
+    Optional<List<Diary>> findAllByMemberIdTodayMonth(UUID memberId, Timestamp curDate);
+
+    /**
+     * 사용자와 현재 일로 일기 정보를 조회하는 메서드
+     * 
+     * @param memberId
+     * @param curDate
+     * @return
+     */
+    @Query(value = "SELECT * FROM diary d " +
+            "WHERE d.member_id = ?1 AND DATE_FORMAT(d.reg_date, '%Y-%m-%d') = DATE_FORMAT(?2, '%Y-%m-%d')", nativeQuery = true)
+    Optional<Diary> findByMemberIdTodayDate(UUID memberId, Timestamp curDate);
 }
