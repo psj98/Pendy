@@ -7,6 +7,7 @@ import com.ssafy.namani.global.response.BaseException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +31,8 @@ public class DiaryServiceImpl implements DiaryService {
     public DiaryListResponseDto getCalendar(String accessToken, DiaryListRequestDto diaryListRequestDto) throws BaseException {
         // accessToken decode => UUID
 
-        Date todayDate = diaryListRequestDto.getTodayDate();
-        Date todayMonth = diaryListRequestDto.getTodayMonth();
+        Timestamp todayDate = diaryListRequestDto.getTodayDate();
+        Timestamp todayMonth = diaryListRequestDto.getTodayMonth();
 
 
         // DiaryList - UUID와 todayMonth로 일기 정보 가져옴
@@ -84,7 +85,7 @@ public class DiaryServiceImpl implements DiaryService {
     public DiaryDetailResponseDto detailDiary(String accessToken, DiaryDetailRequestDto diaryDetailRequestDto) throws BaseException {
         // accessToken decode => UUID
         Long id = diaryDetailRequestDto.getId();
-        Date regDate = diaryDetailRequestDto.getRegDate();
+        Timestamp regDate = diaryDetailRequestDto.getRegDate();
 
         Optional<Diary> diary = diaryRepository.findById(id);
         if (!diary.isPresent()) {
@@ -116,13 +117,13 @@ public class DiaryServiceImpl implements DiaryService {
 
         diary = diaryRepository.findById(id); // 재확인
 
-        return new DiaryResponseDto(diary.get());
+        return null;
     }
 
     @Override
     public DiaryMonthlyAnalysisResponseDto getMonthlyAnalysis(String accessToken, DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) throws BaseException {
         // accessToken decode => UUID
-        Date curMonth = diaryMonthlyAnalysisRequestDto.getCurMonth();
+        Timestamp curMonth = diaryMonthlyAnalysisRequestDto.getCurMonth();
 
         // TotalGoal 조회 => UUID와 curMonth로 조회
         // 목표 없음 ERROR
