@@ -10,7 +10,9 @@ import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -83,9 +85,11 @@ public class DiaryController {
 	 * @return diaryDetailResponseDto
 	 */
 	@PostMapping("/after")
-	public BaseResponse<Object> detailDiary(@RequestHeader(value = "accessToken") String accessToken, @RequestBody DiaryDetailRequestDto diaryDetailRequestDto) {
+	public BaseResponse<Object> detailDiary(@RequestHeader(value = "accessToken") String accessToken,
+		@RequestBody DiaryDetailRequestDto diaryDetailRequestDto) {
 		try {
-			DiaryDetailResponseDto diaryDetailResponseDto = diaryService.detailDiary(accessToken, diaryDetailRequestDto);
+			DiaryDetailResponseDto diaryDetailResponseDto = diaryService.detailDiary(accessToken,
+				diaryDetailRequestDto);
 			return baseResponseService.getSuccessResponse(diaryDetailResponseDto);
 		} catch (BaseException e) {
 			return baseResponseService.getFailureResponse(e.status);
@@ -100,7 +104,8 @@ public class DiaryController {
 	 * @return diaryResponseDto
 	 */
 	@PutMapping("/{id}")
-	public BaseResponse<Object> updateDiary(@PathVariable("id") Long id, @RequestBody DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) {
+	public BaseResponse<Object> updateDiary(@PathVariable("id") Long id,
+		@RequestBody DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) {
 		try {
 			diaryService.updateDiary(id, diaryUpdateContentRequestDto);
 			return baseResponseService.getSuccessNoDataResponse();
@@ -117,9 +122,13 @@ public class DiaryController {
 	 * @return diaryMonthlyAnalysisResponseDto
 	 */
 	@PostMapping("/monthly-analysis")
-	public BaseResponse<Object> getMonthlyAnalysis(String accessToken, @RequestBody DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) {
+	public BaseResponse<Object> getMonthlyAnalysis(
+		@RequestHeader(value = "accessToken") String accessToken,
+		@RequestBody DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) {
+		UUID memberId = jwtService.getMemberIdFromToken(accessToken);
 		try {
-			DiaryMonthlyAnalysisResponseDto diaryMonthlyAnalysisResponseDto = diaryService.getMonthlyAnalysis(accessToken, diaryMonthlyAnalysisRequestDto);
+			DiaryMonthlyAnalysisResponseDto diaryMonthlyAnalysisResponseDto = diaryService.getMonthlyAnalysis(memberId,
+				diaryMonthlyAnalysisRequestDto);
 			return baseResponseService.getSuccessResponse(diaryMonthlyAnalysisResponseDto);
 		} catch (BaseException e) {
 			return baseResponseService.getFailureResponse(e.status);
