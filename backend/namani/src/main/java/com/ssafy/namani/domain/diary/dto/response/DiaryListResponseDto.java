@@ -35,9 +35,9 @@ public class DiaryListResponseDto {
 
     @Builder
     public DiaryListResponseDto(List<DiaryCalendarResponseDto> diaryList,
-                                TotalGoalDetailResponseDto totalGoal, List<GoalByCategoryDetailResponseDto> goalByCategoryList,
-                                DailyStatisticDetailByRegDateResponseDto dailyStatistic, MonthlyStatisticDetailByRegDateResponseDto monthlyStatistic,
-                                boolean newDailyTransaction) {
+        TotalGoalDetailResponseDto totalGoal, List<GoalByCategoryDetailResponseDto> goalByCategoryList,
+        DailyStatisticDetailByRegDateResponseDto dailyStatistic, MonthlyStatisticDetailByRegDateResponseDto monthlyStatistic,
+        boolean newDailyTransaction) {
         this.diaryList = diaryList;
         this.totalGoal = totalGoal;
         this.goalByCategoryList = goalByCategoryList;

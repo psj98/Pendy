@@ -3,7 +3,7 @@ package com.ssafy.namani.global.response;
 import lombok.Getter;
 
 @Getter
-public enum BaseResponseStatus {
+public enum     BaseResponseStatus {
 
     // -------- 성공 코드 시작 -------- //
     SUCCESS(true, 1000, "요청에 성공했습니다."),
@@ -66,6 +66,7 @@ public enum BaseResponseStatus {
      * MonthlyStatistic
      * Code : 8000번대
      */
+    MONTHLY_STATISTIC_NOT_FOUND(false, 8001, "월별 통계자료가 존재하지 않습니다."),
 
     /**
      * AvgConsumptionAmount, AgeSalary
