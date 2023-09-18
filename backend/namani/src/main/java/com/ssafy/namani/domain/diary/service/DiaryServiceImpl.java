@@ -104,14 +104,15 @@ public class DiaryServiceImpl implements DiaryService {
     public DiaryDetailResponseDto detailDiary(String accessToken, DiaryDetailRequestDto diaryDetailRequestDto) throws BaseException {
         // accessToken decode => UUID
         UUID memberId = jwtService.getMemberIdFromToken(accessToken);
-        Long id = diaryDetailRequestDto.getId();
+        Long diaryId = diaryDetailRequestDto.getId();
         Timestamp regDate = diaryDetailRequestDto.getRegDate();
         Diary diary;
         DailyStatistic dailyStatistic;
         TotalGoal totalGoal;
         GoalByCategory goalByCategory;
+        Integer goalAmount;
 
-        Optional<Diary> optionalDiary = diaryRepository.findById(id);
+        Optional<Diary> optionalDiary = diaryRepository.findById(diaryId);
         if (!optionalDiary.isPresent()) {
             throw new BaseException(BaseResponseStatus.DIARY_NOT_FOUND);
         }else{
@@ -120,7 +121,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         // DailyStatistic 조회 => UUID와 regDate로 조회
         // 수정 필요
-        Optional<DailyStatistic> optionalDailyStatistic = dailyStatisticRepository.findById(id);
+        Optional<DailyStatistic> optionalDailyStatistic = dailyStatisticRepository.findById(diaryId);
         // 일간 통계 없음 ERROR
         if(!optionalDailyStatistic.isPresent()){
             throw new BaseException(BaseResponseStatus.DAILY_STATISTIC_NOT_FOUND);
@@ -137,7 +138,7 @@ public class DiaryServiceImpl implements DiaryService {
             totalGoal = optionalTotalGoal.get();
         }
 
-        Integer goalAmount = totalGoal.getGoalAmount();
+        goalAmount = totalGoal.getGoalAmount();
 
         // GoalByCategory 조회 => totalGoalId로 조회
         Optional<GoalByCategory> optionalGoalByCategory = goalByCategoryRepository.findById(optionalTotalGoal.get().getId());
