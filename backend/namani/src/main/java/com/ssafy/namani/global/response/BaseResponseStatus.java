@@ -33,6 +33,8 @@ public enum BaseResponseStatus {
      * TransactionInfo
      * Code : 4000번대
      */
+    TRANSACTION_INFO_NOT_FOUND(false, 4001, "거래 내역이 존재하지 않습니다."),
+    TRANSACTION_INFO_NOT_FOUND_IN_MEMBERS_ACCOUNT(false, 4001, "사용자가 가진 계좌에 해당 거래 내역이 존재하지 않습니다."),
 
     /**
      * Diary
