@@ -123,20 +123,15 @@ public class GoalServiceImpl implements GoalService {
     }
 
     /**
-     * 목표 조회 메서드
+     * 월별 목표 조회
      *
      * @param memberId
-     * @param goalDetailRequestDto
-     * @return GoalDetailResponseDto
+     * @param curDate
+     * @return TotalGoalDetailResponseDto
      * @throws BaseException
      */
     @Override
-    public GoalDetailResponseDto detailGoal(UUID memberId, GoalDetailRequestDto goalDetailRequestDto) throws BaseException {
-        Integer age = goalDetailRequestDto.getAge();
-        Integer salary = goalDetailRequestDto.getSalary();
-        Timestamp curDate = goalDetailRequestDto.getCurDate();
-
-        /* 월별 목표 조회 */
+    public TotalGoalDetailResponseDto getTotalGoal(UUID memberId, Timestamp curDate) throws BaseException {
         Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, curDate);
         if (!totalGoalOptional.isPresent()) {
             throw new BaseException(BaseResponseStatus.TOTAL_GOAL_NOT_FOUND);
@@ -148,11 +143,23 @@ public class GoalServiceImpl implements GoalService {
                 .goalAmount(newTotalGoal.getGoalAmount())
                 .build();
 
-        /* 카테고리 별 목표 조회 */
+        return totalGoal;
+    }
+
+    /**
+     * 카테고리 별 목표 조회
+     *
+     * @param totalGoalId
+     * @return List<GoalByCategoryDetailResponseDto>
+     * @throws BaseException
+     */
+    @Override
+    public List<GoalByCategoryDetailResponseDto> getGoalByCategoryList(Long totalGoalId) throws BaseException {
         List<GoalByCategoryDetailResponseDto> goalByCategoryList = new ArrayList<>();
         List<Category> categoryList = categoryRepository.findAll();
+
         for (Category category : categoryList) {
-            Optional<GoalByCategory> goalByCategoryOptional = goalByCategoryRepository.findByTotalGoalIdCategoryId(totalGoal.getId(), category.getId());
+            Optional<GoalByCategory> goalByCategoryOptional = goalByCategoryRepository.findByTotalGoalIdCategoryId(totalGoalId, category.getId());
 
             // 카테고리 별 목표 체크
             if (!goalByCategoryOptional.isPresent()) {
@@ -169,6 +176,29 @@ public class GoalServiceImpl implements GoalService {
 
             goalByCategoryList.add(goalByCategoryDetailResponseDto);
         }
+
+        return goalByCategoryList;
+    }
+
+    /**
+     * 목표 조회 메서드
+     *
+     * @param memberId
+     * @param goalDetailRequestDto
+     * @return GoalDetailResponseDto
+     * @throws BaseException
+     */
+    @Override
+    public GoalDetailResponseDto detailGoal(UUID memberId, GoalDetailRequestDto goalDetailRequestDto) throws BaseException {
+        Integer age = goalDetailRequestDto.getAge();
+        Integer salary = goalDetailRequestDto.getSalary();
+        Timestamp curDate = goalDetailRequestDto.getCurDate();
+
+        /* 월별 목표 조회 */
+        TotalGoalDetailResponseDto totalGoal = getTotalGoal(memberId, curDate);
+
+        /* 카테고리 별 목표 조회 */
+        List<GoalByCategoryDetailResponseDto> goalByCategoryList = getGoalByCategoryList(totalGoal.getId());
 
         /* 현재 달 월간 소비 통계 조회 */
         MonthlyStatisticDetailByRegDateResponseDto monthlyStatistic = statisticService.getMonthlyStatisticByRegDate(memberId, curDate);
