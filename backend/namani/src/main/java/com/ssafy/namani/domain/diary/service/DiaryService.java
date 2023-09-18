@@ -12,6 +12,7 @@ import com.ssafy.namani.domain.diary.dto.response.DiaryResponseDto;
 import com.ssafy.namani.global.response.BaseException;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface DiaryService {
 
@@ -23,5 +24,5 @@ public interface DiaryService {
 
     DiaryResponseDto updateDiary(Long id, DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) throws BaseException;
 
-    DiaryMonthlyAnalysisResponseDto getMonthlyAnalysis(String accessToken, DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) throws BaseException;
+    DiaryMonthlyAnalysisResponseDto getMonthlyAnalysis(UUID memberId, DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) throws BaseException;
 }

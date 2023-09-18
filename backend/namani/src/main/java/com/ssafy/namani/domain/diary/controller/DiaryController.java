@@ -1,5 +1,16 @@
 package com.ssafy.namani.domain.diary.controller;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ssafy.namani.domain.diary.dto.request.DiaryDetailRequestDto;
 import com.ssafy.namani.domain.diary.dto.request.DiaryListRequestDto;
 import com.ssafy.namani.domain.diary.dto.request.DiaryMonthlyAnalysisRequestDto;
@@ -9,24 +20,22 @@ import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryResponseDto;
-import com.ssafy.namani.domain.diary.service.DiaryServiceImpl;
+import com.ssafy.namani.domain.diary.service.DiaryService;
+import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/diaries")
 public class DiaryController {
 
-	private final DiaryServiceImpl diaryService;
+	private final DiaryService diaryService;
 	private final BaseResponseService baseResponseService;
+	private final JwtService jwtService;
 
 	/**
 	 * 해당 월의 달력 정보를 불러오는 API
@@ -36,7 +45,8 @@ public class DiaryController {
 	 * @return diaryListResponseDto
 	 */
 	@PostMapping("/calendar")
-	public BaseResponse<Object> getCalendar(String accessToken, @RequestBody DiaryListRequestDto diaryListRequestDto) {
+	public BaseResponse<Object> getCalendar(@RequestHeader(value = "accessToken") String accessToken,
+		@RequestBody DiaryListRequestDto diaryListRequestDto) {
 		try {
 			DiaryListResponseDto diaryListResponseDto = diaryService.getCalendar(accessToken, diaryListRequestDto);
 			return baseResponseService.getSuccessResponse(diaryListResponseDto);
@@ -108,11 +118,12 @@ public class DiaryController {
 	 * @return diaryMonthlyAnalysisResponseDto
 	 */
 	@PostMapping("/monthly-analysis")
-	public BaseResponse<Object> getMonthlyAnalysis(String accessToken,
+	public BaseResponse<Object> getMonthlyAnalysis(@RequestHeader(value = "accessToken") String accessToken,
 		@RequestBody DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) {
+		UUID memberIdFromToken = jwtService.getMemberIdFromToken(accessToken);
 		try {
 			DiaryMonthlyAnalysisResponseDto diaryMonthlyAnalysisResponseDto = diaryService.getMonthlyAnalysis(
-				accessToken, diaryMonthlyAnalysisRequestDto);
+				memberIdFromToken, diaryMonthlyAnalysisRequestDto);
 			return baseResponseService.getSuccessResponse(diaryMonthlyAnalysisResponseDto);
 		} catch (BaseException e) {
 			return baseResponseService.getFailureResponse(e.status);
