@@ -33,10 +33,9 @@ public class Diary {
 	@NotNull
 	private Integer stampType; // 일기 도장 종류
 
-    @NotNull
     private Timestamp regDate; // 일기 등록 날짜
 
-    @Builder
+    @Builder(toBuilder = true)
     public Diary(Long id, Member member, String content, String comment, Integer stampType, Timestamp regDate) {
         this.id = id;
         this.member = member;
