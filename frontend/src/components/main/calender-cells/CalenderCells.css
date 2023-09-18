@@ -1,0 +1,60 @@
+/* CalenderCells.css */
+
+.calender-body {
+  width: 100%;
+  height: 89%;
+  display: flex;
+  flex-direction: column;
+}
+
+.calender-row {
+  width: 100%;
+  aspect-ratio: 7 / 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.col {
+  width: 13.5%;
+  height: 93%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border: 0.4px solid rgba(128, 128, 128, 0.4);
+  border-radius: 3px;
+  font-size: 0.8em;
+}
+
+.col span {
+  margin: 4px 0 0 4px;
+}
+
+.col .not-valid {
+  color: #888;
+}
+
+.col img {
+  opacity: 0.1;
+}
+
+.col.cell {
+  background-color: white;
+}
+.col.cell.valid:hover {
+  cursor: pointer;
+  box-shadow: 1.5px 1.5px 0.1em #444;
+  transform: scale(1.01);
+  border: none;
+  background: rgba(128, 128, 128, 0.5);
+}
+
+.col.cell.selected {
+  box-shadow: 1.5px 1.5px 0.1em #007bff;
+  transform: scale(1.02);
+  border: none;
+  background: #007bff;
+  color: #fff;
+  font-weight: 600;
+}

@@ -1,4 +1,4 @@
-// 회원가입 (테스트 필요)
+// 회원가입
 import axiosCreate from '../axiosCreate';
 
 const handleSignup = (email, password, name, age, salary, accounts) => {
@@ -11,8 +11,7 @@ const handleSignup = (email, password, name, age, salary, accounts) => {
     salary: salary,
     accounts: accounts,
   };
-  // console.log(data);
-  // console.log(data.accounts);
+
   const serverUrl = '/api/members/join';
 
   return axiosCreate.post(serverUrl, data);
