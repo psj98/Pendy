@@ -1,6 +1,9 @@
 package com.ssafy.namani.domain.diary.controller;
 
-import com.ssafy.namani.domain.diary.dto.*;
+import com.ssafy.namani.domain.diary.dto.request.*;
+import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
 import com.ssafy.namani.domain.diary.service.DiaryService;
 import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.global.response.BaseException;
@@ -10,8 +13,6 @@ import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,7 +83,7 @@ public class DiaryController {
      * @return diaryDetailResponseDto
      */
     @PostMapping("/after")
-    public BaseResponse<Object> detailDiary(String accessToken, @RequestBody DiaryDetailRequestDto diaryDetailRequestDto) {
+    public BaseResponse<Object> detailDiary(@RequestHeader(value = "accessToken") String accessToken, @RequestBody DiaryDetailRequestDto diaryDetailRequestDto) {
         try {
             DiaryDetailResponseDto diaryDetailResponseDto = diaryService.detailDiary(accessToken, diaryDetailRequestDto);
             return baseResponseService.getSuccessResponse(diaryDetailResponseDto);

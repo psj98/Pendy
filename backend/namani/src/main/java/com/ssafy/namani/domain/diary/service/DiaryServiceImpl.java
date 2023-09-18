@@ -2,9 +2,11 @@ package com.ssafy.namani.domain.diary.service;
 
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
-import com.ssafy.namani.domain.category.entity.Category;
-import com.ssafy.namani.domain.category.repository.CategoryRepository;
-import com.ssafy.namani.domain.diary.dto.*;
+import com.ssafy.namani.domain.diary.dto.response.DiaryCalendarResponseDto;
+import com.ssafy.namani.domain.diary.dto.request.*;
+import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
 import com.ssafy.namani.domain.diary.entity.Diary;
 import com.ssafy.namani.domain.diary.repository.DiaryRepository;
 import com.ssafy.namani.domain.emotion.entity.Emotion;
@@ -16,16 +18,20 @@ import com.ssafy.namani.domain.goal.entity.TotalGoal;
 import com.ssafy.namani.domain.goal.repository.GoalByCategoryRepository;
 import com.ssafy.namani.domain.goal.repository.TotalGoalRepository;
 import com.ssafy.namani.domain.goal.service.GoalService;
+import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.domain.member.entity.Member;
 import com.ssafy.namani.domain.member.repository.MemberRepository;
 import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticDetailByRegDateResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
+import com.ssafy.namani.domain.statistic.entity.DailyStatistic;
+import com.ssafy.namani.domain.statistic.repository.DailyStatisticRepository;
 import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
 import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -35,14 +41,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
 
+    private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private final DiaryRepository diaryRepository;
     private final EmotionRepository emotionRepository;
     private final TransactionInfoRepository transactionInfoRepository;
     private final AccountInfoRepository accountInfoRepository;
+    private final TotalGoalRepository totalGoalRepository;
+    private final GoalByCategoryRepository goalByCategoryRepository;
+    private final DailyStatisticRepository dailyStatisticRepository;
 
     private final GoalService goalService;
     private final StatisticService statisticService;
@@ -194,43 +205,51 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public DiaryDetailResponseDto detailDiary(String accessToken, DiaryDetailRequestDto diaryDetailRequestDto) throws BaseException {
-        // accessToken decode => UUID
-        Long id = diaryDetailRequestDto.getId();
+        UUID memberId = jwtService.getMemberIdFromToken(accessToken);
+        Long diaryId = diaryDetailRequestDto.getId();
         Timestamp regDate = diaryDetailRequestDto.getRegDate();
 
-        Optional<Diary> diary = diaryRepository.findById(id);
-        if (!diary.isPresent()) {
-            // 일기 정보 없음 ERROR
+        Optional<Diary> optionalDiary = diaryRepository.findById(diaryId);
+        if (!optionalDiary.isPresent()) {
+            throw new BaseException(BaseResponseStatus.DIARY_NOT_FOUND);
         }
 
-        // DailyStatistic 조회 => UUID와 regDate로 조회
-        // 일간 통계 없음 ERROR
+        Diary diary = optionalDiary.get();
 
-        // TotalGoal 조회 => UUID와 curMonth로 조회
-        // 목표 없음 ERROR
+        /* 월간 목표 조회 */
+        TotalGoalDetailResponseDto totalGoal = goalService.getTotalGoal(memberId, regDate);
+        Integer goalAmount = totalGoal.getGoalAmount();
 
-        // GoalByCategory 조회 => totalGoalId로 조회
-        // 목표 없음 ERROR
+        /* 카테고리 별 목표 조회 */
+        List<GoalByCategoryDetailResponseDto> goalByCategoryList = goalService.getGoalByCategoryList(totalGoal.getId());
 
-        return new DiaryDetailResponseDto(); // diary, dailyStatistic, goalAmount, goalByCategory
+        /* 특정 일에 해당하는 DailyStatistic 조회 */
+        DailyStatisticDetailByRegDateResponseDto dailyStatistic = statisticService.getDailyStatisticByRegDate(memberId, regDate);
+
+        return DiaryDetailResponseDto.builder()
+                .diary(diary)
+                .dailyStatistic(dailyStatistic)
+                .goalAmount(goalAmount)
+                .goalByCategory(goalByCategoryList)
+                .build();
     }
 
     @Override
     public void updateDiary(Long id, DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) throws BaseException {
         String content = diaryUpdateContentRequestDto.getContent();
 
-        Optional<Diary> diaryOptional = diaryRepository.findById(id);
-        if (!diaryOptional.isPresent()) {
-            // 일기 정보 없음 ERROR
-            throw new BaseException(BaseResponseStatus.NOT_FOUND_MEMBER);
+        Optional<Diary> optionalDiary = diaryRepository.findById(id);
+
+        if (!optionalDiary.isPresent()) {
+            throw new BaseException(BaseResponseStatus.DIARY_NOT_FOUND);
         }
+        Diary diary = optionalDiary.get();
+        Diary diary1 = diary.toBuilder().
+                content(content).
+                build();
 
-        Diary diary = diaryOptional.get();
-        Diary newDiary = diary.toBuilder()
-                .content(content)
-                .build();
 
-        diaryRepository.save(newDiary);
+        diaryRepository.save(diary1);
     }
 
     @Override

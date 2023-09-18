@@ -1,6 +1,9 @@
 package com.ssafy.namani.domain.diary.service;
 
-import com.ssafy.namani.domain.diary.dto.*;
+import com.ssafy.namani.domain.diary.dto.request.*;
+import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
 import com.ssafy.namani.global.response.BaseException;
 
 import java.util.List;
