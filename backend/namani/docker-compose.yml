@@ -3,7 +3,7 @@ services:
   backend:
     image: pohangman/backend:latest
     build:
-      context: ./backend/namani
+      context: ./backend/namani/build/libs
       dockerfile: Dockerfile
 
   frontend:
