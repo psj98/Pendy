@@ -109,20 +109,22 @@ public class DiaryController {
         }
     }
 
-    /**
-     * 해당 월의 월간 분석 정보를 불러오는 API
-     *
-     * @param accessToken
-     * @param diaryMonthlyAnalysisRequestDto
-     * @return diaryMonthlyAnalysisResponseDto
-     */
-    @PostMapping("/monthly-analysis")
-    public BaseResponse<Object> getMonthlyAnalysis(String accessToken, @RequestBody DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) {
-        try {
-            DiaryMonthlyAnalysisResponseDto diaryMonthlyAnalysisResponseDto = diaryService.getMonthlyAnalysis(accessToken, diaryMonthlyAnalysisRequestDto);
-            return baseResponseService.getSuccessResponse(diaryMonthlyAnalysisResponseDto);
-        } catch (BaseException e) {
-            return baseResponseService.getFailureResponse(e.status);
-        }
-    }
+	/**
+	 * 해당 월의 월간 분석 정보를 불러오는 API
+	 *
+	 * @param accessToken
+	 * @param diaryMonthlyAnalysisRequestDto
+	 * @return diaryMonthlyAnalysisResponseDto
+	 */
+	@PostMapping("/monthly-analysis")
+	public BaseResponse<Object> getMonthlyAnalysis(String accessToken,
+		@RequestBody DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) {
+		try {
+			DiaryMonthlyAnalysisResponseDto diaryMonthlyAnalysisResponseDto = diaryService.getMonthlyAnalysis(
+				accessToken, diaryMonthlyAnalysisRequestDto);
+			return baseResponseService.getSuccessResponse(diaryMonthlyAnalysisResponseDto);
+		} catch (BaseException e) {
+			return baseResponseService.getFailureResponse(e.status);
+		}
+	}
 }
