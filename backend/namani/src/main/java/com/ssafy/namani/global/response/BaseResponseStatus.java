@@ -39,6 +39,8 @@ public enum BaseResponseStatus {
      * Code : 5000번대
      */
 
+    DIARY_NOT_FOUND(false, 5001, "일기 정보를 찾지 못했습니다."),
+
     /**
      * Goal
      * Code : 6000번대
@@ -55,6 +57,8 @@ public enum BaseResponseStatus {
      * DailyStatistic
      * Code : 7000번대
      */
+
+    DAILY_STATISTIC_NOT_FOUND(false, 7001, "일별 목표가 존재하지 않습니다."),
 
     /**
      * MonthlyStatistic

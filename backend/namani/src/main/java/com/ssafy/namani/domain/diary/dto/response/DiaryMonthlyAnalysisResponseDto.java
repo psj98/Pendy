@@ -1,4 +1,4 @@
-package com.ssafy.namani.domain.diary.dto;
+package com.ssafy.namani.domain.diary.dto.response;
 
 import com.ssafy.namani.domain.goal.entity.GoalByCategory;
 import com.ssafy.namani.domain.goal.entity.TotalGoal;

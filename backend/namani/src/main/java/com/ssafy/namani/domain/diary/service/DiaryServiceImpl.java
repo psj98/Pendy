@@ -1,21 +1,40 @@
 package com.ssafy.namani.domain.diary.service;
 
-import com.ssafy.namani.domain.diary.dto.*;
+import com.ssafy.namani.domain.diary.dto.request.*;
+import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.DiaryResponseDto;
 import com.ssafy.namani.domain.diary.entity.Diary;
 import com.ssafy.namani.domain.diary.repository.DiaryRepository;
+import com.ssafy.namani.domain.goal.dto.response.GoalDetailResponseDto;
+import com.ssafy.namani.domain.goal.entity.GoalByCategory;
+import com.ssafy.namani.domain.goal.entity.TotalGoal;
+import com.ssafy.namani.domain.goal.repository.GoalByCategoryRepository;
+import com.ssafy.namani.domain.goal.repository.TotalGoalRepository;
+import com.ssafy.namani.domain.jwt.service.JwtService;
+import com.ssafy.namani.domain.jwt.util.JwtUtil;
+import com.ssafy.namani.domain.statistic.entity.DailyStatistic;
+import com.ssafy.namani.domain.statistic.repository.DailyStatisticRepository;
+import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.global.response.BaseException;
+import com.ssafy.namani.global.response.BaseResponseStatus;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DiaryServiceImpl implements DiaryService {
 
     private DiaryService diaryService;
     private static DiaryService instance = new DiaryServiceImpl();
+    private JwtService jwtService;
+    private TotalGoalRepository totalGoalRepository;
+    private GoalByCategoryRepository goalByCategoryRepository;
+    private DailyStatisticRepository dailyStatisticRepository;
 
     private DiaryRepository diaryRepository;
 
@@ -84,24 +103,53 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public DiaryDetailResponseDto detailDiary(String accessToken, DiaryDetailRequestDto diaryDetailRequestDto) throws BaseException {
         // accessToken decode => UUID
+        UUID memberId = jwtService.getMemberIdFromToken(accessToken);
         Long id = diaryDetailRequestDto.getId();
         Timestamp regDate = diaryDetailRequestDto.getRegDate();
+        Diary diary;
+        DailyStatistic dailyStatistic;
+        TotalGoal totalGoal;
+        GoalByCategory goalByCategory;
 
-        Optional<Diary> diary = diaryRepository.findById(id);
-        if (!diary.isPresent()) {
-            // 일기 정보 없음 ERROR
+        Optional<Diary> optionalDiary = diaryRepository.findById(id);
+        if (!optionalDiary.isPresent()) {
+            throw new BaseException(BaseResponseStatus.DIARY_NOT_FOUND);
+        }else{
+            diary = optionalDiary.get();
         }
 
         // DailyStatistic 조회 => UUID와 regDate로 조회
+        // 수정 필요
+        Optional<DailyStatistic> optionalDailyStatistic = dailyStatisticRepository.findById(id);
         // 일간 통계 없음 ERROR
+        if(!optionalDailyStatistic.isPresent()){
+            throw new BaseException(BaseResponseStatus.DAILY_STATISTIC_NOT_FOUND);
+        }else {
+            dailyStatistic = optionalDailyStatistic.get();
+        }
 
         // TotalGoal 조회 => UUID와 curMonth로 조회
+        Optional<TotalGoal> optionalTotalGoal = totalGoalRepository.findByCurDate(memberId, regDate);
         // 목표 없음 ERROR
+        if(!optionalTotalGoal.isPresent()){
+            throw new BaseException(BaseResponseStatus.TOTAL_GOAL_NOT_FOUND);
+        }else{
+            totalGoal = optionalTotalGoal.get();
+        }
+
+        Integer goalAmount = totalGoal.getGoalAmount();
 
         // GoalByCategory 조회 => totalGoalId로 조회
-        // 목표 없음 ERROR
+        Optional<GoalByCategory> optionalGoalByCategory = goalByCategoryRepository.findById(optionalTotalGoal.get().getId());
 
-        return new DiaryDetailResponseDto(); // diary, dailyStatistic, goalAmount, goalByCategory
+        // 목표 없음 ERROR
+        if(!optionalGoalByCategory.isPresent()){
+            throw new BaseException(BaseResponseStatus.GOAL_BY_CATEGORY_NOT_FOUND);
+        }else{
+            goalByCategory = optionalGoalByCategory.get();
+        }
+
+        return new DiaryDetailResponseDto(diary, dailyStatistic, goalAmount, goalByCategory); // diary, dailyStatistic, goalAmount, goalByCategory
     }
 
     @Override
