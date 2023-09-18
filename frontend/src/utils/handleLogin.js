@@ -1,4 +1,4 @@
-//로그인 (테스트 필요)
+//로그인
 import axiosCreate from '../axiosCreate';
 
 const handleLogin = (email, password) => {
