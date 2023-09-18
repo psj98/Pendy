@@ -19,5 +19,5 @@ public interface DiaryService {
 
     void updateDiary(Long id, DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) throws BaseException;
 
-    DiaryMonthlyAnalysisResponseDto getMonthlyAnalysis(String accessToken, DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) throws BaseException;
+    DiaryMonthlyAnalysisResponseDto getMonthlyAnalysis(UUID memberId, DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) throws BaseException;
 }
