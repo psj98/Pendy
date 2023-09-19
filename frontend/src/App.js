@@ -31,7 +31,6 @@ function App() {
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-
     if (accessToken) {
       setIsLoggedIn(true);
     } else {
@@ -67,8 +66,11 @@ function App() {
       {/* 계좌 페이지 */}
       <Route path="/bank" element={<BankPage />}>
         <Route path="" element={<BankMainTemplate />} />
-        <Route path="account" element={<AccountTemplate />} />
-        <Route path="regist" element={<RegistrationTemplate />} />
+        <Route path="account/:accountNumber" element={<AccountTemplate />} />
+        <Route
+          path="regist/:accountNumber"
+          element={<RegistrationTemplate />}
+        />
       </Route>
     </Routes>
   );
