@@ -21,10 +21,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class TransactionInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +52,7 @@ public class TransactionInfo {
 	@CreationTimestamp
 	private Timestamp tradeDate; // 거래 일자
 
-	@Builder
+	@Builder(toBuilder = true)
 	public TransactionInfo(Long id, AccountInfo accountInfo, Category category, Emotion emotion, String transactionName,
 		Integer transactionAmount, Integer transactionType, Integer afterBalance, Timestamp tradeDate) {
 		this.id = id;

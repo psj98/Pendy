@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 // , useEffect
-import ReactApexChart from 'react-apexcharts';
 import './DonutChart.css';
+
+import ReactApexChart from 'react-apexcharts';
 // import axios from 'axios';
 
 const DonutChart = () => {
@@ -53,19 +54,19 @@ const DonutChart = () => {
         },
       },
     },
-    // colors: [
-    //   '#FAF2E8',
-    //   '#BDECEA',
-    //   '#DAB8F1',
-    //   'rgba(243, 213, 182, 0.63)',
-    //   'rgba(208, 228, 197, 0.42)',
-    //   'rgba(255, 170, 180, 0.50)',
-    //   '#CFE4C5',
-    // ],
+    colors: [
+      '#FAF2E8',
+      '#BDECEA',
+      '#DAB8F1',
+      'rgba(243, 213, 182, 0.63)',
+      'rgba(208, 228, 197, 0.42)',
+      'rgba(255, 170, 180, 0.50)',
+      '#CFE4C5',
+    ],
   };
 
   return (
-    <div className="chart">
+    <div className="donut-chart">
       <ReactApexChart
         options={options}
         series={chartData.series}

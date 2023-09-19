@@ -11,14 +11,28 @@ const LoginTemplate = () => {
   const onLoginButtonClick = async (event) => {
     event.preventDefault();
     try {
-      //eslint-disable-next-line
       const response = await handleLogin(state.email, state.password);
-      console.log('Login success');
-      alert('로그인에 성공하셨습니다.');
-      navigate('/', { replace: true });
+      if (response.data.code === 1000) {
+        const accountList = JSON.stringify(
+          response.data.data.accountListResponseDtoList,
+        );
+        localStorage.setItem('accessToken', response.data.data.accessToken);
+        sessionStorage.setItem('email', response.data.data.email);
+        sessionStorage.setItem('name', response.data.data.name);
+        sessionStorage.setItem('age', response.data.data.age);
+        sessionStorage.setItem('salary', response.data.data.salary);
+        sessionStorage.setItem('accountList', accountList);
+        console.log('Login success');
+        alert('로그인에 성공하셨습니다.');
+        navigate('/', { replace: true });
+      } else {
+        console.error(response.data.code + ' ' + response.data.message);
+        alert('회원가입에 실패하셨습니다');
+        setState({ email: '', password: '' });
+      }
     } catch (error) {
       console.error('Login failed');
-      alert('로그인에 실패하셨습니다.');
+      alert('로그인에 실패하셨습니다');
       setState({ email: '', password: '' });
     }
   };
