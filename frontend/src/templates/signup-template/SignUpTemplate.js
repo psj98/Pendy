@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import handleSignup from '../../utils/handleSignup';
 import AccountModal from '../../components/signup/account-modal/AccountModal';
 import { useNavigate } from 'react-router-dom';
+import handleDuplicate from '../../utils/handleCheckDuplicate';
 
 const SignUpTemplate = () => {
   const [state, setState] = useState({
@@ -19,7 +20,27 @@ const SignUpTemplate = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAccountIndex, setSelectedAccountIndex] = useState(null);
+
   const navigate = useNavigate();
+
+  //이메일 중복 확인
+  const checkDuplicateEmail = async () => {
+    try {
+      const response = await handleDuplicate(state.email);
+      console.log('log', response.data.code);
+      console.log('log', response.data.data);
+
+      if (response.data.code === 2002) {
+        alert(response.data.message);
+      } else {
+        alert('이메일 사용 가능');
+      }
+    } catch (error) {
+      console.log(error.message);
+      console.error('Email check failed', error);
+      alert('이메일 중복 확인에 실패했습니다.');
+    }
+  };
 
   //계좌 개수 증가
   const handleAddAccount = () => {
@@ -128,14 +149,21 @@ const SignUpTemplate = () => {
       {/* 이메일 입력 */}
       <div className="signup-input1">
         <input
-          type="email"
+          type="text"
           className="input"
           placeholder="이메일"
           variant="outlined"
           value={state.email}
           onChange={(e) => setState({ ...state, email: e.target.value })}
         />
-        <span className="border"></span>
+
+        <button
+          className="signup-button duplicatecheck-button"
+          style={{ fontSize: 'smaller', padding: '5px 10px' }}
+          onClick={checkDuplicateEmail}
+        >
+          중복확인
+        </button>
       </div>
 
       {/* 비밀번호 입력 */}
