@@ -1,12 +1,11 @@
 package com.ssafy.namani.domain.diary.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
 import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
 import com.ssafy.namani.domain.diary.dto.request.*;
-import com.ssafy.namani.domain.diary.dto.response.DiaryCalendarResponseDto;
-import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
-import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
-import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
+import com.ssafy.namani.domain.diary.dto.response.*;
 import com.ssafy.namani.domain.diary.entity.Diary;
 import com.ssafy.namani.domain.diary.repository.DiaryRepository;
 import com.ssafy.namani.domain.emotion.entity.Emotion;
@@ -29,12 +28,11 @@ import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -137,7 +135,9 @@ public class DiaryServiceImpl implements DiaryService {
      * @throws BaseException
      */
     @Override
-    public void registDiary(UUID memberId, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException {
+    public void registDiary(UUID memberId, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException, JsonProcessingException {
+        Timestamp curDate = Timestamp.valueOf(LocalDateTime.now());
+
         // 사용자 정보 체크
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         if (!memberOptional.isPresent()) {
@@ -147,6 +147,7 @@ public class DiaryServiceImpl implements DiaryService {
         Member member = memberOptional.get();
 
         // 감정 등록
+        HashMap<String, Integer[]> consumptionDetails = new HashMap<>();
         List<TransactionInfo> transactionInfoList = new ArrayList<>();
         for (DiaryRegistRequestDto diaryRegistRequestDto : diaryRegistRequestDtoList) {
             Integer emotionId = diaryRegistRequestDto.getEmotionId();
@@ -175,26 +176,60 @@ public class DiaryServiceImpl implements DiaryService {
                     .build();
 
             transactionInfoList.add(newTransactionInfo);
+
+            // 지출 내역에 따른 [지출 금액, 감정 번호] 저장
+            String transactionName = transactionInfo.getTransactionName(); // 지출 내역
+
+            Integer[] transactionDetail = new Integer[2];
+            transactionDetail[0] = transactionInfo.getTransactionAmount(); // 지출 금액
+            transactionDetail[1] = emotionId; // 감정 번호
+
+            consumptionDetails.put(transactionName, transactionDetail);
         }
 
         transactionInfoRepository.saveAll(transactionInfoList); // 오류가 없으면 거래 내역 전체 저장
 
         /* -------------- AI에게 일기 생성 요청 -------------- */
+        String url = "http://localhost:8000/create-diary"; // 파이썬 요청 url
+        RestTemplate restTemplate = new RestTemplate();
 
+        // 월간 목표로 일간 소비 금액 구하기
+        TotalGoalDetailResponseDto totalGoal = goalService.getTotalGoal(memberId, curDate);
+        Integer goalAmount = totalGoal.getGoalAmount() / curDate.toLocalDateTime().toLocalDate().lengthOfMonth();
 
-        /* -------------- 생성된 일기 데이터 반환 -------------- */
+        /* -------------- 데이터 전달 및 생성된 일기 데이터 반환 -------------- */
+        DiaryCreateByAIRequestDto diaryCreateByAIRequestDto = DiaryCreateByAIRequestDto.builder()
+                .consumptionLimits(goalAmount)
+                .consumptionDetails(consumptionDetails)
+                .build();
 
+        // 반환된 데이터
+        String response = restTemplate.postForObject(url, diaryCreateByAIRequestDto, String.class);
 
-        /* 일기 저장
-            Diary diary = Diary.builder()
-                    .member(member)
-                    .content()
-                    .comment()
-                    .stampType()
+        // DiaryCreateByAIResponseDto로 매핑
+        ObjectMapper mapper = new ObjectMapper();
+        DiaryCreateByAIResponseDto diaryCreateByAIResponseDto = mapper.readValue(response, DiaryCreateByAIResponseDto.class);
+
+        /* 일기 저장 */
+        Optional<Diary> diaryOptional = diaryRepository.findByMemberIdTodayDate(memberId, curDate);
+        Diary newDiary;
+        if (diaryOptional.isPresent()) { // 일기가 생성되어 있는 경우
+            Diary diary = diaryOptional.get();
+            newDiary = diary.toBuilder()
+                    .content(diaryCreateByAIResponseDto.getContent())
+                    .comment(diaryCreateByAIResponseDto.getComment())
+                    .stampType(diaryCreateByAIResponseDto.getStampType())
                     .build();
+        } else { // 일기가 생성되어 있지 않은 경우
+            newDiary = Diary.builder()
+                    .member(member)
+                    .content(diaryCreateByAIResponseDto.getContent())
+                    .comment(diaryCreateByAIResponseDto.getComment())
+                    .stampType(diaryCreateByAIResponseDto.getStampType())
+                    .build();
+        }
 
-            diaryRepository.save(diary);
-         */
+        diaryRepository.save(newDiary);
     }
 
     /**
