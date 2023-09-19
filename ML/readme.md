@@ -13,8 +13,7 @@
 # 주요 기능
 ## 일기 생성_ diaries, 월별 보고서 작성 _ monthly-analysis/monthly-feedback
 - gpt + langchain을 이용해 구현된 상태
-- 비용이 발생하기 때문에 LLAMA, KoAlpaca 등 다른 모델을 사용할 수 있는지 테스트 하여 보고 있습니다
-
+- 월별 보고서의 경우 임베딩한 카드 정보를 기반으로 소비패턴에 적합한 카드를 추천합니다
 
 
 ## 챗봇 _ chatbot
@@ -42,6 +41,20 @@
 
 
 ## 고려중
-- KoAlpaca
-- LoRA
+- ~~KoAlpaca~~(학습 리소스 부족, 지연 시간 등으로 X)
+- ~~LoRA~~
 
+## 포팅 매뉴얼
+### openai api key
+- ML/openaikey.py 파일에 openai api key를 넣어주세요
+### 가상환경(virtual venv)
+- python -m venv myvenv 로 가상환경을 만들어주세요
+- source myvenv/Scripts/activate 로 가상환경을 실행해주세요
+
+### 필수 패키지 설치
+- pip install -r requirements.txt 로 필요한 패키지를 설치해주세요
+
+## 현재 진행
+### 월별 리포트
+- 카드 정보 스크래이핑 중 (삼성카드)
+- 카드 정보 임베딩
