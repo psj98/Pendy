@@ -13,7 +13,17 @@ os.environ["OPENAI_API_KEY"] = apikey
 import pandas as pd
 
 def mkdiary(req):
-    ret = {"message": "오늘은 소비내역이 없습니다"}
+    # ret = {
+    #     "content": "오늘의 먹방 대모험, 오늘은 여러 군데에서 맛있는 것들을 먹어봤어! 먼저 서브웨이에서 5900원을 쓰고 먹었는데, 맛이 별로였어. 그 다음엔 매머드커피에서 2000원을 주고 뭔가를 먹었어, 그건 괜찮았단다! 그리고 바나프레소에서 2600원을 주고 먹었는데, 그것도 별로였어. 마지막으로 BBQ치킨에서 완전 대박이었어! 29000원을 주고 치킨을 먹었는데, 그건 정말 대만족!",
+    #     "comment ": "우와, 너 정말 많이 먹었네! 근데, 예산이 10000원이라고 했잖아? 너무 많이 초과했어. 다음에는 예산 안에서 먹을 수 있는 맛있는 걸 찾아보자!",
+    #     "stamp_type": 1
+    # }
+    ret = {
+        "content": "오늘은 그냥 잠만 잤다", # text
+        "comment ": "참 잘했어요", # text
+        "stamp_type": 5 # int
+    }
+
     # tempurature : 0 ~ 1 로 높아질수록 랜덤한 답변 생성 / 창의력
     llm = OpenAI(temperature=0.9)
 
@@ -26,7 +36,7 @@ def mkdiary(req):
     # 		}
     # }
 
-    # 받아온 req로 input_txt 수정
+    # 받아온 req로 res_plain_txt 수정
         # 접근하기 쉽게 데이터프레임화
     # BaseModel로 col을 명시해서 col_name와도 문제가 없습니다
     req_cols = list(req.keys())
@@ -39,53 +49,49 @@ def mkdiary(req):
     # feeling = ["매우 불만족","불만족","보통","만족","매우 만족"]
     feeling = ["Shit", "Dissatisfied", "Neutral", "Satisfied", "Stoked"]
 
-    consume_list = ""
+    consume_list = "[Consume List]\n{"
     for i in req_consume_list.columns:
         consume_one = str(i) + ":" + str(req_consume_list[i][0]) + "Won " + str(
             feeling[(req_consume_list[i][1])]) + "\n"
         consume_list += consume_one
-
+    consume_list += "}\n"
 
     #소비 내역으로 instructions 생성
     #고정적인 입력값
     # 영어 지시문 혹은 한국어 지시문 둘 다 작성해두었습니다
     instructions = """
-        Act as an 5-year-old child
         [Instructions]
-        Create a diary entry that is compact and easily digestible in one read.
-        Adhere to the response format below for crafting the diary entry and providing feedback.
-        [Steps]
-    
-        Title: Craft an engaging title summarizing the content in about 10 characters.
-        Body: Write the main content of the diary.
-        Feedback: From the perspective of an elementary school teacher, give economic feedback considering the budget, using informal language in about 20 characters.
+        Write a diary entry in Korean following the instructions below, referring to the 'Response Format' and 'Consume List'
+
         [Response Format]
         {
-        "Title": "engaging and concise title",
-        "Body": "main content of the diary",
-        "Feedback": "economic feedback considering the budget as an elementary school teacher."
+        "content": "As an 5-year-old, child write a fun title with about 10 characters summarizing the content + the diary entry",
+        "comment": "As an elementary school tescher, give comment",
+        "stamp_type": "assign a score judging the spending details from a range of 1 to 5".
         }
     """
 
     instructions_kor ="""
-       "아래의 정보들로 일기를 써주세요\n"
-        "일기 작성자는 5살입니다\n"
-        "한번에 확인할 수 있게 컴팩트하게 작성해주세요\n"
+       아래의 지시대로 Response Format과 Consume List를 참고하여 일기를 써주세요
 
-        "제목 : 내용을 요약한 제목을 재미있게 10자 내외로 작성해주세요\n"
-        "본문 : 일기를 작성하고\n"
-        "피드백 : 소비 목표액을 고려한 피드백을 20자 내외로 적어주세요\n"
 
-        "위 양식을 지켜주세요\n"
-        "피드백은 초등학교 선생님의 입장에서 반말로 목표금액을 고려하여 경제적인 관점에서 작성해주세요\n")
+        [Response Format]
+        {
+        "content": 내용을 요약한 제목을 재미있는 10자 내외 제목 + 일기를 작성해주세요,
+        "comment": 초등학교 선생님의 입장에서 반말로 목표금액을 고려하여 경제적인 관점에서 작성해주세요,
+        "stamp_type": 1~5까지의 숫자 중 소비내역을 판단하여 점수를 매겨주세요
+        }
+
     """
-    # input_limit_txt = "\n소비한도금액:"+limit_amount+"\n"
-    input_limit_txt = "SpendingLimit:" + limit_amount + "\n"
+    # limit_amount_txt = "\n소비한도금액:"+limit_amount+"\n"
+    limit_amount_txt = "\nSpendingLimit:" + limit_amount + "Won\n"
 
     # 최종적으로 GPT에 입력할 텍스트
-    input_txt = instructions+consume_list+input_limit_txt
-    result = llm(input_txt)
+    input_txt = instructions+consume_list+limit_amount_txt
+    res_plain_txt = llm(input_txt)
 
+
+    # Title Body Feedback 가공해서 보내주기
     ret["message"] = result
     return ret
 

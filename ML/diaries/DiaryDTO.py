@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class DiaryRequest(BaseModel):
     ConsumptionLimit : int = 0 # default값
-    ConsumptionDetails : int = 0
+    ConsumptionDetails : dict
 
 # ConsumptionLimit : 소비 한도
 # ConsumptionDetails : 소비 내역
