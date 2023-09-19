@@ -28,24 +28,45 @@ def mkreport(req):
     #     "fashion": [12000, 10000],
     #     "culture": [0, 10000]
     # }
+
     #소비 내역으로 input_txt 생성
     #고정적인 입력값
-    # 프롬프트 수정 필요(영어로 role등 명시해서(기능은 잘 돌아감, 토큰이 많이듬))
-    input_head_txt = (
-        "입력은 아래의 형식과 같습니다\n"
-        "카테고리명 : 사용 금액 , 제한 금액\n"
-        "각 영단어는 매핑된 오른쪽 한글에 해당됩니다\n"
+    #한국어, 영어 버전 둘 다 작성
+    instructions_kor = """
+        입력은 아래의 형식과 같습니다
+        카테고리명 : 사용 금액 , 제한 금액
+        각 영단어는 매핑된 오른쪽 한글에 해당됩니다
 
-        "food : 식비\n"
-        "traffic : 교통\n"
-        "online : 온라인 쇼핑\n"
-        "offline : 오프라인 쇼핑\n"
-        "cafe : 카페/간식\n"
-        "housing : 주거/통신\n"
-        "fashion : 패션/미용\n"
-        "culture : 문화/여가\n"
-        "주어진 카테고리별 사용금액과 제한금액을 보고 공백 포함 150자 내외로 피드백을 한글로 컴팩트하게 작성해주세요\n"
-    )
+        food : 식비
+        traffic : 교통
+        online : 온라인 쇼핑
+        offline : 오프라인 쇼핑
+        cafe : 카페/간식
+        housing : 주거/통신
+        fashion : 패션/미용
+        culture : 문화/여가
+        주어진 카테고리별 사용금액과 제한금액을 보고 공백 포함 150자 내외로 피드백을 한글로 컴팩트하게 작성해주세요
+    """
+    instructions = """
+        Act as a Financial Analyst
+
+        [Instructions]
+        "The input should be in the following format:
+        'Category Name: Expense amount, Limit amount'
+        Each English word corresponds to the mapped Korean term on the right."
+
+        food : 식비
+        traffic : 교통
+        online : 온라인 쇼핑
+        offline : 오프라인 쇼핑
+        cafe : 카페/간식
+        housing : 주거/통신
+        fashion : 패션/미용
+        culture : 문화/여가
+
+        Based on the given expense and limit amounts for each category, please write compact feedback in Korean, within approximately 150 characters including spaces.
+        }
+    """
 
     # 중간 txt
     # req_cols = req.keys()
@@ -58,7 +79,7 @@ def mkreport(req):
     consume_txt = ''.join(a for a in consume_list)
 
     # 최종적으로 GPT에 입력할 텍스트
-    input_txt = input_head_txt+consume_txt
+    input_txt = instructions + consume_txt
     result = llm(input_txt)
 
     ret["message"] = result
