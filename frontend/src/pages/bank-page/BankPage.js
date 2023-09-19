@@ -1,10 +1,11 @@
 import React from 'react';
 import './BankPage.css';
+import { Outlet } from 'react-router-dom';
 
 const BankPage = () => {
   return (
     <div>
-      <p>은행 계좌 페이지입니다!</p>
+      <Outlet />
     </div>
   );
 };

@@ -30,23 +30,6 @@
   align-items: center;
 }
 
-.chart-button {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: right;
-  align-items: center;
-  margin-right: 15%;
-  width: 100%;
-}
-
-.chart-button label {
-  height: 100%;
-  font-size: 16px;
-  display: flex;
-  align-items: flex-end;
-}
-
 .chart-content {
   flex: 6;
   display: flex;

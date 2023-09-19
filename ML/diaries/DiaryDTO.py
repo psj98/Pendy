@@ -3,8 +3,8 @@ from pydantic import BaseModel
 #DTO
 
 class DiaryRequest(BaseModel):
-    ConsumptionLimit : int = 0 # default값
-    ConsumptionDetails : dict
+    consumptionLimits: int = 0
+    consumptionDetails: dict[str, list[int]] = {"abcd": [1000, 1]}
 
 # ConsumptionLimit : 소비 한도
 # ConsumptionDetails : 소비 내역

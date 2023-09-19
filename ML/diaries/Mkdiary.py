@@ -12,7 +12,7 @@ os.environ["OPENAI_API_KEY"] = apikey
 # 데이터프레임
 import pandas as pd
 
-#json
+# JSON으로 변환
 import json
 
 def mkdiary(req):
@@ -42,13 +42,14 @@ def mkdiary(req):
     # 받아온 req로 res_plain_txt 수정
         # 접근하기 쉽게 데이터프레임화
     # BaseModel로 col을 명시해서 col_name와도 문제가 없습니다
+    req = req.json()
     req = json.loads(req)
 
     req_cols = list(req.keys())
-    req_limit_amount = pd.DataFrame([req[req_cols[0]]])#[]로 감싼 이유_error: scalar values사용시 인덱스를 써주거나 list로 래핑
+    req_limit_amount = pd.DataFrame([req[req_cols[0]]]) # []로 감싼 이유_error: scalar values사용시 인덱스를 써주거나 list로 래핑
     req_consume_list = pd.DataFrame(req[req_cols[1]])
 
-    limit_amount = req_limit_amount.iloc[0,0] #목표 금액
+    limit_amount = req_limit_amount.iloc[0,0] # 목표 금액
     # limit_amount = req_limit_amount["금액"][0]
 
     # feeling = ["매우 불만족","불만족","보통","만족","매우 만족"]
@@ -61,30 +62,30 @@ def mkdiary(req):
         consume_list += consume_one
     consume_list += "}\n"
 
-    #소비 내역으로 instructions 생성
-    #고정적인 입력값
+    # 소비 내역으로 instructions 생성
+    # 고정적인 입력값
     # 영어 지시문 혹은 한국어 지시문 둘 다 작성해두었습니다
     instructions = """
-        [Instructions]
-        - Write a diary entry in Korean following the instructions below, referring to the 'Response Format' and 'Consume List'
-        - Be sure to follow the 'Response Format' and do not respond otherwise.
-        - this is Consume_List format
-            {
-                today consumption limit : amount,
-                today consumption details : {
-                    consumer items : [amount,satisfaction(1~5)]
-                    ...
-                }
-            }
-        [Response Format]
-        {
-        "content": "like an 75-years-old, write a fun  diary(title over 10 characters + content over 50 characters)",
-        "comment": "As an elementary school tescher, give comment",
-        "stamp_type": "assign a score judging the spending details from a range of 1 to 5, int"
-        }
+       [Instructions]
+       - Write a diary entry in Korean following the instructions below, referring to the 'Response Format' and 'Consume List'
+       - Be sure to follow the 'Response Format' and do not respond otherwise.
+       - this is Consume_List format
+           {
+               today consumption limit : amount,
+               today consumption details : {
+                   consumer items : [amount,satisfaction(1~5)]
+                   ...
+               }
+           }
+       [Response Format]
+       {
+           "content": "like an 75-years-old, write a fun diary(title over 10 characters + content over 50 characters)",
+           "comment": "As an elementary school teacher, give comment",
+           "stampType": "assign a score judging the spending details from a range of 1 to 5, int"
+       }
     """
 
-    #구버전, 개요 확인용으로 남겨두었습니다
+    # 구버전, 개요 확인용으로 남겨두었습니다
     # instructions_kor ="""
     #    아래의 지시대로 Response Format과 Consume List를 참고하여 일기를 써주세요
     #
@@ -97,11 +98,11 @@ def mkdiary(req):
     #     }
     #
     # """
-    # limit_amount_txt = "\n소비한도금액:"+limit_amount+"\n"
-    limit_amount_txt = "\nSpendingLimit:" + limit_amount + "Won\n"
+    # limit_amount_txt = "\n소비한도금액:" + limit_amount + "\n"
+    limit_amount_txt = "\nSpendingLimit: " + str(limit_amount) + "Won\n"
 
     # 최종적으로 GPT에 입력할 텍스트
-    input_txt = instructions+consume_list+limit_amount_txt
+    input_txt = instructions + consume_list + limit_amount_txt
     res_plain_txt = llm(input_txt)
 
     # OPEN AI로부터 res를 원하는 형식으로 못 받을 경우 에러 발생
