@@ -1,7 +1,7 @@
-/* SignUpTemplate.css */
+/* BankSignupTemplate.css */
 
 /* 로그인 스타일 */
-.signup {
+.bank-signup {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,7 +13,7 @@
 }
 
 /* 제목 스타일 */
-.signup-title {
+.bank-signup-title {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -21,7 +21,7 @@
 }
 
 /* 입력 필드 스타일 */
-.signup-input1 {
+.bank-signup-input1 {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,7 +30,7 @@
   position: relative;
 }
 
-.signup-input2 {
+.bank-signup-input2 {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,7 +39,7 @@
   position: relative;
 }
 
-.signup-input-main {
+.bank-signup-input-main {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -49,7 +49,7 @@
   position: relative;
 }
 
-.signup-input-sub {
+.bank-signup-input-sub {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,7 +58,7 @@
   position: relative;
 }
 
-.signup-input-sub1 {
+.bank-signup-input-sub1 {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -68,7 +68,7 @@
   position: relative;
 }
 
-.signup-input-sub2 {
+.bank-signup-input-sub2 {
   flex: 3;
   display: flex;
   flex-direction: column;
@@ -79,7 +79,7 @@
 }
 
 /* 버튼 스타일 */
-.signup-button {
+.bank-signup-button {
   background-color: #007bff;
   color: white;
   border: none;
@@ -90,82 +90,16 @@
   font-size: 16px;
 }
 
-.signup-button:hover {
+.bank-signup-button:hover {
   background-color: #0056b3;
 }
 
 /* 링크 스타일 */
-.signup-link {
+.bank-signup-link {
   color: black;
   text-decoration: none;
 }
 
-.signup-link:hover {
+.bank-signup-link:hover {
   text-decoration: underline;
-}
-
-/* 모달 컨테이너 */
-.modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
-/* 모달 내용 컨테이너 */
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  width: 300px;
-}
-
-/* 모달 내용 스타일링 예제 */
-.modal h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.modal input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-.modal button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.modal button:hover {
-  background-color: #0056b3;
-}
-
-/* 모달 닫기 버튼 스타일링 */
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-  color: #333;
-}
-
-.close-button:hover {
-  color: #000;
 }

@@ -98,7 +98,7 @@ const BankLoginTemplate = () => {
 
       {/* 계좌 생성 링크 */}
       <div className="bank-login-input">
-        <Link to="/login/signup" className="login-link">
+        <Link to="/bank/signup" className="login-link">
           계좌생성
         </Link>
       </div>
