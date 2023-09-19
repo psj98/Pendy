@@ -11,10 +11,14 @@
 
 
 # 주요 기능
-## 일기 생성_ diaries, 월별 보고서 작성 _ monthly-analysis/monthly-feedback
-- gpt + langchain을 이용해 구현된 상태
-- 월별 보고서의 경우 임베딩한 카드 정보를 기반으로 소비패턴에 적합한 카드를 추천합니다
+## 일기 _ 완료
+- gpt + langchain
+## 월별 보고서 _ 완성중
+- 소비 내역 데이터는 카드 추천이 가장 적합하다고 판단되어 카드 추천 기능을 제공합니다
+- 카드 정보 일단 삼성카드로 10개 정도만 넣어두었음
 
+## 챗봇 _ 미구현 상태
+- 자료 조사 완료
 
 ## 챗봇 _ chatbot
 - chromadb에 금융 관련 정보를 임베딩(텍스트를 ml에서 사용되는 vector화)하고 
@@ -36,7 +40,6 @@
 - chromadb
 - chat gpt
   - prompt engineering
-
 - fastapi
 
 
@@ -50,9 +53,12 @@
 ### 가상환경(virtual venv)
 - python -m venv myvenv 로 가상환경을 만들어주세요
 - source myvenv/Scripts/activate 로 가상환경을 실행해주세요
-
 ### 필수 패키지 설치
 - pip install -r requirements.txt 로 필요한 패키지를 설치해주세요
+### main.py run
+- main.py 파일을 run 해주세요
+
+
 
 ## 현재 진행
 ### 월별 리포트
@@ -60,5 +66,4 @@
 - 카드 정보 임베딩
 
 ### Todo
-- req message -> json으로 각 col에 나눠서 넣기
-- 
+- 월별 리포트 임베딩, req 포멧 확인
