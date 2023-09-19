@@ -6,8 +6,8 @@ services:
       context: ./backend/namani
       dockerfile: Dockerfile
 
-#  frontend:
-#    image: pohangman/frontend:latest
-#    build:
-#      context: ./frontend
-#      dockerfile: Dockerfile
+  frontend:
+    image: pohangman/frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
