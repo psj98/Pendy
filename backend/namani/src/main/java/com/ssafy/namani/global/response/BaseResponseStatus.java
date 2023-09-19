@@ -33,11 +33,15 @@ public enum BaseResponseStatus {
      * TransactionInfo
      * Code : 4000번대
      */
+    TRANSACTION_INFO_NOT_FOUND(false, 4001, "거래 내역이 존재하지 않습니다."),
+    TRANSACTION_INFO_NOT_FOUND_IN_MEMBERS_ACCOUNT(false, 4001, "사용자가 가진 계좌에 해당 거래 내역이 존재하지 않습니다."),
 
     /**
      * Diary
      * Code : 5000번대
      */
+
+    DIARY_NOT_FOUND(false, 5001, "일기 정보를 찾지 못했습니다."),
 
     /**
      * Goal
@@ -56,10 +60,13 @@ public enum BaseResponseStatus {
      * Code : 7000번대
      */
 
+    DAILY_STATISTIC_NOT_FOUND(false, 7001, "일별 목표가 존재하지 않습니다."),
+
     /**
      * MonthlyStatistic
      * Code : 8000번대
      */
+    MONTHLY_STATISTIC_NOT_FOUND(false, 8001, "월별 통계자료가 존재하지 않습니다."),
 
     /**
      * AvgConsumptionAmount, AgeSalary

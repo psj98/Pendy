@@ -1,4 +1,4 @@
-//로그인 (테스트 필요)
+//로그인
 import axiosCreate from '../axiosCreate';
 
 const handleLogin = (email, password) => {
@@ -14,25 +14,3 @@ const handleLogin = (email, password) => {
 };
 
 export default handleLogin;
-
-// import axiosCreate from '../axiosCreate';
-
-// const handleLogin = async (email, password) => {
-//   try {
-//     console.log('handleLogin');
-//     const data = {
-//       email: email,
-//       password: password,
-//     };
-
-//     const serverUrl = '/api/members/login';
-
-//     const response = await axiosCreate.post(serverUrl, data);
-//     return response.data;
-//   } catch (error) {
-//     console.error('로그인 중 오류 발생:', error);
-//     throw error;
-//   }
-// };
-
-// export default handleLogin;

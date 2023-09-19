@@ -1,28 +1,18 @@
 package com.ssafy.namani.domain.diary.entity;
 
-import java.sql.Timestamp;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-
 import com.ssafy.namani.domain.member.entity.Member;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
+
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Diary {
 
 	@Id
@@ -43,6 +33,16 @@ public class Diary {
 	@NotNull
 	private Integer stampType; // 일기 도장 종류
 
-	@NotNull
-	private Timestamp regDate; // 일기 등록 날짜
+	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp regDate; // 일기 등록 날짜
+
+    @Builder(toBuilder = true)
+    public Diary(Long id, Member member, String content, String comment, Integer stampType, Timestamp regDate) {
+        this.id = id;
+        this.member = member;
+        this.content = content;
+        this.comment = comment;
+        this.stampType = stampType;
+        this.regDate = regDate;
+    }
 }
