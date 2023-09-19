@@ -42,6 +42,8 @@ def mkdiary(req):
     # 받아온 req로 res_plain_txt 수정
         # 접근하기 쉽게 데이터프레임화
     # BaseModel로 col을 명시해서 col_name와도 문제가 없습니다
+    req = json.loads(req)
+
     req_cols = list(req.keys())
     req_limit_amount = pd.DataFrame([req[req_cols[0]]])#[]로 감싼 이유_error: scalar values사용시 인덱스를 써주거나 list로 래핑
     req_consume_list = pd.DataFrame(req[req_cols[1]])
@@ -76,7 +78,7 @@ def mkdiary(req):
             }
         [Response Format]
         {
-        "content": "like an 75-years-old, write a fun title with about 10 characters summarizing the content + the diary entry",
+        "content": "like an 75-years-old, write a fun  diary(title over 10 characters + content over 50 characters)",
         "comment": "As an elementary school tescher, give comment",
         "stamp_type": "assign a score judging the spending details from a range of 1 to 5, int".
         }
