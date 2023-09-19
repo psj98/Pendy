@@ -8,10 +8,6 @@
   height: 100vh;
 }
 
-.bank-input-container {
-  margin: 10px;
-}
-
 .bank-button-container {
   display: flex;
   flex-direction: column;
@@ -46,28 +42,4 @@
 
 .bank-input:hover {
   background-color: #f0f0f0;
-}
-
-.bank-input.selected {
-  color: blue;
-}
-
-.bank-input1 {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  position: relative;
-}
-
-.bank-input2 {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  position: relative;
 }
