@@ -1,7 +1,7 @@
-/* RegistrationTemplate.css */
+/* BankLoginTemplate.css */
 
 /* 로그인 스타일 */
-.registration {
+.bank-login {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,7 +13,7 @@
 }
 
 /* 제목 스타일 */
-.registration-title {
+.bank-login-title {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -21,7 +21,7 @@
 }
 
 /* 입력 필드 스타일 */
-.registration-input {
+.bank-login-input {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,7 +31,7 @@
 }
 
 /* 버튼 스타일 */
-.registration-button {
+.bank-login-button {
   background-color: #007bff;
   color: white;
   border: none;
@@ -42,16 +42,16 @@
   font-size: 16px;
 }
 
-.registration-button:hover {
+.bank-login-button:hover {
   background-color: #0056b3;
 }
 
 /* 링크 스타일 */
-.registration-link {
+.bank-login-link {
   color: black;
   text-decoration: none;
 }
 
-.registration-link:hover {
+.bank-login-link:hover {
   text-decoration: underline;
 }
