@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+
+import useLogin from './hooks/useLogin';
 
 import TestPage from './pages/test-page/TestPage';
 
@@ -28,17 +29,7 @@ import AccountTemplate from './templates/account-template/AccountTemplate';
 import RegistrationTemplate from './templates/registration-template/RegistrationTemplate';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const location = useLocation();
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, [location]);
+  const isLoggedIn = useLogin();
 
   return (
     <Routes>
