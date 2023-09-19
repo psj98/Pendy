@@ -31,22 +31,22 @@ def mkreport(req):
 
     #소비 내역으로 input_txt 생성
     #고정적인 입력값
-    #한국어, 영어 버전 둘 다 작성
-    instructions_kor = """
-        입력은 아래의 형식과 같습니다
-        카테고리명 : 사용 금액 , 제한 금액
-        각 영단어는 매핑된 오른쪽 한글에 해당됩니다
-
-        food : 식비
-        traffic : 교통
-        online : 온라인 쇼핑
-        offline : 오프라인 쇼핑
-        cafe : 카페/간식
-        housing : 주거/통신
-        fashion : 패션/미용
-        culture : 문화/여가
-        주어진 카테고리별 사용금액과 제한금액을 보고 공백 포함 150자 내외로 피드백을 한글로 컴팩트하게 작성해주세요
-    """
+    # 한국어 버전은 주석용, 개정 X
+    # instructions_kor = """
+    #     입력은 아래의 형식과 같습니다
+    #     카테고리명 : 사용 금액 , 제한 금액
+    #     각 영단어는 매핑된 오른쪽 한글에 해당됩니다
+    #
+    #     food : 식비
+    #     traffic : 교통
+    #     online : 온라인 쇼핑
+    #     offline : 오프라인 쇼핑
+    #     cafe : 카페/간식
+    #     housing : 주거/통신
+    #     fashion : 패션/미용
+    #     culture : 문화/여가
+    #     주어진 카테고리별 사용금액과 제한금액을 보고 공백 포함 150자 내외로 피드백을 한글로 컴팩트하게 작성해주세요
+    # """
     instructions = """
         Act as a Financial Analyst
 
