@@ -12,6 +12,9 @@ os.environ["OPENAI_API_KEY"] = apikey
 # 데이터프레임
 import pandas as pd
 
+#json
+import json
+
 def mkdiary(req):
     # ret = {
     #     "content": "오늘의 먹방 대모험, 오늘은 여러 군데에서 맛있는 것들을 먹어봤어! 먼저 서브웨이에서 5900원을 쓰고 먹었는데, 맛이 별로였어. 그 다음엔 매머드커피에서 2000원을 주고 뭔가를 먹었어, 그건 괜찮았단다! 그리고 바나프레소에서 2600원을 주고 먹었는데, 그것도 별로였어. 마지막으로 BBQ치킨에서 완전 대박이었어! 29000원을 주고 치킨을 먹었는데, 그건 정말 대만족!",
@@ -61,28 +64,37 @@ def mkdiary(req):
     # 영어 지시문 혹은 한국어 지시문 둘 다 작성해두었습니다
     instructions = """
         [Instructions]
-        Write a diary entry in Korean following the instructions below, referring to the 'Response Format' and 'Consume List'
-
+        - Write a diary entry in Korean following the instructions below, referring to the 'Response Format' and 'Consume List'
+        - Be sure to follow the 'Response Format' and do not respond otherwise.
+        - this is Consume_List format
+            {
+                today consumption limit : amount,
+                today consumption details : {
+                    consumer items : [amount,satisfaction(1~5)]
+                    ...
+                }
+            }
         [Response Format]
         {
-        "content": "As an 5-year-old, child write a fun title with about 10 characters summarizing the content + the diary entry",
+        "content": "like an 75-years-old, write a fun title with about 10 characters summarizing the content + the diary entry",
         "comment": "As an elementary school tescher, give comment",
-        "stamp_type": "assign a score judging the spending details from a range of 1 to 5".
+        "stamp_type": "assign a score judging the spending details from a range of 1 to 5, int".
         }
     """
 
-    instructions_kor ="""
-       아래의 지시대로 Response Format과 Consume List를 참고하여 일기를 써주세요
-
-
-        [Response Format]
-        {
-        "content": 내용을 요약한 제목을 재미있는 10자 내외 제목 + 일기를 작성해주세요,
-        "comment": 초등학교 선생님의 입장에서 반말로 목표금액을 고려하여 경제적인 관점에서 작성해주세요,
-        "stamp_type": 1~5까지의 숫자 중 소비내역을 판단하여 점수를 매겨주세요
-        }
-
-    """
+    #구버전, 개요 확인용으로 남겨두었습니다
+    # instructions_kor ="""
+    #    아래의 지시대로 Response Format과 Consume List를 참고하여 일기를 써주세요
+    #
+    #
+    #     [Response Format]
+    #     {
+    #     "content": 내용을 요약한 제목을 재미있는 10자 내외 제목 + 일기를 작성해주세요,
+    #     "comment": 초등학교 선생님의 입장에서 반말로 목표금액을 고려하여 경제적인 관점에서 작성해주세요,
+    #     "stamp_type": 1~5까지의 숫자 중 소비내역을 판단하여 점수를 매겨주세요
+    #     }
+    #
+    # """
     # limit_amount_txt = "\n소비한도금액:"+limit_amount+"\n"
     limit_amount_txt = "\nSpendingLimit:" + limit_amount + "Won\n"
 
@@ -90,9 +102,11 @@ def mkdiary(req):
     input_txt = instructions+consume_list+limit_amount_txt
     res_plain_txt = llm(input_txt)
 
-
-    # Title Body Feedback 가공해서 보내주기
-    ret["message"] = result
+    # OPEN AI로부터 res를 원하는 형식으로 못 받을 경우 에러 발생
+    # ret["content"]
+    # ret["comment"]
+    # ret["stamp_type"]
+    ret = json.loads(res_plain_txt)
     return ret
 
     # food : 식비
