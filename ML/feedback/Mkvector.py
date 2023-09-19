@@ -13,7 +13,7 @@ from pydantic import BaseSettings
 import chromadb
 
 
-file_name ="test.txt"
+file_name ="product.txt"
 file=open(file_name,"r",encoding="utf-8")
 # file.write()
 # file.close()
