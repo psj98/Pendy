@@ -17,7 +17,7 @@ const BankSignUpTemplate = () => {
   //비밀번호 재확인 성공여부 판단
   const passwordCheck = state.password === state.repassword;
 
-  // 회원가입 버튼 클릭 시
+  //계정 생성 버튼 클릭 시
   const onSignUpButtonClick = async (event) => {
     event.preventDefault();
     if (state.bankCode.trim() === '') {
@@ -36,7 +36,6 @@ const BankSignUpTemplate = () => {
       alert('잔액을 입력해주세요');
       return;
     }
-
     if (passwordCheck) {
       try {
         const response = await handleBankSignup(
