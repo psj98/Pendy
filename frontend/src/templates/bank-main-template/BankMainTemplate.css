@@ -1,1 +1,73 @@
 /* BankMainTemplate.css */
+
+.bank-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.bank-input-container {
+  margin: 10px;
+}
+
+.bank-button-container {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.bank-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.bank-button:hover {
+  background-color: #0056b3;
+}
+
+.bank-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.bank-input:hover {
+  background-color: #f0f0f0;
+}
+
+.bank-input.selected {
+  color: blue;
+}
+
+.bank-input1 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+
+.bank-input2 {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}

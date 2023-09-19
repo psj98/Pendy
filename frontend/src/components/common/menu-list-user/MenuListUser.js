@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './MenuListUser.css';
-import useClickOutside from '../../../hooks/useOutsideClick';
+import useClickOutside from '../../../hooks/useClickOutside.js';
 import { Icon } from '@iconify/react';
 import { Link, useNavigate } from 'react-router-dom';
 
