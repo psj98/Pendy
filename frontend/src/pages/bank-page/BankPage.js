@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 const BankPage = () => {
   return (
-    <div>
+    <div className="bank-page">
       <Outlet />
     </div>
   );
