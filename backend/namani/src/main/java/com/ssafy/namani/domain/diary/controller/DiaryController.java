@@ -1,9 +1,7 @@
 package com.ssafy.namani.domain.diary.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.namani.domain.diary.dto.request.*;
-import com.ssafy.namani.domain.diary.dto.response.DiaryCreateByAIResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryMonthlyAnalysisResponseDto;
@@ -13,16 +11,9 @@ import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
