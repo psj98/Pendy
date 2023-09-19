@@ -1,5 +1,6 @@
 package com.ssafy.namani.domain.diary.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.namani.domain.diary.dto.request.*;
 import com.ssafy.namani.domain.diary.dto.response.DiaryDetailResponseDto;
 import com.ssafy.namani.domain.diary.dto.response.DiaryListResponseDto;
@@ -13,7 +14,7 @@ public interface DiaryService {
 
     DiaryListResponseDto getCalendar(UUID memberId, DiaryListRequestDto diaryListRequestDto) throws BaseException;
 
-    void registDiary(UUID memberId, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException;
+    void registDiary(UUID memberId, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException, JsonProcessingException;
 
     DiaryDetailResponseDto detailDiary(String accessToken, DiaryDetailRequestDto diaryDetailRequestDto) throws BaseException;
 
