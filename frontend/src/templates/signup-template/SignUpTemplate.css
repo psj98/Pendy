@@ -169,3 +169,11 @@
 .close-button:hover {
   color: #000;
 }
+
+.duplicatecheck-button {
+  margin-left: 30px;
+  padding: 7px 10px; /* 기존 패딩의 절반 크기로 조절 */
+  width: auto; /* 너비를 자동으로 설정 */
+  font-size: 10px; /* 폰트 크기 감소 */
+  white-space: nowrap;
+}
