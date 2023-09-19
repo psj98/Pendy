@@ -42,6 +42,7 @@ public enum BaseResponseStatus {
      */
 
     DIARY_NOT_FOUND(false, 5001, "일기 정보를 찾지 못했습니다."),
+    DIARY_JSON_PARSING_ERROR(false, 5002, "반환된 일기 데이터 형식이 다릅니다."),
 
     /**
      * Goal
