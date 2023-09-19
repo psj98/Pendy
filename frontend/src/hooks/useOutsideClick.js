@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-// 메뉴가 아닌 위치 클릭 시 메뉴 비활성화
+//외부 클릭 시 안 보이게해주기 위한 함수
 function useClickOutside(ref, callback) {
   useEffect(() => {
     const handleClickOutside = (event) => {

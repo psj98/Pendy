@@ -1,4 +1,4 @@
-// 회원가입 (테스트 필요)
+// 회원가입
 import axiosCreate from '../axiosCreate';
 
 const handleSignup = (email, password, name, age, salary, accounts) => {

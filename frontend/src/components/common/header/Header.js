@@ -5,9 +5,7 @@ import MenuListUser from '../menu-list-user/MenuListUser';
 import MenuListGuest from '../menu-list-guest/MenuListGuset';
 
 // 페이지 헤더
-const Header = () => {
-  const isLoggedIn = false;
-
+const Header = ({ isLoggedIn }) => {
   return (
     <div className="header">
       <div className="header-logo-container">

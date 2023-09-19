@@ -2,7 +2,11 @@ import React from 'react';
 import './GuestTemplate.css';
 
 const GuestTemplate = () => {
-  return <div>비회원용 메인페이지입니다.</div>;
+  return (
+    <div className="guest-template">
+      <img src="/GuestMain.png" alt="Guest Main" />
+    </div>
+  );
 };
 
 export default GuestTemplate;
