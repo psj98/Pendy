@@ -15,6 +15,7 @@ import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,41 +32,41 @@ public class MemberController {
     private final JwtService jwtService;
 
     @PostMapping("/join")
-    public ResponseEntity<BaseResponse<Object>> joinMember(@RequestBody MemberRegisterRequestDto memberRegisterRequestDto) {
+    public BaseResponse<Object> joinMember(@RequestBody MemberRegisterRequestDto memberRegisterRequestDto) {
         try {
             memberService.register(memberRegisterRequestDto);
-            return ResponseEntity.ok(baseResponseService.getSuccessResponse(BaseResponseStatus.SUCCESS));
+            return baseResponseService.getSuccessResponse(BaseResponseStatus.SUCCESS);
         } catch (BaseException e) {
-            return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(e.getStatus()));
+            return baseResponseService.getFailureResponse(e.status);
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<BaseResponse<Object>> login(@RequestBody MemberLoginRequestDto requestDto) {
+    public BaseResponse<Object> login(@RequestBody MemberLoginRequestDto requestDto) {
 
         try {
             MemberLoginResponseDto responseDto = memberService.login(requestDto);
-            return ResponseEntity.ok(baseResponseService.getSuccessResponse(responseDto));
+            return baseResponseService.getSuccessResponse(responseDto);
         } catch (BaseException e) {
-            return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(e.getStatus()));
+            return baseResponseService.getFailureResponse(e.status);
         }
 
     }
 
     @PostMapping("/duplicate-check")
-    public ResponseEntity<BaseResponse<Object>> checkDuplication(@RequestBody MemberDuplicationCheckRequestDto requestDto) {
+    public BaseResponse<Object> checkDuplication(@RequestBody MemberDuplicationCheckRequestDto requestDto) {
         try {
             boolean isDuplicate = memberService.checkDuplication(requestDto);
-            return ResponseEntity.ok(baseResponseService.getSuccessResponse(isDuplicate));
+            return baseResponseService.getSuccessResponse(isDuplicate);
         } catch (BaseException e) {
-            return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(e.getStatus()));
+            return baseResponseService.getFailureResponse(e.status);
         }
 
     }
 
 
     @PutMapping
-    public ResponseEntity<BaseResponse<Object>> updateMemberInfo(@RequestHeader(value = "accessToken") String token,
+    public BaseResponse<Object> updateMemberInfo(@RequestHeader(value = "accessToken") String token,
                                                                  @RequestBody MemberUpdateRequestDto requestDto) {
         try {
             if (token != null && !token.equals("")) {
@@ -74,12 +75,12 @@ public class MemberController {
                 UUID memberIdFromToken = jwtService.getMemberIdFromToken(token);
                 log.debug("memberIdFromToken" + memberIdFromToken);
                 memberService.updateMemberInfo(memberIdFromToken, requestDto);
-                return ResponseEntity.ok(baseResponseService.getSuccessNoDataResponse());
+                return baseResponseService.getSuccessNoDataResponse();
             }else{
-                return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(BaseResponseStatus.NOT_FOUND_MEMBER));
+                return baseResponseService.getFailureResponse(BaseResponseStatus.NOT_FOUND_MEMBER);
             }
         } catch (BaseException e) {
-            return ResponseEntity.badRequest().body(baseResponseService.getFailureResponse(e.getStatus()));
+            return baseResponseService.getFailureResponse(e.getStatus());
 
         }
 

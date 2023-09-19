@@ -198,6 +198,7 @@ public class MemberServiceImpl implements MemberService {
         if (existingMember.isPresent()) {
             throw new BaseException(BaseResponseStatus.DUPLICATE_MEMBER_EMAIL);
         }
+
         return true;
     }
 

@@ -3,7 +3,7 @@ package com.ssafy.namani.global.response;
 import lombok.Getter;
 
 @Getter
-public enum     BaseResponseStatus {
+public enum BaseResponseStatus {
 
     // -------- 성공 코드 시작 -------- //
     SUCCESS(true, 1000, "요청에 성공했습니다."),
