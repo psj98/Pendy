@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 
 #Custom
 from diaries.DiaryDTO import DiaryRequest
@@ -30,3 +31,7 @@ def create_diary(request: DiaryRequest):
 def create_diary(request: ReportRequest):
     ret = mkreport(request)
     return ret
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
