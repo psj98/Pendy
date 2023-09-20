@@ -1,5 +1,6 @@
 package com.ssafy.namani.domain.goal.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.namani.domain.goal.dto.request.GoalDetailRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalRegistRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalUpdateRequestDto;
@@ -120,6 +121,24 @@ public class GoalController {
             return baseResponseService.getSuccessNoDataResponse();
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);
+        }
+    }
+
+    /**
+     * 월간 분석 피드백 생성 API
+     * 
+     * @return BaseResponse<Object>
+     */
+    @GetMapping("/monthly-feedback")
+    public BaseResponse<Object> registMonthlyFeedback() {
+        try {
+            goalService.registMonthlyFeedback();
+
+            return baseResponseService.getSuccessNoDataResponse();
+        } catch (BaseException e) {
+            return baseResponseService.getFailureResponse(e.status);
+        } catch (JsonProcessingException e) {
+            return baseResponseService.getFailureResponse(BaseResponseStatus.TOTAL_GOAL_JSON_PARSING_ERROR);
         }
     }
 }
