@@ -9,77 +9,42 @@ const LoginTemplate = () => {
   const navigate = useNavigate();
 
   //로그인 버튼 동작
-  const onLoginButtonClick = (event) => {
+  const onLoginButtonClick = async (event) => {
     event.preventDefault();
-    handleLogin(state.email, state.password)
-      .then((response) => {
-        if (response.data.code === 1000) {
-          const accountList = JSON.stringify(
-            response.data.data.accountListResponseDtoList,
-          );
-          localStorage.setItem('accessToken', response.data.data.accessToken);
-          sessionStorage.setItem('email', response.data.data.email);
-          sessionStorage.setItem('name', response.data.data.name);
-          sessionStorage.setItem('age', response.data.data.age);
-          sessionStorage.setItem('salary', response.data.data.salary);
-          sessionStorage.setItem('accountList', accountList);
-          console.log('Login success');
-          alert('로그인에 성공하셨습니다.');
-          return handleCheckGoal(); // handleCheckGoal 함수를 호출하고 프로미스 반환
-        } else {
-          console.error(response.data.code + ' ' + response.data.message);
-          alert('로그인에 실패하셨습니다');
-          setState({ email: '', password: '' });
-          return Promise.reject('로그인 실패'); // 실패한 경우 프로미스를 reject
-        }
-      })
-      .then((response2) => {
-        // 응답에 따라 navigate를 설정합니다.
-        console.log(response2.data.data.check);
-        if (response2.data.data.check === false) {
-          console.log('목표 생성해야함 -> goal페이지로');
-          navigate('/goal', { replace: true });
-        } else {
-          navigate('/', { replace: true });
-        }
-      })
-      .catch((error) => {
-        console.error('Login failed', error);
-        alert('알 수 없는 이유로 로그인에 실패하셨습니다');
+    try {
+      const response = await handleLogin(state.email, state.password);
+      console.log(response);
+      if (response.data.code === 1000) {
+        const accountList = JSON.stringify(
+          response.data.data.accountListResponseDtoList,
+        );
+        localStorage.setItem('accessToken', response.data.data.accessToken);
+        sessionStorage.setItem('email', response.data.data.email);
+        sessionStorage.setItem('name', response.data.data.name);
+        sessionStorage.setItem('age', response.data.data.age);
+        sessionStorage.setItem('salary', response.data.data.salary);
+        sessionStorage.setItem('accountList', accountList);
+        alert('로그인에 성공하셨습니다.');
+        const goalResponse = handleCheckGoal();
+        goalResponse.then((result) => {
+          const isCheckGoal = result;
+          if (isCheckGoal) {
+            navigate('/', { replace: true });
+          } else {
+            navigate('/goal', { replace: true });
+          }
+        });
+      } else {
+        console.error(response.data.code + ' ' + response.data.message);
+        alert('로그인에 실패하셨습니다');
         setState({ email: '', password: '' });
-      });
+      }
+    } catch (error) {
+      console.error('Login failed');
+      alert('알 수 없는 이유로 로그인에 실패하셨습니다');
+      setState({ email: '', password: '' });
+    }
   };
-  // const onLoginButtonClick = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     const response = await handleLogin(state.email, state.password);
-  //     if (response.data.code === 1000) {
-  //       const accountList = JSON.stringify(
-  //         response.data.data.accountListResponseDtoList,
-  //       );
-  //       localStorage.setItem('accessToken', response.data.data.accessToken);
-  //       sessionStorage.setItem('email', response.data.data.email);
-  //       sessionStorage.setItem('name', response.data.data.name);
-  //       sessionStorage.setItem('age', response.data.data.age);
-  //       sessionStorage.setItem('salary', response.data.data.salary);
-  //       sessionStorage.setItem('accountList', accountList);
-  //       console.log('Login success');
-  //       alert('로그인에 성공하셨습니다.');
-  //       const response2 = await handleCheckGoal();
-  //       console.log('log', response2.data.code);
-  //       console.log('log', response2.data.data);
-  //       // navigate('/', { replace: true });
-  //     } else {
-  //       console.error(response.data.code + ' ' + response.data.message);
-  //       alert('로그인에 실패하셨습니다');
-  //       setState({ email: '', password: '' });
-  //     }
-  //   } catch (error) {
-  //     console.error('Login failed');
-  //     alert('알 수 없는 이유로 로그인에 실패하셨습니다');
-  //     setState({ email: '', password: '' });
-  //   }
-  // };
 
   return (
     <div className="login">
