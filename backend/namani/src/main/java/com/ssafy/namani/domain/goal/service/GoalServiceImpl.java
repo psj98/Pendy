@@ -23,6 +23,8 @@ import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,6 +34,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@EnableScheduling
 public class GoalServiceImpl implements GoalService {
 
     private final TotalGoalRepository totalGoalRepository;
@@ -285,6 +288,7 @@ public class GoalServiceImpl implements GoalService {
      * @throws BaseException
      * @throws JsonProcessingException
      */
+    @Scheduled(cron = "0 59 23 L * *")
     public void registMonthlyFeedback() throws BaseException, JsonProcessingException {
         Timestamp curDate = Timestamp.valueOf(LocalDateTime.now());
         LinkedHashMap<String, Integer[]> categoryData = new LinkedHashMap<>();
