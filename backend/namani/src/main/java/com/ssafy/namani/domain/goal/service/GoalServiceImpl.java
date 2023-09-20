@@ -135,13 +135,23 @@ public class GoalServiceImpl implements GoalService {
      * @throws BaseException
      */
     @Override
-    public TotalGoalDetailResponseDto getTotalGoal(UUID memberId, Timestamp curDate) throws BaseException {
+    public TotalGoalDetailResponseDto getTotalGoal(UUID memberId, Timestamp curDate) {
         Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, curDate);
+        Member member = memberRepository.findById(memberId).get();
+
+        // 월별 목표가 없으면, 초기값을 0으로 생성
         if (!totalGoalOptional.isPresent()) {
-            throw new BaseException(BaseResponseStatus.TOTAL_GOAL_NOT_FOUND);
+            TotalGoal totalGoal = TotalGoal.builder()
+                    .member(member)
+                    .goalAmount(0)
+                    .goalDate(curDate)
+                    .build();
+
+            totalGoalRepository.save(totalGoal);
         }
 
-        TotalGoal newTotalGoal = totalGoalOptional.get();
+        // 반환할 데이터 저장
+        TotalGoal newTotalGoal = totalGoalRepository.findByCurDate(memberId, curDate).get();
         TotalGoalDetailResponseDto totalGoal = TotalGoalDetailResponseDto.builder()
                 .id(newTotalGoal.getId())
                 .goalAmount(newTotalGoal.getGoalAmount())
@@ -158,23 +168,32 @@ public class GoalServiceImpl implements GoalService {
      * @throws BaseException
      */
     @Override
-    public List<GoalByCategoryDetailResponseDto> getGoalByCategoryList(Long totalGoalId) throws BaseException {
+    public List<GoalByCategoryDetailResponseDto> getGoalByCategoryList(Long totalGoalId) {
         List<GoalByCategoryDetailResponseDto> goalByCategoryList = new ArrayList<>();
         List<Category> categoryList = categoryRepository.findAll();
+        TotalGoal totalGoal = totalGoalRepository.findById(totalGoalId).get();
 
-        for (Category category : categoryList) {
-            Optional<GoalByCategory> goalByCategoryOptional = goalByCategoryRepository.findByTotalGoalIdCategoryId(totalGoalId, category.getId());
+        // 카테고리 별 목표가 없는 경우, 초기값을 0으로 생성
+        Optional<List<GoalByCategory>> goalByCategoryListOptional = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId);
+        if (!goalByCategoryListOptional.isEmpty()) { // 없으면 생성
+            for (Category category : categoryList) {
+                GoalByCategory goalByCategory = GoalByCategory.builder()
+                        .category(category)
+                        .totalGoal(totalGoal)
+                        .categoryGoalAmount(0)
+                        .build();
 
-            // 카테고리 별 목표 체크
-            if (!goalByCategoryOptional.isPresent()) {
-                throw new BaseException(BaseResponseStatus.GOAL_BY_CATEGORY_NOT_FOUND);
+                goalByCategoryRepository.save(goalByCategory);
             }
+        }
 
-            GoalByCategory goalByCategory = goalByCategoryOptional.get();
+        // 반환할 데이터 저장
+        List<GoalByCategory> goalByCategories = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId).get();
+        for (GoalByCategory goalByCategory : goalByCategories) {
             GoalByCategoryDetailResponseDto goalByCategoryDetailResponseDto =
                     GoalByCategoryDetailResponseDto.builder()
-                            .categoryId(category.getId())
-                            .categoryName(category.getName())
+                            .categoryId(goalByCategory.getCategory().getId())
+                            .categoryName(goalByCategory.getCategory().getName())
                             .categoryGoalAmount(goalByCategory.getCategoryGoalAmount())
                             .build();
 
@@ -200,6 +219,7 @@ public class GoalServiceImpl implements GoalService {
 
         /* 월별 목표 조회 */
         TotalGoalDetailResponseDto totalGoal = getTotalGoal(memberId, curDate);
+        System.out.println(totalGoal.getId());
 
         /* 카테고리 별 목표 조회 */
         List<GoalByCategoryDetailResponseDto> goalByCategoryList = getGoalByCategoryList(totalGoal.getId());
