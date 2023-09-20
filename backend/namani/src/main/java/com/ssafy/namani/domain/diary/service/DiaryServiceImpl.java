@@ -51,7 +51,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final StatisticService statisticService;
 
     /**
-     * 달력 조회
+     * 달력 조회 메서드
      *
      * @param memberId
      * @param diaryListRequestDto
@@ -128,11 +128,12 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     /**
-     * 일기 생성
+     * 일기 생성 메서드
      *
      * @param memberId
      * @param diaryRegistRequestDtoList
      * @throws BaseException
+     * @throws JsonProcessingException
      */
     @Override
     public void registDiary(UUID memberId, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException, JsonProcessingException {
@@ -190,7 +191,7 @@ public class DiaryServiceImpl implements DiaryService {
         transactionInfoRepository.saveAll(transactionInfoList); // 오류가 없으면 거래 내역 전체 저장
 
         /* -------------- AI에게 일기 생성 요청 -------------- */
-        String url = "http://localhost:8000/create-diary"; // 파이썬 요청 url
+        String url = "http://localhost:8000/ml/create-diary"; // 파이썬 요청 url
         RestTemplate restTemplate = new RestTemplate();
 
         // 월간 목표로 일간 소비 금액 구하기
@@ -233,7 +234,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     /**
-     * 일기 조회
+     * 일기 조회 메서드
      *
      * @param accessToken
      * @param diaryDetailRequestDto
@@ -272,7 +273,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     /**
-     * 일기 내용 수정
+     * 일기 내용 수정 메서드
      *
      * @param id
      * @param diaryUpdateContentRequestDto
@@ -296,7 +297,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     /**
-     * 월간 분석 불러오기
+     * 월간 분석 조회 메서드
      *
      * @param memberId
      * @param diaryMonthlyAnalysisRequestDto

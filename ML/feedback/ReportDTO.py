@@ -3,14 +3,7 @@ from pydantic import BaseModel
 #DTO
 
 class ReportRequest(BaseModel):
-    food : int = 0 # default값
-    traffic : int = 0
-    online : int = 0
-    offline : int = 0
-    cafe : int = 0
-    housing : int = 0
-    fashion : int = 0
-    culture : int = 0
+    categoryData: dict[str, list[int]] = {"categoryName": [1000, 20000]} # default 값
 
 # food : 식비
 # traffic : 교통
