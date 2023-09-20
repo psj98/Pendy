@@ -1,0 +1,2 @@
+- chromadb는 pydantic 종속성에 따른 fastapi와의 버전 충돌 문제로 사용하지 않기로 결정
+- faiss로 임베딩 하기로 결정
