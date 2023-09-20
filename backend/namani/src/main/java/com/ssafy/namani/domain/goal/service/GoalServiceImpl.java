@@ -321,7 +321,7 @@ public class GoalServiceImpl implements GoalService {
             }
 
             /* -------------- AI에게 월간 분석 요청 -------------- */
-            String url = "http://localhost:8000/create-report"; // 파이썬 요청 url
+            String url = "http://localhost:8000/ml/create-report"; // 파이썬 요청 url
             RestTemplate restTemplate = new RestTemplate();
 
             /* -------------- 데이터 전달 및 생성된 월간 분석 데이터 반환 -------------- */
