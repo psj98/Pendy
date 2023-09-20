@@ -1,5 +1,6 @@
 package com.ssafy.namani.domain.goal.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.namani.domain.goal.dto.request.GoalDetailRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalRegistRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalUpdateRequestDto;
@@ -33,7 +34,7 @@ public interface GoalService {
     void registGoal(UUID memberId, GoalRegistRequestDto goalRegistRequestDto) throws BaseException;
 
     /**
-     * 월별 목표 조회
+     * 월별 목표 조회 메서드
      *
      * @param memberId
      * @param curDate
@@ -43,7 +44,7 @@ public interface GoalService {
     TotalGoalDetailResponseDto getTotalGoal(UUID memberId, Timestamp curDate) throws BaseException;
 
     /**
-     * 카테고리 별 목표 조회
+     * 카테고리 별 목표 조회 메서드
      *
      * @param totalGoalId
      * @return List<GoalByCategoryDetailResponseDto>
@@ -66,6 +67,15 @@ public interface GoalService {
      *
      * @param memberId
      * @param goalUpdateRequestDto
+     * @throws BaseException
      */
     void updateGoal(UUID memberId, GoalUpdateRequestDto goalUpdateRequestDto) throws BaseException;
+
+    /**
+     * 월간 분석 피드백 생성 메서드
+     *
+     * @throws BaseException
+     * @throws JsonProcessingException
+     */
+    void registMonthlyFeedback() throws BaseException, JsonProcessingException;
 }

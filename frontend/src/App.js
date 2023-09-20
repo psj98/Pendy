@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+
+import useLogin from './hooks/useLogin';
 
 import TestPage from './pages/test-page/TestPage';
 
@@ -22,21 +23,13 @@ import RepasswordTemplate from './templates/repassword-template/RepasswordTempla
 // 은행 계좌 관련 페이지
 import BankPage from './pages/bank-page/BankPage';
 import BankMainTemplate from './templates/bank-main-template/BankMainTemplate';
+import BankLoginTemplate from './templates/bank-login-template/BankLoginTemplate';
+import BankSignupTemplate from './templates/bank-signup-template/BankSignupTemplate';
 import AccountTemplate from './templates/account-template/AccountTemplate';
 import RegistrationTemplate from './templates/registration-template/RegistrationTemplate';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const location = useLocation();
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, [location]);
+  const isLoggedIn = useLogin();
 
   return (
     <Routes>
@@ -66,6 +59,8 @@ function App() {
       {/* 계좌 페이지 */}
       <Route path="/bank" element={<BankPage />}>
         <Route path="" element={<BankMainTemplate />} />
+        <Route path="login" element={<BankLoginTemplate />} />
+        <Route path="signup" element={<BankSignupTemplate />} />
         <Route path="account/:accountNumber" element={<AccountTemplate />} />
         <Route
           path="regist/:accountNumber"
