@@ -1,5 +1,6 @@
 package com.ssafy.namani.domain.goal.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.namani.domain.goal.dto.request.GoalDetailRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalRegistRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalUpdateRequestDto;
@@ -68,4 +69,12 @@ public interface GoalService {
      * @param goalUpdateRequestDto
      */
     void updateGoal(UUID memberId, GoalUpdateRequestDto goalUpdateRequestDto) throws BaseException;
+
+    /**
+     * 월간 분석 피드백 생성 메서드
+     *
+     * @throws BaseException
+     * @throws JsonProcessingException
+     */
+    void registMonthlyFeedback() throws BaseException, JsonProcessingException;
 }
