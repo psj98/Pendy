@@ -31,7 +31,7 @@ public class DiaryController {
      *
      * @param token
      * @param diaryListRequestDto
-     * @return diaryListResponseDto
+     * @return BaseResponse<Object> - DiaryListResponseDto
      */
     @PostMapping("/calendar")
     public BaseResponse<Object> getCalendar(@RequestHeader(value = "accessToken", required = false) String token,
@@ -56,7 +56,7 @@ public class DiaryController {
      *
      * @param token
      * @param diaryRegistRequestDtoList
-     * @return diaryResponseDto
+     * @return BaseResponse<Object>
      */
     @PostMapping("/regist")
     public BaseResponse<Object> registDiary(@RequestHeader(value = "accessToken", required = false) String token,
@@ -83,14 +83,13 @@ public class DiaryController {
      *
      * @param accessToken
      * @param diaryDetailRequestDto
-     * @return diaryDetailResponseDto
+     * @return DiaryDetailResponseDto
      */
     @PostMapping("/after")
     public BaseResponse<Object> detailDiary(@RequestHeader(value = "accessToken") String accessToken,
                                             @RequestBody DiaryDetailRequestDto diaryDetailRequestDto) {
         try {
-            DiaryDetailResponseDto diaryDetailResponseDto = diaryService.detailDiary(accessToken,
-                    diaryDetailRequestDto);
+            DiaryDetailResponseDto diaryDetailResponseDto = diaryService.detailDiary(accessToken, diaryDetailRequestDto);
             return baseResponseService.getSuccessResponse(diaryDetailResponseDto);
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);
@@ -102,7 +101,7 @@ public class DiaryController {
      *
      * @param id
      * @param diaryUpdateContentRequestDto
-     * @return diaryResponseDto
+     * @return BaseResponse<Object>
      */
     @PutMapping("/{id}")
     public BaseResponse<Object> updateDiary(@PathVariable("id") Long id,
@@ -120,7 +119,7 @@ public class DiaryController {
      *
      * @param accessToken
      * @param diaryMonthlyAnalysisRequestDto
-     * @return diaryMonthlyAnalysisResponseDto
+     * @return DiaryMonthlyAnalysisResponseDto
      */
     @PostMapping("/monthly-analysis")
     public BaseResponse<Object> getMonthlyAnalysis(
