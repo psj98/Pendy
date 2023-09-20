@@ -14,7 +14,7 @@
         [Response Format]
         {
         "content": "like an 75-years-old, write a fun  diary(title over 10 characters + content over 50 characters)",
-        "comment": "As an elementary school tescher, give comment",
+        "comment": "As an elementary school teacher, give comment",
         "stamp_type": "assign a score judging the spending details from a range of 1 to 5, int".
         }
 
