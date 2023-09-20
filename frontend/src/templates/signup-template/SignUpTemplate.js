@@ -33,7 +33,7 @@ const SignUpTemplate = () => {
       if (response.data.code === 2002) {
         alert(response.data.message);
       } else {
-        alert('이메일 사용 가능');
+        alert('사용 가능한 이메일 입니다.');
       }
     } catch (error) {
       console.log(error.message);
