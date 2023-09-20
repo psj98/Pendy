@@ -7,12 +7,13 @@ import CalenderCells from '../../components/main/calender-cells/CalenderCells';
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
 import DayMonthButton from '../../components/main/day-month-button/DayMonthButton';
-import handleFetchData from '../../utils/handleFetchData';
+import handleCalender from '../../utils/handleCalender';
 import { format } from 'date-fns';
+
 //유저 전용 메인 페이지
 const UserTemplate = () => {
-  const [apiData, setApiData] = useState('');
   const [currentMonth, setCurrentMonth] = useState(new Date());
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,12 +31,9 @@ const UserTemplate = () => {
           "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'",
         );
 
-        const response = await handleFetchData(todayDate, todayMonth);
+        const response = await handleCalender(todayDate, todayMonth);
 
         console.log(response.data);
-        setApiData(response.data);
-
-        console.log('apiData', apiData);
       } catch (error) {
         console.log(error);
       }
