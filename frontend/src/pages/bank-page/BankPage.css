@@ -1,1 +1,5 @@
 /* BankPage.css */
+.bank-page {
+  max-height: 100vh;
+  overflow-y: auto;
+}

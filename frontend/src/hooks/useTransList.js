@@ -3,6 +3,7 @@ import axiosCreate from '../axiosCreate';
 import { useState, useEffect } from 'react';
 
 function useTransList(accountNumber) {
+  console.log('useTransList');
   const [transList, setTransList] = useState([]);
   const [loading, setLoading] = useState(true);
 
