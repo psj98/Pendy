@@ -67,3 +67,21 @@
 
 ### Todo
 - 월별 리포트 임베딩, req 포멧 확인
+
+
+# 오류 정리
+## pydantic 버전 오류
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+chromadb 0.4.10 requires pydantic<2.0,>=1.9, but you have pydantic 2.3.0 which is incompatible.
+fastapi 0.99.1 requires pydantic!=1.8,!=1.8.1,<2.0.0,>=1.7.4, but you have pydantic 2.3.0 which is incompatible.
+- 요약 : chromadb와 fastapi가 pydantic 버전을 특정 범위로 요구하는데 이를 충족하지 못하는 2.3.0이 설치되어서 충돌이 발생함
+- 해결 : 1.9 설치
+
+
+## TypeError: issubclass() arg 1 must be a class
+- 요약 : 앞선 pydantic 버전을 수정하고 나서 발생한 오류 
+- 자세히 : 2023 09 20 기준 chromadb는 1.10 이하의 pydantic 버전을강제, fast api는 2.0이상을 필요로 함 
+  - fast api 버전을 낮추거나 chromadb 대신 다른 라이브러리를 사용
+- 해결 : faiss 사용, python버전 3.9에서 3.11.5로 변경
+- 비고 : 에러 메세지를 보고 무슨 원인인지 파악하기 어려움
