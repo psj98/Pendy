@@ -6,8 +6,6 @@ import com.ssafy.namani.domain.avgConsumptionAmount.dto.response.AvgConsumptionA
 import com.ssafy.namani.domain.avgConsumptionAmount.service.AvgConsumptionAmountService;
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.category.repository.CategoryRepository;
-import com.ssafy.namani.domain.diary.dto.request.DiaryCreateByAIRequestDto;
-import com.ssafy.namani.domain.diary.dto.response.DiaryCreateByAIResponseDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalDetailRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalRegistMonthlyFeedbackRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalRegistRequestDto;
@@ -19,8 +17,6 @@ import com.ssafy.namani.domain.goal.repository.GoalByCategoryRepository;
 import com.ssafy.namani.domain.goal.repository.TotalGoalRepository;
 import com.ssafy.namani.domain.member.entity.Member;
 import com.ssafy.namani.domain.member.repository.MemberRepository;
-import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticAmountByCategoryResponseDto;
-import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticDetailByRegDateResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticAmountByCategoryResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
 import com.ssafy.namani.domain.statistic.service.StatisticService;
@@ -284,7 +280,7 @@ public class GoalServiceImpl implements GoalService {
     }
 
     /**
-     * 월간 분석 피드백 생성
+     * 월간 분석 피드백 생성 메서드
      *
      * @throws BaseException
      * @throws JsonProcessingException
@@ -304,7 +300,7 @@ public class GoalServiceImpl implements GoalService {
 
             // 월간 분석이 생성되어 있는 경우, 스킵 (테스트용)
             TotalGoal totalGoal = totalGoalOptional.get();
-            if(totalGoal.getAiAnalysis() != null) {
+            if (totalGoal.getAiAnalysis() != null) {
                 continue;
             }
 

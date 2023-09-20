@@ -51,7 +51,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final StatisticService statisticService;
 
     /**
-     * 달력 조회
+     * 달력 조회 메서드
      *
      * @param memberId
      * @param diaryListRequestDto
@@ -128,11 +128,12 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     /**
-     * 일기 생성
+     * 일기 생성 메서드
      *
      * @param memberId
      * @param diaryRegistRequestDtoList
      * @throws BaseException
+     * @throws JsonProcessingException
      */
     @Override
     public void registDiary(UUID memberId, List<DiaryRegistRequestDto> diaryRegistRequestDtoList) throws BaseException, JsonProcessingException {
@@ -233,7 +234,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     /**
-     * 일기 조회
+     * 일기 조회 메서드
      *
      * @param accessToken
      * @param diaryDetailRequestDto
@@ -272,7 +273,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     /**
-     * 일기 내용 수정
+     * 일기 내용 수정 메서드
      *
      * @param id
      * @param diaryUpdateContentRequestDto
@@ -296,7 +297,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     /**
-     * 월간 분석 불러오기
+     * 월간 분석 조회 메서드
      *
      * @param memberId
      * @param diaryMonthlyAnalysisRequestDto

@@ -29,7 +29,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
      * 
      * @param memberId
      * @param curDate
-     * @return
+     * @return Optional<Diary>
      */
     @Query(value = "SELECT * FROM diary d " +
             "WHERE d.member_id = ?1 AND DATE_FORMAT(d.reg_date, '%Y-%m-%d') = DATE_FORMAT(?2, '%Y-%m-%d')", nativeQuery = true)

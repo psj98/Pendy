@@ -34,7 +34,7 @@ public interface GoalService {
     void registGoal(UUID memberId, GoalRegistRequestDto goalRegistRequestDto) throws BaseException;
 
     /**
-     * 월별 목표 조회
+     * 월별 목표 조회 메서드
      *
      * @param memberId
      * @param curDate
@@ -44,7 +44,7 @@ public interface GoalService {
     TotalGoalDetailResponseDto getTotalGoal(UUID memberId, Timestamp curDate) throws BaseException;
 
     /**
-     * 카테고리 별 목표 조회
+     * 카테고리 별 목표 조회 메서드
      *
      * @param totalGoalId
      * @return List<GoalByCategoryDetailResponseDto>
@@ -67,6 +67,7 @@ public interface GoalService {
      *
      * @param memberId
      * @param goalUpdateRequestDto
+     * @throws BaseException
      */
     void updateGoal(UUID memberId, GoalUpdateRequestDto goalUpdateRequestDto) throws BaseException;
 
