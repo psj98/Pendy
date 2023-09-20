@@ -5,8 +5,8 @@
   height: 35px;
   background: linear-gradient(
     to right,
-    #2a4ffa 0%,
-    #2a4ffa calc(var(--midpoint) - 5%),
+    var(--color) 0%,
+    var(--color) calc(var(--midpoint) - 5%),
     #94a7fc var(--midpoint),
     #fff calc(var(--midpoint) + 5%),
     #fff 100%
