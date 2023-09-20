@@ -34,6 +34,9 @@ const BarChart = () => {
           options={{
             chart: {
               type: 'bar',
+              toolbar: {
+                show: false,
+              },
             },
             xaxis: {
               categories: chartData.categories,
