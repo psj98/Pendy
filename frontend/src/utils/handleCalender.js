@@ -1,6 +1,6 @@
 import authAxiosCreate from '../authAxiosCreate';
 
-const handleFetchData = (todayDate, todayMonth) => {
+const handleCalender = (todayDate, todayMonth) => {
   console.log('fetching data from serve...');
   const data = {
     //달력 부른 시간 (연,월,일 시 분 초)
@@ -15,4 +15,4 @@ const handleFetchData = (todayDate, todayMonth) => {
   return authAxiosCreate.post(serverUrl, data);
 };
 
-export default handleFetchData;
+export default handleCalender;
