@@ -7,8 +7,8 @@ const handleCheckGoal = async () => {
   const serverUrl = '/api/goals/check';
   try {
     const response = await authAxiosCreate.get(serverUrl);
-    const isCheckGoal = response.data.data.check;
-    return isCheckGoal;
+    const goalResponse = response.data.data.check;
+    return goalResponse;
   } catch (error) {
     console.error('Goal Check failed', error);
     throw error;
