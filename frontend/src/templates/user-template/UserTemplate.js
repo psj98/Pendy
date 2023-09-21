@@ -115,7 +115,12 @@ const UserTemplate = () => {
             <div className="spend-text-blue">현재 소비 금액 /</div>&nbsp;
             <div className="spend-text-black">목표 소비 금액</div>
           </div>
-          <GoalBar />
+          <GoalBar
+            color={'#2A4FFA'}
+            current={100}
+            goal={2000}
+            type={'default'}
+          />
           <br />
           <div className="spend-text-black">오늘의 고정 지출</div>
         </div>
