@@ -49,6 +49,7 @@ const DonutChart = ({
               color: valueColor,
             },
           },
+          size: 60,
         },
       },
     },
@@ -56,13 +57,7 @@ const DonutChart = ({
   };
 
   return (
-    <div className="donut-chart">
-      <ReactApexChart
-        options={options}
-        series={chartData.series}
-        type="donut"
-      />
-    </div>
+    <ReactApexChart options={options} series={chartData.series} type="donut" />
   );
 };
 
