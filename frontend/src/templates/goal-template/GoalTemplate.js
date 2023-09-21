@@ -4,6 +4,7 @@ import DonutChart from '../../components/common/donut-chart/DonutChart';
 import BarChart from '../../components/common/bar-chart/BarChart';
 import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
+
 const GoalTemplate = () => {
   const [goalByCategory, setGoalByCategory] = useState([]);
   const categoryNameToKor = {
@@ -44,6 +45,7 @@ const GoalTemplate = () => {
         // );
 
         setGoalByCategory(goalByCategoryList);
+        console.log(goalByCategoryList);
       } catch (error) {
         console.log(error);
       }
@@ -68,6 +70,7 @@ const GoalTemplate = () => {
             valueShow={true}
             valueColor={'black'}
             colors={colors}
+            label={goalByCategory}
           />
         </div>
         <div className="goal-inputs-container">
