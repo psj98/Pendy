@@ -24,18 +24,13 @@ const UserTemplate = () => {
           currentMonth,
           "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'",
         );
-
         // yyyy-MM-01T00:00:00.000+09:00 형식으로 todayMonth 값 생성
-
         const todayMonth = format(
           currentMonth,
           "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'",
         );
-
         const response = await handleCalender(todayDate, todayMonth);
-
         console.log(response.data);
-
         setResponseData(response.data); // response 데이터를 상태로 저장
       } catch (error) {
         console.log(error);
@@ -44,7 +39,6 @@ const UserTemplate = () => {
 
     fetchData();
   }, [currentMonth]);
-
   console.log('usertemplate ' + currentMonth);
 
   // 달력을 이전달로 넘기는 기능
