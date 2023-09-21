@@ -1,1 +1,48 @@
 /* DiaryForm.css */
+.diary-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.diary-form-date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.diary-form-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.diary-form-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.diary-comment {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.diary-form-comment {
+  flex: 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.diary-form-stamp {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
