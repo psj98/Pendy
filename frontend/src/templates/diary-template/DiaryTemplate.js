@@ -7,7 +7,7 @@ import useDiaryDetail from '../../hooks/useDiaryDetail';
 
 const DiaryTemplate = () => {
   const { diaryDetail, loading } = useDiaryDetail(1);
-  const series = [1, 1, 1, 1, 1, 1, 1, 1];
+  const series = [1, 1, 1, 1, 1, 1, 1];
   const colors = [
     '#FAF2E8',
     '#BDECEA',
@@ -26,7 +26,12 @@ const DiaryTemplate = () => {
   console.log('diaryDetail');
   console.log(diaryDetail);
   console.log(diaryDetail.data.diary);
-  const id = diaryDetail.data.diary.id;
+  const regDate = diaryDetail.data.diary.regDate;
+  // const title = diaryDetail.data.diary.title;
+  const content = diaryDetail.data.diary.content;
+  const comment = diaryDetail.data.diary.comment;
+  const stampType = diaryDetail.data.diary.stampType;
+
   return (
     <div className="diary-container">
       <div className="diary-template">
@@ -34,7 +39,13 @@ const DiaryTemplate = () => {
           <div className="diary-title">
             <p>일기장</p>
           </div>
-          <DiaryForm id={id} />
+          <DiaryForm
+            regDate={regDate}
+            // title={title}
+            content={content}
+            comment={comment}
+            stampType={stampType}
+          />
         </div>
         <div className="diary-donutchart-container">
           <div className="diary-donutchart-title">
