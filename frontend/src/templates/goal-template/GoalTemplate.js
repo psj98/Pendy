@@ -4,10 +4,14 @@ import DonutChart from '../../components/common/donut-chart/DonutChart';
 import BarChart from '../../components/common/bar-chart/BarChart';
 import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
+import handleGoalUpdate from '../../utils/handleGoalUpdate';
 
 const GoalTemplate = () => {
   const [goalByCategory, setGoalByCategory] = useState([]);
   const [series, setSeries] = useState([]);
+  const [totalGoals, setTotalGoals] = useState([]);
+  const [editable, setEditable] = useState(false);
+  const [buttonLabel, setButtonLabel] = useState('목표수정');
   const categoryNameToKor = {
     food: '식비',
     traffic: '교통',
@@ -42,15 +46,54 @@ const GoalTemplate = () => {
         const seriestList = response.data.data.goalByCategoryList.map(
           (index) => index.categoryGoalAmount,
         );
+        const totalGoal = response.data.data.totalGoal;
 
         setGoalByCategory(goalByCategoryList);
         setSeries(seriestList);
+        setTotalGoals(totalGoal);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, []);
+
+  const handleButtonClick = () => {
+    console.log('click');
+    if (editable) {
+      handleUpdate();
+    }
+    handleEditToggle();
+  };
+
+  const handleEditToggle = () => {
+    setEditable(!editable);
+    setButtonLabel(editable ? '목표수정' : '수정 완료');
+  };
+
+  const handleCancel = () => {
+    setEditable(false);
+    setButtonLabel('목표수정');
+    // Reset the state to original (you may need to call the API again)
+  };
+
+  const handleUpdate = async () => {
+    if (editable) {
+      try {
+        const id = totalGoals.id;
+        const goalAmount = totalGoals.goalAmount;
+
+        console.log('id', id);
+        console.log('goalAmount', goalAmount);
+        console.log('goalByCategory', goalByCategory);
+
+        await handleGoalUpdate(id, goalAmount, goalByCategory);
+        handleEditToggle();
+      } catch (error) {
+        console.error('Failed to update:', error);
+      }
+    }
+  };
 
   return (
     <div className="goal-template">
@@ -73,6 +116,22 @@ const GoalTemplate = () => {
             />
           )}
         </div>
+        <button
+          onClick={handleButtonClick}
+          className="signup-button duplicatecheck-button"
+          style={{ fontSize: 'smaller', padding: '5px 10px' }}
+        >
+          {buttonLabel}
+        </button>
+        {editable && (
+          <button
+            onClick={handleCancel}
+            className="cancel-button"
+            style={{ fontSize: 'smaller', padding: '5px 10px' }}
+          >
+            취소
+          </button>
+        )}
         <div className="goal-inputs-container">
           <div className="goal-inputs-left">
             {goalByCategory.slice(0, 4).map((category, index) => (
@@ -91,13 +150,12 @@ const GoalTemplate = () => {
                   type="text"
                   placeholder={`Input ${index + 1}`}
                   value={category.categoryGoalAmount || ''}
-                  readOnly
+                  readOnly={!editable}
                 />
                 원
               </div>
             ))}
           </div>
-
           <div className="goal-inputs-right">
             {goalByCategory.slice(4, 8).map((category, index) => (
               <div key={index} className="goal-inputs-category">
@@ -115,7 +173,7 @@ const GoalTemplate = () => {
                   type="text"
                   placeholder={`Input ${index + 1}`}
                   value={category.categoryGoalAmount || ''}
-                  readOnly
+                  readOnly={!editable}
                 />
                 원
               </div>
