@@ -3,29 +3,80 @@
 .goal-template {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
 .goal-container {
-  flex: 1;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
-  width: 100%;
 }
 
 .goal-chart {
-  flex: 2;
-}
-
-.goal-category {
-  flex: 3;
+  width: 100%;
 }
 
 .goal-bar-chart {
   flex: 1;
   width: 95%;
   height: 100%;
+}
+
+.goal-inputs-container {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .goal-container {
+    flex-direction: column;
+  }
+
+  .goal-chart {
+    width: auto !important;
+    margin-bottom: 30px;
+  }
+
+  .goal-inputs-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 997px) {
+  .goal-container {
+    flex-direction: column;
+  }
+
+  .goal-chart {
+    width: 50%;
+    margin-bottom: 30px;
+  }
+}
+
+.goal-inputs-left {
+  margin-right: 10px;
+}
+
+.goal-inputs-category {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.goal-inputs-category-name {
+  width: 125px;
+  margin-right: 5px;
+  text-align: right;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.goal-inputs-rectangle-label {
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.goal-inputs-amount {
+  width: 150px;
+  font-size: inherit;
+  text-indent: 5px;
 }

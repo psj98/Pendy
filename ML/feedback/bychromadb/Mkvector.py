@@ -13,7 +13,7 @@ from pydantic import BaseSettings
 import chromadb
 
 
-file_name ="test.txt"
+file_name = "../product.txt"
 file=open(file_name,"r",encoding="utf-8")
 # file.write()
 # file.close()
@@ -35,7 +35,7 @@ for line in plain_txt:
         )
         doc_chunks.append(doc)
 		#persist_directory 을 명시하지 않으면 현재 디렉토리에 저장합니다
-persist_directory = "./db"
+persist_directory = "./vector_chromadb"
 #os_enviroment에 api_key를 입력했다면 파라미터로 전달하지 않아도 됩니다
 embeddings = OpenAIEmbeddings(api_key = apikey)
 vectordb = Chroma.from_documents(documents=doc_chunks,
