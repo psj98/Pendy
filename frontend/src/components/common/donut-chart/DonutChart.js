@@ -61,11 +61,7 @@ const DonutChart = ({
 
   return (
     <div className="donut-chart">
-      <ReactApexChart
-        options={options}
-        series={chartData.series}
-        type="donut"
-      />
+      <ReactApexChart options={options} series={series} type="donut" />
     </div>
   );
 };

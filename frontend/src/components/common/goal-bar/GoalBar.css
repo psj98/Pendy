@@ -6,9 +6,8 @@
   background: linear-gradient(
     to right,
     var(--color) 0%,
-    var(--color) calc(var(--midpoint) - 5%),
-    #94a7fc var(--midpoint),
-    #fff calc(var(--midpoint) + 5%),
+    var(--color) var(--midpoint),
+    #fff var(--midpoint),
     #fff 100%
   );
   border-radius: 10px;

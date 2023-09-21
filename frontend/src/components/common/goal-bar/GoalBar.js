@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './GoalBar.css';
 
 const GoalBar = ({ color, current, goal }) => {
-  const [midpoint] = useState(`${(current / goal) * 100}%`);
-
+  const midpoint = (current / goal) * 100 + '%';
   return (
     <div
       className="goal-bar"
