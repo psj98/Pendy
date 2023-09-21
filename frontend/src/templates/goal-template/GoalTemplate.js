@@ -6,6 +6,7 @@ import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
 const GoalTemplate = () => {
   const [goalByCategory, setGoalByCategory] = useState([]);
+  const [categoryName, setCategoryNames] = useState([]);
   const categoryNameToKor = {
     food: '식비',
     traffic: '교통',
@@ -16,7 +17,7 @@ const GoalTemplate = () => {
     fashion: '패션/미용',
     culture: '문화/여가',
   };
-  const series = [1, 1, 1, 1, 1, 1, 1, 1];
+
   const colors = [
     '#FAF2E8',
     '#BDECEA',
@@ -44,6 +45,17 @@ const GoalTemplate = () => {
         // );
 
         setGoalByCategory(goalByCategoryList);
+        console.log(response.data);
+        const amounts = response.data.data.goalByCategoryList.map(
+          (item) => item.categoryGoalAmount,
+        );
+        const label = response.data.data.goalByCategoryList.map(
+          (item) => item.categoryName,
+        );
+
+        setGoalByCategory(amounts);
+        setCategoryNames(label);
+        // console.log(categotyNames);
       } catch (error) {
         console.log(error);
       }
@@ -51,11 +63,37 @@ const GoalTemplate = () => {
     fetchData();
   }, []);
 
+  // console.log(categotyNames[0]);
+
+  // const labelList = [
+  //   // categotyNames[0],
+  //   // categotyNames[1],
+  //   // categotyNames[2],
+  //   // categotyNames[3],
+  //   // categotyNames[4],
+  //   // categotyNames[5],
+  //   // categotyNames[6],
+  //   // categotyNames[7],
+  // ];
+
+  // console.log(categoryGoalAmounts[0]);
+
+  const series = [
+    goalByCategory[0],
+    goalByCategory[1],
+    goalByCategory[2],
+    goalByCategory[3],
+    goalByCategory[4],
+    goalByCategory[5],
+    goalByCategory[6],
+    goalByCategory[7],
+  ];
+
   return (
     <div className="goal-template">
       <h1>목표 설정</h1>
       <div className="goal-container">
-        <div className="goal-chart">
+        {goalByCategory.length > 0 && (
           <DonutChart
             series={series}
             title={'오늘 총 소비액'}
@@ -68,8 +106,9 @@ const GoalTemplate = () => {
             valueShow={true}
             valueColor={'black'}
             colors={colors}
+            label={categoryName}
           />
-        </div>
+        )}
         <div className="goal-inputs-container">
           <div className="goal-inputs-left">
             {goalByCategory.slice(0, 4).map((category, index) => (
