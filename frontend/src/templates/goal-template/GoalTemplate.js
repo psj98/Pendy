@@ -7,6 +7,7 @@ import format from 'date-fns/format';
 
 const GoalTemplate = () => {
   const [goalByCategory, setGoalByCategory] = useState([]);
+  const [series, setSeries] = useState([]);
   const categoryNameToKor = {
     food: '식비',
     traffic: '교통',
@@ -38,8 +39,12 @@ const GoalTemplate = () => {
       try {
         const response = await handleGoalDetail(age, salary, curDate);
         const goalByCategoryList = response.data.data.goalByCategoryList;
+        const seriestList = response.data.data.goalByCategoryList.map(
+          (index) => index.categoryGoalAmount,
+        );
 
         setGoalByCategory(goalByCategoryList);
+        setSeries(seriestList);
       } catch (error) {
         console.log(error);
       }
@@ -47,35 +52,26 @@ const GoalTemplate = () => {
     fetchData();
   }, []);
 
-  const series = [
-    goalByCategory[0],
-    goalByCategory[1],
-    goalByCategory[2],
-    goalByCategory[3],
-    goalByCategory[4],
-    goalByCategory[5],
-    goalByCategory[6],
-    goalByCategory[7],
-  ];
-
   return (
     <div className="goal-template">
       <h1>목표 설정</h1>
       <div className="goal-container">
         <div className="goal-chart">
-          <DonutChart
-            series={series}
-            title={'오늘 총 소비액'}
-            legendShow={false}
-            legendFont={20}
-            labelShow={true}
-            labelFont={18}
-            labelColor={'black'}
-            valueFont={16}
-            valueShow={true}
-            valueColor={'black'}
-            colors={colors}
-          />
+          {goalByCategory.length > 0 && (
+            <DonutChart
+              series={series}
+              title={'오늘 총 소비액'}
+              legendShow={false}
+              legendFont={20}
+              labelShow={true}
+              labelFont={18}
+              labelColor={'black'}
+              valueFont={16}
+              valueShow={true}
+              valueColor={'black'}
+              colors={colors}
+            />
+          )}
         </div>
         <div className="goal-inputs-container">
           <div className="goal-inputs-left">
