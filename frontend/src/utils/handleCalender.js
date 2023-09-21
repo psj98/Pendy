@@ -1,7 +1,7 @@
 import authAxiosCreate from '../authAxiosCreate';
 
 const handleCalender = (todayDate, todayMonth) => {
-  console.log('fetching data from serve...');
+  console.log('fetching calendar data from serve...');
   const data = {
     //달력 부른 시간 (연,월,일 시 분 초)
     todayDate: todayDate,
