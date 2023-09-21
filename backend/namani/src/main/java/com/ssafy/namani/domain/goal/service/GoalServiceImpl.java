@@ -175,7 +175,7 @@ public class GoalServiceImpl implements GoalService {
 
         // 카테고리 별 목표가 없는 경우, 초기값을 0으로 생성
         Optional<List<GoalByCategory>> goalByCategoryListOptional = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId);
-        if (!goalByCategoryListOptional.isEmpty()) { // 없으면 생성
+        if (goalByCategoryListOptional.isEmpty()) { // 없으면 생성
             for (Category category : categoryList) {
                 GoalByCategory goalByCategory = GoalByCategory.builder()
                         .category(category)

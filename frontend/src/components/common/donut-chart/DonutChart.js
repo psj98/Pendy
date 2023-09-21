@@ -6,6 +6,7 @@ import ReactApexChart from 'react-apexcharts';
 
 const DonutChart = ({
   series,
+  chartLabel,
   title,
   legendShow,
   legendFont,
@@ -26,6 +27,7 @@ const DonutChart = ({
     chart: {
       width: '100%',
     },
+    chartOptions: {},
     legend: {
       position: 'bottom',
       show: legendShow,
@@ -49,20 +51,17 @@ const DonutChart = ({
               color: valueColor,
             },
           },
+          size: 60,
         },
       },
     },
+    labels: chartLabel,
+
     colors: colors,
   };
 
   return (
-    <div className="donut-chart">
-      <ReactApexChart
-        options={options}
-        series={chartData.series}
-        type="donut"
-      />
-    </div>
+    <ReactApexChart options={options} series={chartData.series} type="donut" />
   );
 };
 
