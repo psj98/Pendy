@@ -45,6 +45,7 @@ const GoalTemplate = () => {
         // );
 
         setGoalByCategory(goalByCategoryList);
+
         console.log(response.data);
         const amounts = response.data.data.goalByCategoryList.map(
           (item) => item.categoryGoalAmount,

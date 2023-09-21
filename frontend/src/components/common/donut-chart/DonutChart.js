@@ -67,7 +67,6 @@ const DonutChart = ({
       label[6],
       label[7],
     ],
-
     colors: colors,
   };
 
