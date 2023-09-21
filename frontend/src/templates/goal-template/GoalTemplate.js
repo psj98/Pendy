@@ -40,9 +40,7 @@ const GoalTemplate = () => {
         const response = await handleGoalDetail(age, salary, curDate);
 
         const goalByCategoryList = response.data.data.goalByCategoryList;
-        // const amounts = response.data.data.goalByCategoryList.map(
-        //   (item) => item.categoryGoalAmount,
-        // );
+        //
 
         setGoalByCategory(goalByCategoryList);
 
@@ -56,28 +54,12 @@ const GoalTemplate = () => {
 
         setGoalByCategory(amounts);
         setCategoryNames(label);
-        // console.log(categotyNames);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, []);
-
-  // console.log(categotyNames[0]);
-
-  // const labelList = [
-  //   // categotyNames[0],
-  //   // categotyNames[1],
-  //   // categotyNames[2],
-  //   // categotyNames[3],
-  //   // categotyNames[4],
-  //   // categotyNames[5],
-  //   // categotyNames[6],
-  //   // categotyNames[7],
-  // ];
-
-  // console.log(categoryGoalAmounts[0]);
 
   const series = [
     goalByCategory[0],
