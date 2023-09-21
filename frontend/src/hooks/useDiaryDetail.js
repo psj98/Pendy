@@ -19,7 +19,6 @@ const useDiaryDetail = (id) => {
 
         const serverUrl = '/api/diaries/after';
         const response = await authAxiosCreate.post(serverUrl, data);
-        console.log(response);
         setDiaryDetail(response.data);
       } catch (error) {
         console.error('일기 내용을 불러오는 중 에러가 발생했습니다.', error);
