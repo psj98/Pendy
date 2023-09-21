@@ -17,7 +17,6 @@ const GoalTemplate = () => {
     fashion: '패션/미용',
     culture: '문화/여가',
   };
-  const series = [1, 1, 1, 1, 1, 1, 1, 1];
   const colors = [
     '#FAF2E8',
     '#BDECEA',
@@ -38,20 +37,26 @@ const GoalTemplate = () => {
     const fetchData = async () => {
       try {
         const response = await handleGoalDetail(age, salary, curDate);
-
         const goalByCategoryList = response.data.data.goalByCategoryList;
-        // const amounts = response.data.data.goalByCategoryList.map(
-        //   (item) => item.categoryGoalAmount,
-        // );
 
         setGoalByCategory(goalByCategoryList);
-        console.log(goalByCategoryList);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, []);
+
+  const series = [
+    goalByCategory[0],
+    goalByCategory[1],
+    goalByCategory[2],
+    goalByCategory[3],
+    goalByCategory[4],
+    goalByCategory[5],
+    goalByCategory[6],
+    goalByCategory[7],
+  ];
 
   return (
     <div className="goal-template">
@@ -70,7 +75,6 @@ const GoalTemplate = () => {
             valueShow={true}
             valueColor={'black'}
             colors={colors}
-            label={goalByCategory}
           />
         </div>
         <div className="goal-inputs-container">

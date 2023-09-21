@@ -6,7 +6,7 @@ import GoalBar from '../../components/common/goal-bar/GoalBar';
 import useDiaryDetail from '../../hooks/useDiaryDetail';
 
 const DiaryTemplate = () => {
-  const diaryDetail = useDiaryDetail(1);
+  const { diaryDetail, loading } = useDiaryDetail(1);
   const series = [1, 1, 1, 1, 1, 1, 1, 1];
   const colors = [
     '#FAF2E8',
@@ -19,15 +19,22 @@ const DiaryTemplate = () => {
     'rgba(189, 236, 235, 0.53)',
   ];
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log('diaryDetail');
   console.log(diaryDetail);
+  console.log(diaryDetail.data.diary);
+  const id = diaryDetail.data.diary.id;
   return (
     <div className="diary-container">
       <div className="diary-template">
         <div className="diary-form-container">
-          <div className="diary-form-title">
+          <div className="diary-title">
             <p>일기장</p>
           </div>
-          <DiaryForm />
+          <DiaryForm id={id} />
         </div>
         <div className="diary-donutchart-container">
           <div className="diary-donutchart-title">
