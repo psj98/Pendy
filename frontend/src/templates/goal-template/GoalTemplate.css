@@ -16,9 +16,7 @@
 }
 
 .goal-bar-chart {
-  flex: 1;
-  width: 95%;
-  height: 100%;
+  width: 40%;
 }
 
 .goal-inputs-container {
@@ -57,7 +55,7 @@
 
 .goal-inputs-category {
   display: flex;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .goal-inputs-category-name {
@@ -76,7 +74,9 @@
 }
 
 .goal-inputs-amount {
-  width: 150px;
+  padding-right: 5px !important;
+  width: 120px;
   font-size: inherit;
-  text-indent: 5px;
+  padding: 0;
+  text-align: right;
 }

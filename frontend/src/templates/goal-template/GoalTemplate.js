@@ -87,9 +87,10 @@ const GoalTemplate = () => {
                   }}
                 ></div>
                 <input
-                  className="goal-inputs-amount"
                   type="text"
+                  className="input goal-inputs-amount"
                   placeholder={`Input ${index + 1}`}
+                  variant="outlined"
                   value={category.categoryGoalAmount || ''}
                   readOnly
                 />
@@ -111,9 +112,10 @@ const GoalTemplate = () => {
                   }}
                 ></div>
                 <input
-                  className="goal-inputs-amount"
                   type="text"
+                  className="input goal-inputs-amount"
                   placeholder={`Input ${index + 1}`}
+                  variant="outlined"
                   value={category.categoryGoalAmount || ''}
                   readOnly
                 />
