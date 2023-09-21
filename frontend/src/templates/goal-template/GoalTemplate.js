@@ -6,7 +6,8 @@ import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
 const GoalTemplate = () => {
   const [categoryGoalAmounts, setCategoryGoalAmounts] = useState([]);
-  const series = [1, 1, 1, 1, 1, 1, 1, 1];
+  const [categotyNames, setCategoryNames] = useState([]);
+
   const colors = [
     '#FAF2E8',
     '#BDECEA',
@@ -28,11 +29,17 @@ const GoalTemplate = () => {
       try {
         const response = await handleGoalDetail(age, salary, curDate);
 
+        console.log(response.data);
         const amounts = response.data.data.goalByCategoryList.map(
           (item) => item.categoryGoalAmount,
         );
+        const label = response.data.data.goalByCategoryList.map(
+          (item) => item.categoryName,
+        );
 
         setCategoryGoalAmounts(amounts);
+        setCategoryNames(label);
+        // console.log(categotyNames);
       } catch (error) {
         console.log(error);
       }
@@ -40,12 +47,36 @@ const GoalTemplate = () => {
     fetchData();
   }, []);
 
-  // console.log(categoryGoalAmounts);
+  // console.log(categotyNames[0]);
+
+  // const labelList = [
+  //   // categotyNames[0],
+  //   // categotyNames[1],
+  //   // categotyNames[2],
+  //   // categotyNames[3],
+  //   // categotyNames[4],
+  //   // categotyNames[5],
+  //   // categotyNames[6],
+  //   // categotyNames[7],
+  // ];
+
+  // console.log(categoryGoalAmounts[0]);
+
+  const series = [
+    categoryGoalAmounts[0],
+    categoryGoalAmounts[1],
+    categoryGoalAmounts[2],
+    categoryGoalAmounts[3],
+    categoryGoalAmounts[4],
+    categoryGoalAmounts[5],
+    categoryGoalAmounts[6],
+    categoryGoalAmounts[7],
+  ];
 
   return (
     <div className="goal-template">
       <div className="goal-container">
-        <div className="goal-chart">
+        {categoryGoalAmounts.length > 0 && (
           <DonutChart
             series={series}
             title={'오늘 총 소비액'}
@@ -58,8 +89,9 @@ const GoalTemplate = () => {
             valueShow={true}
             valueColor={'black'}
             colors={colors}
+            label={categotyNames}
           />
-        </div>
+        )}
         <div className="goal-inputs-container">
           <div className="goal-inputs-left">
             {categoryGoalAmounts.slice(0, 4).map((amount, index) => (
