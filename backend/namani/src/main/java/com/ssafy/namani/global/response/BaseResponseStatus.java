@@ -82,7 +82,15 @@ public enum BaseResponseStatus {
      * Category
      * Code : 10000번대
      */
-    CATEGORY_NOT_FOUND(false, 10001, "카테고리 정보가 없습니다.");
+    CATEGORY_NOT_FOUND(false, 10001, "카테고리 정보가 없습니다."),
+
+
+    /**
+     * Clova OCR
+     * Code : 11000번대
+     */
+    CLOVA_CONNECTION_FAILED(false,11001,"연결에 실패하였습니다."),
+    CLOVA_PARSING_ERROR(false,11002,"데이터 파싱 실패");
 
     // 필요하면 추가할 것
 
