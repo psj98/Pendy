@@ -5,7 +5,17 @@ import BarChart from '../../components/common/bar-chart/BarChart';
 import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
 const GoalTemplate = () => {
-  const [categoryGoalAmounts, setCategoryGoalAmounts] = useState([]);
+  const [goalByCategory, setGoalByCategory] = useState([]);
+  const categoryNameToKor = {
+    food: '식비',
+    traffic: '교통',
+    online: '온라인 쇼핑',
+    offline: '오프라인 쇼핑',
+    cafe: '카페/간식',
+    housing: '고정지출',
+    fashion: '패션/미용',
+    culture: '문화/여가',
+  };
   const series = [1, 1, 1, 1, 1, 1, 1, 1];
   const colors = [
     '#FAF2E8',
@@ -28,11 +38,12 @@ const GoalTemplate = () => {
       try {
         const response = await handleGoalDetail(age, salary, curDate);
 
-        const amounts = response.data.data.goalByCategoryList.map(
-          (item) => item.categoryGoalAmount,
-        );
+        const goalByCategoryList = response.data.data.goalByCategoryList;
+        // const amounts = response.data.data.goalByCategoryList.map(
+        //   (item) => item.categoryGoalAmount,
+        // );
 
-        setCategoryGoalAmounts(amounts);
+        setGoalByCategory(goalByCategoryList);
       } catch (error) {
         console.log(error);
       }
@@ -40,10 +51,9 @@ const GoalTemplate = () => {
     fetchData();
   }, []);
 
-  // console.log(categoryGoalAmounts);
-
   return (
     <div className="goal-template">
+      <h1>목표 설정</h1>
       <div className="goal-container">
         <div className="goal-chart">
           <DonutChart
@@ -62,12 +72,22 @@ const GoalTemplate = () => {
         </div>
         <div className="goal-inputs-container">
           <div className="goal-inputs-left">
-            {categoryGoalAmounts.slice(0, 4).map((amount, index) => (
-              <div key={index}>
+            {goalByCategory.slice(0, 4).map((category, index) => (
+              <div key={index} className="goal-inputs-category">
+                <div className="goal-inputs-category-name">
+                  {categoryNameToKor[category.categoryName]}
+                </div>
+                <div
+                  className="goal-inputs-rectangle-label"
+                  style={{
+                    backgroundColor: colors[index],
+                  }}
+                ></div>
                 <input
+                  className="goal-inputs-amount"
                   type="text"
                   placeholder={`Input ${index + 1}`}
-                  value={amount || ''}
+                  value={category.categoryGoalAmount || ''}
                   readOnly
                 />
                 원
@@ -76,12 +96,22 @@ const GoalTemplate = () => {
           </div>
 
           <div className="goal-inputs-right">
-            {categoryGoalAmounts.slice(4, 8).map((amount, index) => (
-              <div key={index + 4}>
+            {goalByCategory.slice(4, 8).map((category, index) => (
+              <div key={index} className="goal-inputs-category">
+                <div className="goal-inputs-category-name">
+                  {categoryNameToKor[category.categoryName]}
+                </div>
+                <div
+                  className="goal-inputs-rectangle-label"
+                  style={{
+                    backgroundColor: colors[index + 4],
+                  }}
+                ></div>
                 <input
+                  className="goal-inputs-amount"
                   type="text"
-                  placeholder={`Input ${index + 5}`}
-                  value={amount || ''}
+                  placeholder={`Input ${index + 1}`}
+                  value={category.categoryGoalAmount || ''}
                   readOnly
                 />
                 원
