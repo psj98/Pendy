@@ -55,7 +55,7 @@ const GoalTemplate = () => {
     <div className="goal-template">
       <h1>목표 설정</h1>
       <div className="goal-container">
-        <div className="goal-chart">
+        {categoryGoalAmounts.length > 0 && (
           <DonutChart
             series={series}
             title={'오늘 총 소비액'}
@@ -68,8 +68,9 @@ const GoalTemplate = () => {
             valueShow={true}
             valueColor={'black'}
             colors={colors}
+            label={categotyNames}
           />
-        </div>
+        )}
         <div className="goal-inputs-container">
           <div className="goal-inputs-left">
             {goalByCategory.slice(0, 4).map((category, index) => (
