@@ -19,7 +19,7 @@ public class MonthlyStatisticAmountByCategoryResponseDto {
     @NotNull
     private Integer amount; // 통계값
 
-    @Builder
+    @Builder(toBuilder = true)
     public MonthlyStatisticAmountByCategoryResponseDto(Integer categoryId, String categoryName, Integer amount) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
