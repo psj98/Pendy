@@ -1,1 +1,60 @@
 /* AccountTemplate.css */
+.account-template {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  border-radius: 50px;
+  border: 1px solid #000;
+  background: rgba(255, 249, 249, 0);
+}
+
+.account-title {
+  display: flex;
+  justify-content: left;
+  width: 70%;
+}
+
+.account-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.account-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.account-line1 {
+  display: flex;
+  justify-content: left;
+  width: 80%;
+}
+
+.account-line2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.account-line3 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 80%;
+}

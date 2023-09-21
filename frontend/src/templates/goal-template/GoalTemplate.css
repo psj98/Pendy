@@ -3,21 +3,16 @@
 .goal-template {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
 .goal-container {
-  flex: 1;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
-  width: 100%;
 }
 
 .goal-chart {
-  flex: 2;
+  width: 300px;
 }
 
 .goal-category {
@@ -28,4 +23,38 @@
   flex: 1;
   width: 95%;
   height: 100%;
+}
+
+.goal-inputs-container {
+  display: flex;
+}
+
+.goal-inputs-left {
+  margin-right: 10px;
+}
+
+.goal-inputs-category {
+  display: flex;
+  height: 30px;
+  margin-bottom: 15px;
+}
+
+.goal-inputs-category-name {
+  width: 125px;
+  margin-right: 5px;
+  text-align: right;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.goal-inputs-rectangle-label {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.goal-inputs-amount {
+  font-size: inherit;
+  text-indent: 5px;
 }

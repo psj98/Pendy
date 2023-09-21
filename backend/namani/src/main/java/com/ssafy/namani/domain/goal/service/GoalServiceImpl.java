@@ -1,10 +1,13 @@
 package com.ssafy.namani.domain.goal.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.namani.domain.avgConsumptionAmount.dto.response.AvgConsumptionAmountForThreeMonthResponseDto;
 import com.ssafy.namani.domain.avgConsumptionAmount.service.AvgConsumptionAmountService;
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.category.repository.CategoryRepository;
 import com.ssafy.namani.domain.goal.dto.request.GoalDetailRequestDto;
+import com.ssafy.namani.domain.goal.dto.request.GoalRegistMonthlyFeedbackRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalRegistRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalUpdateRequestDto;
 import com.ssafy.namani.domain.goal.dto.response.*;
@@ -20,17 +23,18 @@ import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@EnableScheduling
 public class GoalServiceImpl implements GoalService {
 
     private final TotalGoalRepository totalGoalRepository;
@@ -131,13 +135,23 @@ public class GoalServiceImpl implements GoalService {
      * @throws BaseException
      */
     @Override
-    public TotalGoalDetailResponseDto getTotalGoal(UUID memberId, Timestamp curDate) throws BaseException {
+    public TotalGoalDetailResponseDto getTotalGoal(UUID memberId, Timestamp curDate) {
         Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, curDate);
+        Member member = memberRepository.findById(memberId).get();
+
+        // 월별 목표가 없으면, 초기값을 0으로 생성
         if (!totalGoalOptional.isPresent()) {
-            throw new BaseException(BaseResponseStatus.TOTAL_GOAL_NOT_FOUND);
+            TotalGoal totalGoal = TotalGoal.builder()
+                    .member(member)
+                    .goalAmount(0)
+                    .goalDate(curDate)
+                    .build();
+
+            totalGoalRepository.save(totalGoal);
         }
 
-        TotalGoal newTotalGoal = totalGoalOptional.get();
+        // 반환할 데이터 저장
+        TotalGoal newTotalGoal = totalGoalRepository.findByCurDate(memberId, curDate).get();
         TotalGoalDetailResponseDto totalGoal = TotalGoalDetailResponseDto.builder()
                 .id(newTotalGoal.getId())
                 .goalAmount(newTotalGoal.getGoalAmount())
@@ -154,23 +168,32 @@ public class GoalServiceImpl implements GoalService {
      * @throws BaseException
      */
     @Override
-    public List<GoalByCategoryDetailResponseDto> getGoalByCategoryList(Long totalGoalId) throws BaseException {
+    public List<GoalByCategoryDetailResponseDto> getGoalByCategoryList(Long totalGoalId) {
         List<GoalByCategoryDetailResponseDto> goalByCategoryList = new ArrayList<>();
         List<Category> categoryList = categoryRepository.findAll();
+        TotalGoal totalGoal = totalGoalRepository.findById(totalGoalId).get();
 
-        for (Category category : categoryList) {
-            Optional<GoalByCategory> goalByCategoryOptional = goalByCategoryRepository.findByTotalGoalIdCategoryId(totalGoalId, category.getId());
+        // 카테고리 별 목표가 없는 경우, 초기값을 0으로 생성
+        Optional<List<GoalByCategory>> goalByCategoryListOptional = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId);
+        if (goalByCategoryListOptional.isEmpty()) { // 없으면 생성
+            for (Category category : categoryList) {
+                GoalByCategory goalByCategory = GoalByCategory.builder()
+                        .category(category)
+                        .totalGoal(totalGoal)
+                        .categoryGoalAmount(0)
+                        .build();
 
-            // 카테고리 별 목표 체크
-            if (!goalByCategoryOptional.isPresent()) {
-                throw new BaseException(BaseResponseStatus.GOAL_BY_CATEGORY_NOT_FOUND);
+                goalByCategoryRepository.save(goalByCategory);
             }
+        }
 
-            GoalByCategory goalByCategory = goalByCategoryOptional.get();
+        // 반환할 데이터 저장
+        List<GoalByCategory> goalByCategories = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId).get();
+        for (GoalByCategory goalByCategory : goalByCategories) {
             GoalByCategoryDetailResponseDto goalByCategoryDetailResponseDto =
                     GoalByCategoryDetailResponseDto.builder()
-                            .categoryId(category.getId())
-                            .categoryName(category.getName())
+                            .categoryId(goalByCategory.getCategory().getId())
+                            .categoryName(goalByCategory.getCategory().getName())
                             .categoryGoalAmount(goalByCategory.getCategoryGoalAmount())
                             .build();
 
@@ -196,6 +219,7 @@ public class GoalServiceImpl implements GoalService {
 
         /* 월별 목표 조회 */
         TotalGoalDetailResponseDto totalGoal = getTotalGoal(memberId, curDate);
+        System.out.println(totalGoal.getId());
 
         /* 카테고리 별 목표 조회 */
         List<GoalByCategoryDetailResponseDto> goalByCategoryList = getGoalByCategoryList(totalGoal.getId());
@@ -275,6 +299,68 @@ public class GoalServiceImpl implements GoalService {
                     .build();
 
             goalByCategoryRepository.save(newGoalByCategory);
+        }
+    }
+
+    /**
+     * 월간 분석 피드백 생성 메서드
+     *
+     * @throws BaseException
+     * @throws JsonProcessingException
+     */
+    @Scheduled(cron = "0 59 23 L * *")
+    public void registMonthlyFeedback() throws BaseException, JsonProcessingException {
+        Timestamp curDate = Timestamp.valueOf(LocalDateTime.now());
+        LinkedHashMap<String, Integer[]> categoryData = new LinkedHashMap<>();
+        List<Member> memberList = memberRepository.findAll();
+
+        for (Member member : memberList) {
+            // 사용자 + 현재 월에 해당하는 카테고리 별 목표 가져오기
+            UUID memberId = member.getId();
+            Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, curDate);
+            if (!totalGoalOptional.isPresent()) {
+                continue;
+            }
+
+            // 월간 분석이 생성되어 있는 경우, 스킵 (테스트용)
+            TotalGoal totalGoal = totalGoalOptional.get();
+            if (totalGoal.getAiAnalysis() != null) {
+                continue;
+            }
+
+            List<GoalByCategoryDetailResponseDto> goalByCategoryList = getGoalByCategoryList(totalGoal.getId());
+
+            // 사용자 + 현재 월에 해당하는 카테고리 별 소비 금액 가져오기
+            statisticService.checkDailyStatistic(memberId, curDate);
+            MonthlyStatisticDetailByRegDateResponseDto monthlyStatistic = statisticService.getMonthlyStatisticByRegDate(memberId, curDate);
+            List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategory = monthlyStatistic.getAmountByCategory();
+
+            for (int i = 0; i < 8; i++) {
+                Integer[] amount = {amountByCategory.get(i).getAmount(), goalByCategoryList.get(i).getCategoryGoalAmount()};
+                categoryData.put(amountByCategory.get(i).getCategoryName(), amount);
+            }
+
+            /* -------------- AI에게 월간 분석 요청 -------------- */
+            String url = "http://localhost:8000/ml/create-report"; // 파이썬 요청 url
+            RestTemplate restTemplate = new RestTemplate();
+
+            /* -------------- 데이터 전달 및 생성된 월간 분석 데이터 반환 -------------- */
+            GoalRegistMonthlyFeedbackRequestDto goalRegistMonthlyFeedbackRequestDto =
+                    GoalRegistMonthlyFeedbackRequestDto.builder()
+                            .categoryData(categoryData)
+                            .build();
+            String response = restTemplate.postForObject(url, goalRegistMonthlyFeedbackRequestDto, String.class);
+
+            // GoalRegistMonthlyFeedbackResponseDto로 매핑
+            ObjectMapper mapper = new ObjectMapper();
+            GoalRegistMonthlyFeedbackResponseDto goalRegistMonthlyFeedbackResponseDto = mapper.readValue(response, GoalRegistMonthlyFeedbackResponseDto.class);
+
+            // AI 분석 피드백 저장
+            TotalGoal newTotalGoal = totalGoal.toBuilder()
+                    .aiAnalysis(goalRegistMonthlyFeedbackResponseDto.getMessage())
+                    .build();
+
+            totalGoalRepository.save(newTotalGoal);
         }
     }
 }

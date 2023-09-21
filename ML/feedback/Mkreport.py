@@ -27,8 +27,11 @@ os.environ["OPENAI_API_KEY"] = apikey
 import pandas as pd
 import json
 
-def mkreport(req):
-    ret = {"message": "월별 AI 분석"}
+# JSON으로 변환
+import json
+
+def mkreport(request_data):
+    result_data = {"message": "월별 AI 분석"}
     # tempurature : 0 ~ 1 로 높아질수록 랜덤한 답변 생성 / 창의력
     # llm = OpenAI(temperature=1)
 
@@ -59,12 +62,12 @@ def mkreport(req):
 
 
     # 중간 txt
-    # req_cols = req.keys()
     consume_list = []
-    for i in req.keys():
-        consume_list += str(i) + ":"
-        for j in req[i]:
-            consume_list += str(j) + ","
+    for col_name in amount_data_cols:
+        print("컬럼명 : ", col_name)
+        consume_list += str(col_name) + ":"
+        for amount in amount_data[col_name]:
+            consume_list += str(amount) + ","
         consume_list += "\n"
     query = ''.join(a for a in consume_list)
 
@@ -108,8 +111,8 @@ def mkreport(req):
 
     # 문서 기반으로 질문
 
-    ret["message"] = result
-    return ret
+    result_data["message"] = result_by_ai
+    return result_data
 
 if __name__=="__main__":
     req = {

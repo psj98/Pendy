@@ -244,7 +244,8 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 				}
 			}
 		}
-		result.sort((o1, o2) -> o1.getTradeDate().compareTo(o2.getTradeDate()));
+		result.sort((o1, o2) -> o1
+				.getTradeDate().compareTo(o2.getTradeDate()));
 
 		return result;
 	}

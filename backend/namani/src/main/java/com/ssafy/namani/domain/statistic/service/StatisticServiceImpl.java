@@ -13,14 +13,18 @@ import com.ssafy.namani.domain.statistic.entity.IMonthlyStatisticAvg;
 import com.ssafy.namani.domain.statistic.entity.MonthlyStatistic;
 import com.ssafy.namani.domain.statistic.repository.DailyStatisticRepository;
 import com.ssafy.namani.domain.statistic.repository.MonthlyStatisticRepository;
+import com.ssafy.namani.domain.transactionInfo.entity.ITransactionInfoList;
+import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StatisticServiceImpl implements StatisticService {
@@ -29,6 +33,7 @@ public class StatisticServiceImpl implements StatisticService {
     private final MonthlyStatisticRepository monthlyStatisticRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final TransactionInfoRepository transactionInfoRepository;
 
     @Override
     public void checkDailyStatistic(UUID memberId, Timestamp curDate) {
@@ -126,24 +131,28 @@ public class StatisticServiceImpl implements StatisticService {
 
         checkDailyStatistic(memberId, curDate);
 
-        // 월간 통계 정보 저장
-        List<DailyStatistic> dailyStatisticList = dailyStatisticRepository.findAllByMemberIdRegDate(memberId, curDate).get();
-        List<DailyStatisticAmountByCategoryResponseDto> amountByCategory = new ArrayList<>();
+        // 카테고리 정보로 List 초기화
+        List<Category> categoryList = categoryRepository.findAll();
         Integer totalAmount = 0;
-
-        for (DailyStatistic dailyStatistic : dailyStatisticList) {
-            DailyStatisticAmountByCategoryResponseDto newAmountByCategory
-                    = DailyStatisticAmountByCategoryResponseDto.builder()
-                    .categoryId(dailyStatistic.getCategory().getId())
-                    .categoryName(dailyStatistic.getCategory().getName())
-                    .amount(dailyStatistic.getAmount())
-                    .build();
-
-            amountByCategory.add(newAmountByCategory);
-
-            totalAmount += dailyStatistic.getAmount();
+        List<DailyStatisticAmountByCategoryResponseDto> amountByCategory = new ArrayList<>();
+        for (Category category : categoryList) {
+            amountByCategory.add(new DailyStatisticAmountByCategoryResponseDto(category.getId(), category.getName(), 0));
         }
 
+        // 사용자의 모든 계좌에서 현재 일에 해당하는 거래 내역을 카테고리 별로 조회 => 총합으로 구함
+        List<ITransactionInfoList> transactionInfoList = transactionInfoRepository.findDailyStatisticByMemberIdAccountNumberRegDate(memberId, curDate).get();
+        for (ITransactionInfoList transactionInfo : transactionInfoList) {
+            DailyStatisticAmountByCategoryResponseDto curAmountByCategory = amountByCategory.get(transactionInfo.getCategoryId() - 1);
+            DailyStatisticAmountByCategoryResponseDto newAmountByCategory = curAmountByCategory.toBuilder()
+                    .amount(transactionInfo.getAmount())
+                    .build();
+
+            amountByCategory.set(transactionInfo.getCategoryId() - 1, newAmountByCategory);
+
+            totalAmount += transactionInfo.getAmount();
+        }
+
+        // 일간 통계 저장
         DailyStatisticDetailByRegDateResponseDto dailyStatistic
                 = DailyStatisticDetailByRegDateResponseDto.builder()
                 .amountByCategory(amountByCategory)
@@ -171,24 +180,28 @@ public class StatisticServiceImpl implements StatisticService {
 
         checkMonthlyStatistic(memberId, curDate);
 
-        // 월간 통계 정보 저장
-        List<MonthlyStatistic> monthlyStatisticList = monthlyStatisticRepository.findAllByMemberIdRegDate(memberId, curDate).get();
-        List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategory = new ArrayList<>();
+        // 카테고리 정보로 List 초기화
         Integer totalAmount = 0;
-
-        for (MonthlyStatistic monthlyStatistic : monthlyStatisticList) {
-            MonthlyStatisticAmountByCategoryResponseDto newAmountByCategory
-                    = MonthlyStatisticAmountByCategoryResponseDto.builder()
-                    .categoryId(monthlyStatistic.getCategory().getId())
-                    .categoryName(monthlyStatistic.getCategory().getName())
-                    .amount(monthlyStatistic.getAmount())
-                    .build();
-
-            amountByCategory.add(newAmountByCategory);
-
-            totalAmount += monthlyStatistic.getAmount();
+        List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategory = new ArrayList<>();
+        List<Category> categoryList = categoryRepository.findAll();
+        for (Category category : categoryList) {
+            amountByCategory.add(new MonthlyStatisticAmountByCategoryResponseDto(category.getId(), category.getName(), 0));
         }
 
+        // 사용자의 모든 계좌에서 현재 월에 해당하는 거래 내역을 카테고리 별로 조회 => 총합으로 구함
+        List<ITransactionInfoList> transactionInfoList = transactionInfoRepository.findMonthlyStatisticByMemberIdAccountNumberRegDate(memberId, curDate).get();
+        for (ITransactionInfoList transactionInfo : transactionInfoList) {
+            MonthlyStatisticAmountByCategoryResponseDto curAmountByCategory = amountByCategory.get(transactionInfo.getCategoryId() - 1);
+            MonthlyStatisticAmountByCategoryResponseDto newAmountByCategory = curAmountByCategory.toBuilder()
+                    .amount(transactionInfo.getAmount())
+                    .build();
+
+            amountByCategory.set(transactionInfo.getCategoryId() - 1, newAmountByCategory);
+
+            totalAmount += transactionInfo.getAmount();
+        }
+
+        // 월간 통계 저장
         MonthlyStatisticDetailByRegDateResponseDto monthlyStatistic
                 = MonthlyStatisticDetailByRegDateResponseDto.builder()
                 .amountByCategory(amountByCategory)
