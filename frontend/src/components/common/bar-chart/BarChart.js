@@ -28,26 +28,31 @@ const BarChart = () => {
   });
 
   return (
-    <div className="bar-chart-container">
-      <div className="bar-chart-wrapper">
-        <ReactApexChart
-          options={{
-            chart: {
-              type: 'bar',
-              toolbar: {
-                show: false,
-              },
-            },
-            xaxis: {
-              categories: chartData.categories,
-            },
-            colors: ['#0076BE', '#AADAFF'],
-          }}
-          series={chartData.series}
-          type="bar"
-        />
-      </div>
-    </div>
+    <ReactApexChart
+      options={{
+        chart: {
+          type: 'bar',
+          toolbar: {
+            show: false,
+          },
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: '75%',
+            distributed: false,
+          },
+        },
+        legend: {
+          position: 'left', // Move the legend to the right side
+        },
+        xaxis: {
+          categories: chartData.categories,
+        },
+        colors: ['#0076BE', '#AADAFF'],
+      }}
+      series={chartData.series}
+      type="bar"
+    />
   );
 };
 
