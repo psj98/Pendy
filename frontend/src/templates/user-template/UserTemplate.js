@@ -52,10 +52,10 @@ const UserTemplate = () => {
   };
 
   // console.log('응답데이터입니다!!!! : ', responseData);
-  console.log(
-    '응답데이터입니다!!!! : ',
-    responseData.data.dailyStatistic.amountByCategory,
-  );
+  // console.log(
+  //   '응답데이터입니다!!!! : ',
+  //   responseData.data.dailyStatistic.amountByCategory,
+  // );
 
   // const dailyStatistic = responseData.dailyStatistic;
   // console.log('daily 통계 데이터 입니다. : ', dailyStatistic); // 여기!!!
