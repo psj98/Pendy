@@ -8,6 +8,7 @@ import handleGoalUpdate from '../../utils/handleGoalUpdate';
 
 const GoalTemplate = () => {
   const [goalByCategory, setGoalByCategory] = useState([]);
+  const [originalGoalByCategory, setOriginalGoalByCategory] = useState([]);
   const [series, setSeries] = useState([]);
   const [totalGoals, setTotalGoals] = useState([]);
   const [editable, setEditable] = useState(false);
@@ -33,8 +34,17 @@ const GoalTemplate = () => {
     'rgba(189, 236, 235, 0.53)',
   ];
 
+  const handleInputChange = (e, index) => {
+    const value = parseInt(e.target.value) || 0;
+    setGoalByCategory((prevState) =>
+      prevState.map((item, idx) => {
+        if (idx !== index) return item;
+        return { ...item, categoryGoalAmount: value };
+      }),
+    );
+  };
+
   useEffect(() => {
-    //age, salary
     const age = sessionStorage.getItem('age');
     const salary = sessionStorage.getItem('salary');
     const curDate = format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'");
@@ -43,13 +53,14 @@ const GoalTemplate = () => {
       try {
         const response = await handleGoalDetail(age, salary, curDate);
         const goalByCategoryList = response.data.data.goalByCategoryList;
-        const seriestList = response.data.data.goalByCategoryList.map(
+        const seriesList = goalByCategoryList.map(
           (index) => index.categoryGoalAmount,
         );
         const totalGoal = response.data.data.totalGoal;
 
         setGoalByCategory(goalByCategoryList);
-        setSeries(seriestList);
+        setOriginalGoalByCategory(goalByCategoryList); // Set original state
+        setSeries(seriesList);
         setTotalGoals(totalGoal);
       } catch (error) {
         console.log(error);
@@ -57,24 +68,27 @@ const GoalTemplate = () => {
     };
     fetchData();
   }, []);
-
   const handleButtonClick = () => {
-    console.log('click');
     if (editable) {
       handleUpdate();
+    } else {
+      setOriginalGoalByCategory(JSON.parse(JSON.stringify(goalByCategory))); // Deep copy
     }
     handleEditToggle();
   };
 
   const handleEditToggle = () => {
+    if (!editable) {
+      setOriginalGoalByCategory([...originalGoalByCategory]);
+    }
     setEditable(!editable);
     setButtonLabel(editable ? '목표수정' : '수정 완료');
   };
 
   const handleCancel = () => {
+    setGoalByCategory(JSON.parse(JSON.stringify(originalGoalByCategory))); // Reset to original state
     setEditable(false);
     setButtonLabel('목표수정');
-    // Reset the state to original (you may need to call the API again)
   };
 
   const handleUpdate = async () => {
@@ -82,19 +96,20 @@ const GoalTemplate = () => {
       try {
         const id = totalGoals.id;
         const goalAmount = totalGoals.goalAmount;
+        const newGoalByCategory = goalByCategory.map((item) => {
+          return {
+            categoryId: item.categoryId, // 예를 들어, categoryName을 categoryId로 변환하는 함수
+            categoryGoalAmount: item.categoryGoalAmount,
+          };
+        });
 
-        console.log('id', id);
-        console.log('goalAmount', goalAmount);
-        console.log('goalByCategory', goalByCategory);
-
-        await handleGoalUpdate(id, goalAmount, goalByCategory);
+        await handleGoalUpdate(id, goalAmount, newGoalByCategory);
         handleEditToggle();
       } catch (error) {
         console.error('Failed to update:', error);
       }
     }
   };
-
   return (
     <div className="goal-template">
       <h1>목표 설정</h1>
@@ -126,7 +141,7 @@ const GoalTemplate = () => {
         {editable && (
           <button
             onClick={handleCancel}
-            className="cancel-button"
+            className="signup-button duplicatecheck-button"
             style={{ fontSize: 'smaller', padding: '5px 10px' }}
           >
             취소
@@ -151,6 +166,7 @@ const GoalTemplate = () => {
                   placeholder={`Input ${index + 1}`}
                   value={category.categoryGoalAmount || ''}
                   readOnly={!editable}
+                  onChange={(e) => handleInputChange(e, index)}
                 />
                 원
               </div>
@@ -174,6 +190,7 @@ const GoalTemplate = () => {
                   placeholder={`Input ${index + 1}`}
                   value={category.categoryGoalAmount || ''}
                   readOnly={!editable}
+                  onChange={(e) => handleInputChange(e, index + 4)}
                 />
                 원
               </div>

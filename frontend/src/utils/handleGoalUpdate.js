@@ -1,11 +1,15 @@
 import authAxiosCreate from '../authAxiosCreate';
 
-const handleGoalUpdate = (id, goalAmount, goalByCategory) => {
+const handleGoalUpdate = (id, goalAmount, goalByCategoryList) => {
   const data = {
     id: id,
     goalAmount: goalAmount,
-    goalByCategory: goalByCategory,
+    goalByCategoryList: goalByCategoryList,
   };
+
+  console.log('gbc', id);
+  console.log('gbc', goalAmount);
+  console.log('gbc', goalByCategoryList);
 
   const serverUrl = '/api/goals';
 
