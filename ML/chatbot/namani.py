@@ -40,10 +40,9 @@ def namani(request_data):
     template = "[prequestion]"+pre_input+"""
     
         [Instructions]
-        - Act as a financial advisor
-        - Answer the tempQuestion by referring to the preQuestion.
+        - Act as a best friend
         - All answers should be at least 10 characters long.
-        - Refer to the {docs} if necessary
+        - if you do not know answer, Refer to the {docs} or prequestion
         - Your answer targets elderly people over 60 years old.
 
     """
@@ -80,7 +79,7 @@ def namani(request_data):
     doc = " ".join([d.page_content for d in docs])
 
     # $$pay for OpenAI$$
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=1)
+    chat = ChatOpenAI(model_name="gpt-4-0613", temperature=1)
     chain = LLMChain(llm=chat, prompt=chat_prompt)
     result = chain.run(question = usr_input, docs = doc)
 
@@ -91,7 +90,7 @@ def namani(request_data):
 if __name__=="__main__":
     req = {
         "preMessage": "",
-        "tempMessage": "강남구 근처의 노인정을 알려줘 출처도 알려줘"
+        "tempMessage": "최불암 시리즈 하나 이야기해줘"
     }
     ans = (namani(req))
 

@@ -27,7 +27,7 @@ if __name__=="__main__":
     file_path = './TextData'
     transcript = load_documents(file_path)
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0) # 빠름
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,separators=["\n\n", "\n", ".", "!", "?", ",", " ", ""] ,chunk_overlap=0)
     docs = text_splitter.split_documents(transcript)
 
     #chunk_size : 최대 청크 길이, chunk_overlap : 인접한 청크 간에 중복되는 문자 수
