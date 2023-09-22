@@ -13,6 +13,7 @@ import SettingTemplate from './templates/setting-template/SettingTemplate';
 import GoalTemplate from './templates/goal-template/GoalTemplate';
 import AnalysisTemplate from './templates/analysis-template/AnalysisTemplate';
 import DiaryTemplate from './templates/diary-template/DiaryTemplate';
+import EmotionTemplate from './templates/emotion-template/EmotionTemplate';
 
 // 로그인 관련 페이지
 import LoginPage from './pages/login-page/LoginPage';
@@ -47,6 +48,7 @@ function App() {
         <Route path="goal" element={<GoalTemplate />} />
         <Route path="analysis" element={<AnalysisTemplate />} />
         <Route path="diary" element={<DiaryTemplate />} />
+        <Route path="emotion" element={<EmotionTemplate />} />
       </Route>
 
       {/* 로그인 페이지 */}
