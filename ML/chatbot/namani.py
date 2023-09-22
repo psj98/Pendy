@@ -90,8 +90,8 @@ def namani(request_data):
 
 if __name__=="__main__":
     req = {
-        "preMessage": "무슨 서비스가 있는지 알려줘",
-        "tempMessage": "무슨 종목을 사야 할까"
+        "preMessage": "",
+        "tempMessage": "강남구 근처의 노인정을 알려줘 출처도 알려줘"
     }
     ans = (namani(req))
 
