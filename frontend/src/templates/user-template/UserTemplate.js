@@ -22,7 +22,7 @@ const UserTemplate = () => {
         // yyyy-MM-ddTHH:mm:ss.SSSZ 형식으로 todayDate 값 생성
         // yyyy-MM-ddTHH:mm:ss.SSS+09:00 형식으로 todayDate 값 생성
         const todayDate = format(
-          currentMonth,
+          Date.now(),
           "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'",
         );
         // yyyy-MM-01T00:00:00.000+09:00 형식으로 todayMonth 값 생성
@@ -31,7 +31,8 @@ const UserTemplate = () => {
           "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'",
         );
         const response = await handleCalender(todayDate, todayMonth);
-        console.log(response.data);
+        console.log('res', response.data);
+        console.log('complate load');
         setResponseData(response.data); // response 데이터를 상태로 저장
       } catch (error) {
         console.log(error);
@@ -107,6 +108,7 @@ const UserTemplate = () => {
     if (selectedOption === 'option1') {
       statisticData = responseData.data.dailyStatistic.amountByCategory;
       consumption_goal = dailyGoal;
+      //todo - 수정요망
       consumption_amount = responseData.data.dailyStatistic.totalAmount;
     } else {
       // 월간 소비 내역
