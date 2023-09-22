@@ -17,7 +17,7 @@ from langchain.vectorstores import FAISS
 
 from product import products
 #GPT
-from ML.openaikey import apikey
+from openaikey import apikey
 
 #키 등록
 import os
@@ -25,7 +25,6 @@ os.environ["OPENAI_API_KEY"] = apikey
 
 # 데이터프레임
 import pandas as pd
-import json
 
 # JSON으로 변환
 import json
@@ -58,8 +57,8 @@ def mkreport(request_data):
         and Based on the {question} of the respective user, refer to the {docs} and recommend one appropriate card and the reason for it.
     """
 
-
-
+    amount_data = json.loads(request_data.json())["categoryData"]
+    amount_data_cols = amount_data.keys()  # 모든 key를 가져옴
 
     # 중간 txt
     consume_list = []
@@ -111,7 +110,7 @@ def mkreport(request_data):
 
     # 문서 기반으로 질문
 
-    result_data["message"] = result_by_ai
+    result_data["message"] = result
     return result_data
 
 if __name__=="__main__":

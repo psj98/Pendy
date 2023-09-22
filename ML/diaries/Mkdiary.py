@@ -22,6 +22,7 @@ def mkdiary(req):
     #     "stamp_type": 1
     # }
     ret = {
+        "title":"제목 예시",
         "content": "오늘은 그냥 잠만 잤다", # text
         "comment ": "참 잘했어요", # text
         "stamp_type": 5 # int
@@ -79,7 +80,8 @@ def mkdiary(req):
            }
        [Response Format]
        {
-           "content": "like an 75-years-old, write a fun diary(title over 10 characters + content over 50 characters)",
+           "title": "write a title over 10 characters"
+           "content": "like an 75-years-old, write a fun diary content over 50 characters",
            "comment": "As an elementary school teacher, give comment",
            "stampType": "assign a score judging the spending details from a range of 1 to 5, int"
        }

@@ -54,12 +54,23 @@ const DonutChart = ({
         },
       },
     },
-    labels: [],
+    labels: [
+      '식비',
+      '교통',
+      '온라인 쇼핑',
+      '오프라인 쇼핑',
+      '카페/간식',
+      '패션/미용',
+      '문화/여가',
+      '고정지출',
+    ],
     colors: colors,
   };
 
   return (
-    <ReactApexChart options={options} series={chartData.series} type="donut" />
+    <div className="donut-chart">
+      <ReactApexChart options={options} series={series} type="donut" />
+    </div>
   );
 };
 

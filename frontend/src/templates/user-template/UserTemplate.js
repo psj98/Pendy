@@ -14,6 +14,7 @@ import { format } from 'date-fns';
 const UserTemplate = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [responseData, setResponseData] = useState([]);
+  const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,19 +52,30 @@ const UserTemplate = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
   };
 
-  // console.log('응답데이터입니다!!!! : ', responseData);
-  // console.log(
-  //   '응답데이터입니다!!!! : ',
-  //   responseData.data.dailyStatistic.amountByCategory,
-  // );
+  const lastDayOfCurrentMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth() + 1,
+    0,
+  );
 
-  // const dailyStatistic = responseData.dailyStatistic;
-  // console.log('daily 통계 데이터 입니다. : ', dailyStatistic); // 여기!!!
+  // 현재 월의 총 일 수 계산
+  const totalDaysInCurrentMonth = lastDayOfCurrentMonth.getDate();
 
-  const chartData = [40, 60, 30]; // Donut 차트에 표시할 데이터 배열
-  const chartLabel = ['text1', 'text2', 'text3'];
-  const chartTitle = 'My Donut Chart'; // 차트의 제목
-  const showLegend = true; // 범례를 표시할지 여부
+  console.log('현재 월의 총 일 수:', totalDaysInCurrentMonth);
+
+  // DayMonthButton에서 선택된 옵션을 받아와서 상태 업데이트
+  const handleOptionChange = (option) => {
+    setSelectedOption(option);
+  };
+
+  // 선택된 옵션에 따라 차트 제목 설정
+  let chartTitle =
+    selectedOption === 'option1' ? '오늘 총 소비액' : '월간 총 소비액';
+
+  let chartData = []; // Donut 차트에 표시할 데이터 배열
+  let chartLabel = []; // Donut 차트에 표시할 데이터 제목
+
+  const showLegend = false; // 범례를 표시할지 여부
   const legendFontSize = '12px'; // 범례의 글꼴 크기
   const showLabels = true; // 라벨 표시 여부
   const labelFontSize = '14px'; // 라벨 글꼴 크기
@@ -71,7 +83,45 @@ const UserTemplate = () => {
   const showValues = true; // 값 표시 여부
   const valueFontSize = '16px'; // 값 글꼴 크기
   const valueColor = '#555'; // 값 텍스트 색상
-  const chartColors = ['#ff5733', '#33ff57', '#5733ff']; // 차트의 섹션 색상 배열
+  const chartColors = [
+    '#FAF2E8',
+    '#BDECEA',
+    '#DAB8F1',
+    'rgba(243, 213, 182, 0.63)',
+    'rgba(208, 228, 197, 0.42)',
+    'rgba(255, 170, 180, 0.50)',
+    '#CFE4C5',
+    'rgba(189, 236, 235, 0.53)',
+  ]; // 차트의 섹션 색상 배열
+
+  let consumption_goal = 0;
+  let consumption_amount = 0;
+
+  if (responseData.data) {
+    // 이번달 목표
+    let monthlyGoal = responseData.data.totalGoal.goalAmount;
+    let dailyGoal = monthlyGoal / totalDaysInCurrentMonth;
+
+    let statisticData = [];
+    // 일간 소비 내역
+    if (selectedOption === 'option1') {
+      statisticData = responseData.data.dailyStatistic.amountByCategory;
+      consumption_goal = dailyGoal;
+      consumption_amount = responseData.data.dailyStatistic.totalAmount;
+    } else {
+      // 월간 소비 내역
+      statisticData = responseData.data.monthlyStatistic.amountByCategory;
+      consumption_goal = monthlyGoal;
+      consumption_amount = responseData.data.monthlyStatistic.totalAmount;
+    }
+
+    chartLabel = statisticData.map((item) => item.categoryName);
+    chartData = statisticData.map((item) => item.amount);
+  }
+
+  console.log('차트 데이터 입니다. : ', chartData);
+  console.log('소비 금액 : ', consumption_amount);
+  console.log('목표 금액 : ', consumption_goal);
 
   return (
     <div className="user">
@@ -87,22 +137,26 @@ const UserTemplate = () => {
         </div>
       </div>
       <div className="chart-container">
-        <DayMonthButton />
-        <div className="chart-content">
-          <DonutChart
-            series={chartData}
-            chartLabel={chartLabel}
-            title={chartTitle}
-            legendShow={showLegend}
-            legendFont={legendFontSize}
-            labelShow={showLabels}
-            labelFont={labelFontSize}
-            labelColor={labelColor}
-            valueShow={showValues}
-            valueFont={valueFontSize}
-            valueColor={valueColor}
-            colors={chartColors}
-          />
+        <div className="chat-flex-content">
+          <DayMonthButton onOptionChange={handleOptionChange} />
+          <div className="chart-content">
+            {responseData.data && (
+              <DonutChart
+                series={chartData}
+                chartLabel={chartLabel}
+                title={chartTitle}
+                legendShow={showLegend}
+                legendFont={legendFontSize}
+                labelShow={showLabels}
+                labelFont={labelFontSize}
+                labelColor={labelColor}
+                valueShow={showValues}
+                valueFont={valueFontSize}
+                valueColor={valueColor}
+                colors={chartColors}
+              />
+            )}
+          </div>
         </div>
         <div className="bar-content">
           <div className="spend">
@@ -111,12 +165,12 @@ const UserTemplate = () => {
           </div>
           <GoalBar
             color={'#2A4FFA'}
-            current={100}
-            goal={2000}
-            type={'default'}
+            current={consumption_amount}
+            goal={consumption_goal}
           />
-          <br />
-          <div className="spend-text-black">오늘의 고정 지출</div>
+          <div className="spend-text-black spend-today-div">
+            오늘의 고정 지출
+          </div>
         </div>
       </div>
     </div>
