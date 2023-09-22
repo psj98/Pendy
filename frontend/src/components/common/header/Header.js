@@ -13,7 +13,6 @@ const Header = ({ isLoggedIn }) => {
           PENDY
         </Link>
       </div>
-      <div className="header-blank"></div>
       <div className="header-menu-container">
         {isLoggedIn ? <MenuListUser /> : <MenuListGuest />}
       </div>

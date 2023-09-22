@@ -137,24 +137,26 @@ const UserTemplate = () => {
         </div>
       </div>
       <div className="chart-container">
-        <DayMonthButton onOptionChange={handleOptionChange} />
-        <div className="chart-content">
-          {responseData.data && (
-            <DonutChart
-              series={chartData}
-              chartLabel={chartLabel}
-              title={chartTitle}
-              legendShow={showLegend}
-              legendFont={legendFontSize}
-              labelShow={showLabels}
-              labelFont={labelFontSize}
-              labelColor={labelColor}
-              valueShow={showValues}
-              valueFont={valueFontSize}
-              valueColor={valueColor}
-              colors={chartColors}
-            />
-          )}
+        <div className="chat-flex-content">
+          <DayMonthButton onOptionChange={handleOptionChange} />
+          <div className="chart-content">
+            {responseData.data && (
+              <DonutChart
+                series={chartData}
+                chartLabel={chartLabel}
+                title={chartTitle}
+                legendShow={showLegend}
+                legendFont={legendFontSize}
+                labelShow={showLabels}
+                labelFont={labelFontSize}
+                labelColor={labelColor}
+                valueShow={showValues}
+                valueFont={valueFontSize}
+                valueColor={valueColor}
+                colors={chartColors}
+              />
+            )}
+          </div>
         </div>
         <div className="bar-content">
           <div className="spend">
@@ -166,8 +168,9 @@ const UserTemplate = () => {
             current={consumption_amount}
             goal={consumption_goal}
           />
-          <br />
-          <div className="spend-text-black">오늘의 고정 지출</div>
+          <div className="spend-text-black spend-today-div">
+            오늘의 고정 지출
+          </div>
         </div>
       </div>
     </div>
