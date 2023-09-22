@@ -14,7 +14,7 @@ const GoalTemplate = () => {
   const [series, setSeries] = useState([]);
   const [totalGoals, setTotalGoals] = useState([]);
   const [editable, setEditable] = useState(false);
-  const [buttonLabel, setButtonLabel] = useState('목표수정');
+  const [buttonLabel, setButtonLabel] = useState('수정');
   const categoryNameToKor = {
     food: '식비',
     traffic: '교통',
@@ -89,13 +89,13 @@ const GoalTemplate = () => {
       setOriginalGoalByCategory([...originalGoalByCategory]);
     }
     setEditable(!editable);
-    setButtonLabel(editable ? '목표수정' : '수정 완료');
+    setButtonLabel(editable ? '수정' : '확인');
   };
 
   const handleCancel = () => {
     setGoalByCategory(JSON.parse(JSON.stringify(originalGoalByCategory))); // Reset to original state
     setEditable(false);
-    setButtonLabel('목표수정');
+    setButtonLabel('수정');
   };
 
   const handleUpdate = async () => {
@@ -143,7 +143,7 @@ const GoalTemplate = () => {
             {goalByCategory.length > 0 && (
               <DonutChart
                 series={series}
-                title={'오늘 총 소비액'}
+                title={'총 목표 소비액'}
                 legendShow={false}
                 legendFont={20}
                 labelShow={true}
