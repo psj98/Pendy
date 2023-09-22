@@ -46,6 +46,15 @@ const LoginTemplate = () => {
     }
   };
 
+  // Enter 키를 누른 경우 onSendCodeClick 함수 실행
+  const onPressEnterKey = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+
+      onLoginButtonClick(event);
+    }
+  };
+
   return (
     <div className="login">
       <h2 className="login-title">PENDY</h2>
@@ -58,6 +67,7 @@ const LoginTemplate = () => {
           variant="outlined"
           value={state.email}
           onChange={(e) => setState({ ...state, email: e.target.value })}
+          onKeyDown={onPressEnterKey}
         />
         <span className="border"></span>
       </div>
@@ -71,6 +81,7 @@ const LoginTemplate = () => {
           variant="outlined"
           value={state.password}
           onChange={(e) => setState({ ...state, password: e.target.value })}
+          onKeyDown={onPressEnterKey}
         />
         <span className="border"></span>
       </div>
