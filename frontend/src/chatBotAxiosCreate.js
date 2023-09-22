@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const axiosCreate = axios.create({
   //baseURL 설정
-  baseURL: 'https://j9a410.p.ssafy.io',
+  baseURL: 'localhost:8081',
   withCredentials: true,
 });
 

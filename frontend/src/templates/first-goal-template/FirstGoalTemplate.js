@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import './GoalTemplate.css';
+import './FirstGoalTemplate.css';
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import BarChart from '../../components/common/bar-chart/BarChart';
-import GoalBar from '../../components/common/goal-bar/GoalBar';
 import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
+import GoalBar from '../../components/common/goal-bar/GoalBar';
 import handleGoalUpdate from '../../utils/handleGoalUpdate';
 
-const GoalTemplate = () => {
+const FirstGoalTemplate = () => {
   const [goalByCategory, setGoalByCategory] = useState([]);
   const [originalGoalByCategory, setOriginalGoalByCategory] = useState([]);
-  const [monthlyTotalAmount, setMonthlyTotalAmount] = useState();
   const [series, setSeries] = useState([]);
   const [totalGoals, setTotalGoals] = useState([]);
   const [editable, setEditable] = useState(false);
   const [buttonLabel, setButtonLabel] = useState('목표수정');
+  const [monthlyTotalAmount, setMonthlyTotalAmount] = useState();
+
   const categoryNameToKor = {
     food: '식비',
     traffic: '교통',
@@ -54,27 +55,34 @@ const GoalTemplate = () => {
     const fetchData = async () => {
       try {
         const response = await handleGoalDetail(age, salary, curDate);
-        const goalByCategoryList = response.data.data.goalByCategoryList;
-        const seriesList = goalByCategoryList.map(
-          (index) => index.categoryGoalAmount,
-        );
+        const goalByCategoryList =
+          response.data.data.monthlyStatistic.amountByCategory;
+        const myMonthlyStatisticAvg = response.data.data.monthlyStatisticAvg;
+        const seriesList = myMonthlyStatisticAvg.map((index) => index.amount);
         const totalGoal = response.data.data.totalGoal;
+        console.log(response.data);
+
         const monthlyStatisticAmount =
           response.data.data.monthlyStatistic.totalAmount;
         console.log(totalGoal);
         console.log(response.data);
 
         setMonthlyTotalAmount(monthlyStatisticAmount);
+
         setGoalByCategory(goalByCategoryList);
         setOriginalGoalByCategory(goalByCategoryList); // Set original state
-        setSeries(seriesList);
+        setSeries([20, 20, 20, 20, 20, 20]);
+        // setSeries(seriesList);
         setTotalGoals(totalGoal);
+        // console.log(seriesList);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, []);
+
+  console.log(series);
   const handleButtonClick = () => {
     if (editable) {
       handleUpdate();
@@ -102,26 +110,15 @@ const GoalTemplate = () => {
     if (editable) {
       try {
         const id = totalGoals.id;
-        var goalAmount = 0;
+        const goalAmount = totalGoals.goalAmount;
         const newGoalByCategory = goalByCategory.map((item) => {
-          goalAmount += item.categoryGoalAmount;
           return {
-            categoryName: item.categoryName,
             categoryId: item.categoryId, // 예를 들어, categoryName을 categoryId로 변환하는 함수
             categoryGoalAmount: item.categoryGoalAmount,
           };
         });
 
-        const newTotalGoals = totalGoals;
-        newTotalGoals.goalAmount = goalAmount;
-
         await handleGoalUpdate(id, goalAmount, newGoalByCategory);
-        setTotalGoals(newTotalGoals);
-        setOriginalGoalByCategory(newGoalByCategory);
-
-        // const age = sessionStorage.getItem('age');
-        // const salary = sessionStorage.getItem('salary');
-        // const curDate = format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'");
 
         const updatedSeries = goalByCategory.map(
           (item) => item.categoryGoalAmount,
@@ -169,10 +166,10 @@ const GoalTemplate = () => {
           <div className="goal-input-button-container">
             <div className="goal-inputs-container">
               <div className="goal-inputs-left">
-                {goalByCategory.slice(0, 4).map((category, index) => (
+                {goalByCategory.slice(0, 4).map((avg, index) => (
                   <div key={index} className="goal-inputs-category">
                     <div className="goal-inputs-category-name">
-                      {categoryNameToKor[category.categoryName]}
+                      {categoryNameToKor[avg.amount]}
                     </div>
                     <div
                       className="goal-inputs-rectangle-label"
@@ -185,7 +182,7 @@ const GoalTemplate = () => {
                       className="input goal-inputs-amount"
                       placeholder="숫자로 입력"
                       variant="outlined"
-                      value={category.categoryGoalAmount || 0}
+                      value={avg.amount || 0}
                       readOnly={!editable}
                       onChange={(e) => handleInputChange(e, index)}
                     />
@@ -194,10 +191,10 @@ const GoalTemplate = () => {
                 ))}
               </div>
               <div className="goal-inputs-right">
-                {goalByCategory.slice(4, 8).map((category, index) => (
+                {goalByCategory.slice(4, 8).map((avg, index) => (
                   <div key={index} className="goal-inputs-category">
                     <div className="goal-inputs-category-name">
-                      {categoryNameToKor[category.categoryName]}
+                      {categoryNameToKor[avg.amout]}
                     </div>
                     <div
                       className="goal-inputs-rectangle-label"
@@ -210,7 +207,7 @@ const GoalTemplate = () => {
                       className="input goal-inputs-amount"
                       placeholder="숫자로 입력"
                       variant="outlined"
-                      value={category.categoryGoalAmount || 0}
+                      value={avg.amout || 0}
                       readOnly={!editable}
                       onChange={(e) => handleInputChange(e, index + 4)}
                     />
@@ -255,4 +252,4 @@ const GoalTemplate = () => {
   );
 };
 
-export default GoalTemplate;
+export default FirstGoalTemplate;
