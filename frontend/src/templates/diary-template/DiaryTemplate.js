@@ -27,7 +27,7 @@ const DiaryTemplate = () => {
   console.log(diaryDetail);
   console.log(diaryDetail.data.diary);
   const regDate = diaryDetail.data.diary.regDate;
-  // const title = diaryDetail.data.diary.title;
+  const title = diaryDetail.data.diary.title;
   const content = diaryDetail.data.diary.content;
   const comment = diaryDetail.data.diary.comment;
   const stampType = diaryDetail.data.diary.stampType;
@@ -36,12 +36,10 @@ const DiaryTemplate = () => {
     <div className="diary-container">
       <div className="diary-template">
         <div className="diary-form-container">
-          <div className="diary-title">
-            <p>일기장</p>
-          </div>
+          <div className="diary-name">일기장</div>
           <DiaryForm
             regDate={regDate}
-            // title={title}
+            title={title}
             content={content}
             comment={comment}
             stampType={stampType}
