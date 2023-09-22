@@ -113,3 +113,5 @@ RuntimeError: Error loading ./product.txt
 - 해결 : 에러 메세지를 보고 경로 오류인가 착각하여 경로를 수정하여도 해결되지 않아 txt 로 읽어본 후 경로문제가 아님을 확인하고 loader 수정하여 해결
 
 
+# todo 
+- chatbot readme 확인하고 erp, autogpt 비슷한 기능 적용

@@ -95,6 +95,6 @@ if __name__=="__main__":
     ans = (namani(req))
 
     print(ans.keys())
-    for i in ans.keys():
-        print(ans[i])
+    # for i in ans.keys():
+    #     print(ans[i])
     print(ans["message"])
