@@ -9,6 +9,7 @@ import com.ssafy.namani.domain.avgConsumptionAmount.entity.IAvgConsumptionAmount
 import com.ssafy.namani.domain.avgConsumptionAmount.repository.AvgConsumptionAmountRepository;
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.category.repository.CategoryRepository;
+import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticAmountByCategoryResponseDto;
 import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
 import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
 import com.ssafy.namani.global.response.BaseException;
@@ -168,10 +169,22 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
         }
     }
 
+    /**
+     * 회원 연령대 + 연봉대에 해당ㅎ하는 3달간 평균 소비 통계 가져오기
+     *
+     * @param age
+     * @param salary
+     * @param curDate
+     * @return
+     * @throws BaseException
+     */
     @Override
     public List<AvgConsumptionAmountForThreeMonthResponseDto> getAvgConsumptionAmountForThreeMonth(Integer age, Integer salary, Timestamp curDate) throws BaseException {
         List<AvgConsumptionAmountForThreeMonthResponseDto> avgConsumptionAmountAvgList = new ArrayList<>();
         List<Category> categoryList = categoryRepository.findAll();
+        for(Category category : categoryList){
+            avgConsumptionAmountAvgList.add(new AvgConsumptionAmountForThreeMonthResponseDto(category.getId(), category.getName(), 0));
+        }
 
         // 연령대 + 연봉대 체크
         Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age / 10 * 10, salary / 10000000 * 1000);
@@ -179,35 +192,17 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
             throw new BaseException(BaseResponseStatus.NO_AGE_SALARY_INFO_BY_AGE_SALARY);
         }
 
+
         // 평균 소비 정보 체크
         AgeSalary ageSalary = ageSalaryOptional.get();
-        Optional<List<IAvgConsumptionAmountAvg>> avgConsumptionAmountAvgListOptional = avgConsumptionAmountRepository.findByAgeSalaryIdRegDateForThreeMonth(ageSalary.getPeopleNum(), ageSalary.getId(), curDate);
-        if (!avgConsumptionAmountAvgListOptional.isPresent()) {
-            for (Category category : categoryList) {
-                AvgConsumptionAmountForThreeMonthResponseDto amountByCategory
-                        = AvgConsumptionAmountForThreeMonthResponseDto.builder()
-                        .categoryId(category.getId())
-                        .categoryName(category.getName())
-                        .amount(0)
-                        .build();
-
-                avgConsumptionAmountAvgList.add(amountByCategory);
-            }
-
-            return avgConsumptionAmountAvgList;
-        }
-
-        // 카테고리 별로 모두 더해서 반환
-        List<IAvgConsumptionAmountAvg> iAvgConsumptionAmountAvgList = avgConsumptionAmountAvgListOptional.get();
+        List<IAvgConsumptionAmountAvg> iAvgConsumptionAmountAvgList = avgConsumptionAmountRepository.findByAgeSalaryIdRegDateForThreeMonth(ageSalary.getPeopleNum(), ageSalary.getId(), curDate).get();
         for (IAvgConsumptionAmountAvg iAvgConsumptionAmountAvg : iAvgConsumptionAmountAvgList) {
-            AvgConsumptionAmountForThreeMonthResponseDto avgConsumptionAmountAvg =
-                    AvgConsumptionAmountForThreeMonthResponseDto.builder()
-                            .categoryId(iAvgConsumptionAmountAvg.getCategoryId())
-                            .categoryName(iAvgConsumptionAmountAvg.getCategoryName())
-                            .amount(iAvgConsumptionAmountAvg.getAmount())
-                            .build();
+            AvgConsumptionAmountForThreeMonthResponseDto curAmountByCategory = avgConsumptionAmountAvgList.get(iAvgConsumptionAmountAvg.getCategoryId() - 1);
+            AvgConsumptionAmountForThreeMonthResponseDto newAmountByCategory = curAmountByCategory.toBuilder()
+                    .amount(iAvgConsumptionAmountAvg.getAmount())
+                    .build();
 
-            avgConsumptionAmountAvgList.add(avgConsumptionAmountAvg);
+            avgConsumptionAmountAvgList.set(iAvgConsumptionAmountAvg.getCategoryId() - 1, newAmountByCategory);
         }
 
         return avgConsumptionAmountAvgList;
