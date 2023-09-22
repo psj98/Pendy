@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-// , useEffect
+import React, { useState, useEffect } from 'react';
 import './DonutChart.css';
-
 import ReactApexChart from 'react-apexcharts';
 
 const DonutChart = ({
@@ -17,18 +15,18 @@ const DonutChart = ({
   valueColor,
   colors,
 }) => {
-  //eslint-disable-next-line
   const [chartData, setChartData] = useState({
     series: series,
   });
 
-  // console.log(label[0]);
+  useEffect(() => {
+    setChartData({ series: series });
+  }, [series]);
 
   const options = {
     chart: {
       width: '100%',
     },
-    chartOptions: {},
     legend: {
       position: 'bottom',
       show: legendShow,
