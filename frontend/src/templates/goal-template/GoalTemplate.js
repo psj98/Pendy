@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './GoalTemplate.css';
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import BarChart from '../../components/common/bar-chart/BarChart';
+import GoalBar from '../../components/common/goal-bar/GoalBar';
 import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
 import handleGoalUpdate from '../../utils/handleGoalUpdate';
@@ -9,6 +10,7 @@ import handleGoalUpdate from '../../utils/handleGoalUpdate';
 const GoalTemplate = () => {
   const [goalByCategory, setGoalByCategory] = useState([]);
   const [originalGoalByCategory, setOriginalGoalByCategory] = useState([]);
+  const [monthlyTotalAmount, setMonthlyTotalAmount] = useState();
   const [series, setSeries] = useState([]);
   const [totalGoals, setTotalGoals] = useState([]);
   const [editable, setEditable] = useState(false);
@@ -57,7 +59,12 @@ const GoalTemplate = () => {
           (index) => index.categoryGoalAmount,
         );
         const totalGoal = response.data.data.totalGoal;
+        const monthlyStatisticAmount =
+          response.data.data.monthlyStatistic.totalAmount;
+        console.log(totalGoal);
+        console.log(response.data.data);
 
+        setMonthlyTotalAmount(monthlyStatisticAmount);
         setGoalByCategory(goalByCategoryList);
         setOriginalGoalByCategory(goalByCategoryList); // Set original state
         setSeries(seriesList);
@@ -95,19 +102,26 @@ const GoalTemplate = () => {
     if (editable) {
       try {
         const id = totalGoals.id;
-        const goalAmount = totalGoals.goalAmount;
+        var goalAmount = 0;
         const newGoalByCategory = goalByCategory.map((item) => {
+          goalAmount += item.categoryGoalAmount;
           return {
+            categoryName: item.categoryName,
             categoryId: item.categoryId, // 예를 들어, categoryName을 categoryId로 변환하는 함수
             categoryGoalAmount: item.categoryGoalAmount,
           };
         });
 
-        await handleGoalUpdate(id, goalAmount, newGoalByCategory);
+        const newTotalGoals = totalGoals;
+        newTotalGoals.goalAmount = goalAmount;
 
-        const age = sessionStorage.getItem('age');
-        const salary = sessionStorage.getItem('salary');
-        const curDate = format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'");
+        await handleGoalUpdate(id, goalAmount, newGoalByCategory);
+        setTotalGoals(newTotalGoals);
+        setOriginalGoalByCategory(newGoalByCategory);
+
+        // const age = sessionStorage.getItem('age');
+        // const salary = sessionStorage.getItem('salary');
+        // const curDate = format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'");
 
         const updatedSeries = goalByCategory.map(
           (item) => item.categoryGoalAmount,
@@ -122,96 +136,120 @@ const GoalTemplate = () => {
   };
   return (
     <div className="goal-template">
-      <h1>목표 설정</h1>
-      <div className="goal-container">
-        <div className="goal-chart">
-          {goalByCategory.length > 0 && (
-            <DonutChart
-              series={series}
-              title={'오늘 총 소비액'}
-              legendShow={false}
-              legendFont={20}
-              labelShow={true}
-              labelFont={18}
-              labelColor={'black'}
-              valueFont={16}
-              valueShow={true}
-              valueColor={'black'}
-              colors={colors}
-            />
-          )}
-        </div>
-        <button
-          onClick={handleButtonClick}
-          className="signup-button duplicatecheck-button"
-          style={{ fontSize: 'smaller', padding: '5px 10px' }}
-        >
-          {buttonLabel}
-        </button>
-        {editable && (
-          <button
-            onClick={handleCancel}
-            className="signup-button duplicatecheck-button"
-            style={{ fontSize: 'smaller', padding: '5px 10px' }}
-          >
-            취소
-          </button>
-        )}
-        <div className="goal-inputs-container">
-          <div className="goal-inputs-left">
-            {goalByCategory.slice(0, 4).map((category, index) => (
-              <div key={index} className="goal-inputs-category">
-                <div className="goal-inputs-category-name">
-                  {categoryNameToKor[category.categoryName]}
-                </div>
-                <div
-                  className="goal-inputs-rectangle-label"
-                  style={{
-                    backgroundColor: colors[index],
-                  }}
-                ></div>
-                <input
-                  type="text"
-                  className="input goal-inputs-amount"
-                  placeholder={`Input ${index + 1}`}
-                  variant="outlined"
-                  value={category.categoryGoalAmount || ''}
-                  readOnly={!editable}
-                  onChange={(e) => handleInputChange(e, index)}
-                />
-                원
-              </div>
-            ))}
+      <h1 style={{ margin: '30px 0' }}>목표 설정</h1>
+      <div className="goal-main">
+        <div className="goal-container">
+          <div className="goal-chart">
+            {goalByCategory.length > 0 && (
+              <DonutChart
+                series={series}
+                title={'오늘 총 소비액'}
+                legendShow={false}
+                legendFont={20}
+                labelShow={true}
+                labelFont={18}
+                labelColor={'black'}
+                valueFont={16}
+                valueShow={true}
+                valueColor={'black'}
+                colors={colors}
+              />
+            )}
           </div>
-          <div className="goal-inputs-right">
-            {goalByCategory.slice(4, 8).map((category, index) => (
-              <div key={index} className="goal-inputs-category">
-                <div className="goal-inputs-category-name">
-                  {categoryNameToKor[category.categoryName]}
-                </div>
-                <div
-                  className="goal-inputs-rectangle-label"
-                  style={{
-                    backgroundColor: colors[index + 4],
-                  }}
-                ></div>
-                <input
-                  type="text"
-                  className="input goal-inputs-amount"
-                  placeholder={`Input ${index + 1}`}
-                  variant="outlined"
-                  value={category.categoryGoalAmount || ''}
-                  readOnly={!editable}
-                  onChange={(e) => handleInputChange(e, index + 4)}
-                />
-                원
+
+          {/* <div className="goal-bar"> */}
+          <GoalBar
+            color={'#2A4FFA'}
+            current={monthlyTotalAmount}
+            goal={totalGoals.goalAmount}
+            type={'update'}
+          />
+          {/* </div> */}
+
+          <div className="goal-input-button-container">
+            <div className="goal-inputs-container">
+              <div className="goal-inputs-left">
+                {goalByCategory.slice(0, 4).map((category, index) => (
+                  <div key={index} className="goal-inputs-category">
+                    <div className="goal-inputs-category-name">
+                      {categoryNameToKor[category.categoryName]}
+                    </div>
+                    <div
+                      className="goal-inputs-rectangle-label"
+                      style={{
+                        backgroundColor: colors[index],
+                      }}
+                    ></div>
+                    <input
+                      type="text"
+                      className="input goal-inputs-amount"
+                      placeholder="숫자로 입력"
+                      variant="outlined"
+                      value={category.categoryGoalAmount || 0}
+                      readOnly={!editable}
+                      onChange={(e) => handleInputChange(e, index)}
+                    />
+                    원
+                  </div>
+                ))}
               </div>
-            ))}
+              <div className="goal-inputs-right">
+                {goalByCategory.slice(4, 8).map((category, index) => (
+                  <div key={index} className="goal-inputs-category">
+                    <div className="goal-inputs-category-name">
+                      {categoryNameToKor[category.categoryName]}
+                    </div>
+                    <div
+                      className="goal-inputs-rectangle-label"
+                      style={{
+                        backgroundColor: colors[index + 4],
+                      }}
+                    ></div>
+                    <input
+                      type="text"
+                      className="input goal-inputs-amount"
+                      placeholder="숫자로 입력"
+                      variant="outlined"
+                      value={category.categoryGoalAmount || 0}
+                      readOnly={!editable}
+                      onChange={(e) => handleInputChange(e, index + 4)}
+                    />
+                    원
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="goal-update-button-div">
+              <button
+                onClick={handleButtonClick}
+                className="signup-button duplicatecheck-button"
+                style={{
+                  margin: '0 0 0 10px',
+                  fontSize: 'smaller',
+                  padding: '5px 10px',
+                }}
+              >
+                {buttonLabel}
+              </button>
+              {editable && (
+                <button
+                  onClick={handleCancel}
+                  className="signup-button duplicatecheck-button"
+                  style={{
+                    margin: '0 0 0 10px',
+                    fontSize: 'smaller',
+                    padding: '5px 10px',
+                  }}
+                >
+                  취소
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="goal-bar-chart">
-        <BarChart />
+        <div className="goal-bar-chart">
+          <BarChart />
+        </div>
       </div>
     </div>
   );
