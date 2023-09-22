@@ -46,12 +46,6 @@ const DonutChart = ({
               fontSize: labelFont,
               color: labelColor,
             },
-            name: {
-              show: true,
-              // label: 'Custom Text', // 원하는 텍스트를 여기에 넣으세요.
-              fontSize: 150, // 텍스트 글꼴 크기
-              color: '#000', // 텍스트 색상
-            },
             value: {
               fontSize: valueFont,
               show: valueShow,
