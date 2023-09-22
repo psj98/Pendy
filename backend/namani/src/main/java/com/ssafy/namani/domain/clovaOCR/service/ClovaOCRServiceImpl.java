@@ -2,6 +2,7 @@ package com.ssafy.namani.domain.clovaOCR.service;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.ssafy.namani.domain.clovaOCR.dto.request.ClovaOCRRequestDto;
+import com.ssafy.namani.domain.s3.dto.response.S3ResponseDto;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
@@ -38,7 +39,7 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
      * @param request
      * @return String result
      */
-    public String execute(MultipartFile request){
+    public String execute(S3ResponseDto request){
         try{
             // total time check start
             StopWatch totalTime = new StopWatch();
@@ -67,6 +68,7 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
             StopWatch parseTime = new StopWatch();
             parseTime.start();
 
+            // StringBuilder로 결과 받는 다는거 생각!!!!
             StringBuilder result = parseResponseData(response);
 
             parseTime.stop();
@@ -75,7 +77,7 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
             totalTime.stop();
             System.out.println("Total 시간 : "+ totalTime.getTotalTimeMillis()+ "ms");
 
-            System.out.println(result.toString());
+//            System.out.println(result.toString());
             return result.toString();
         }
         catch(Exception e) {
@@ -108,14 +110,13 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
      * @throws IOException
      */
     //"images": [{ "format": "string", "url": "string", "data": "string", "name": "string", "templateIds": [ 0 ] }],
-    private static void createRequestBody(HttpURLConnection connection, MultipartFile request) throws IOException{
+    private static void createRequestBody(HttpURLConnection connection, S3ResponseDto request) throws IOException{
         JSONObject image = new JSONObject();
         // 이미지 확장자랑 이름 추출해야함 , 현재는 임시로
         image.put("format","jpg");
-        image.put("name",request.getOriginalFilename());
-        image.put("url","https://signiel-bucket.s3.ap-northeast-2.amazonaws.com/receipt01.jpg");
-            // images.url 혹은 images.data 중 하나가 존재해야 함, URL은 이미지를 가져 올 수 있는 공개 URL이어야 함
-//        image.put("url",request.url);
+        image.put("name",request.getOriginalName());
+        // images.url 혹은 images.data 중 하나가 존재해야 함, URL은 이미지를 가져 올 수 있는 공개 URL이어야 함
+        image.put("url",request.getAccessUrl());
             // Template OCR API에서는 이 필드를 설정하지 않으면 도메인에 배포된 모든 서비스 템플릿으로 자동 분류됨
 //        JSONArray templateIds = new JSONArray();
 
@@ -188,7 +189,7 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
         JSONParser responseParser = new JSONParser(response.toString());
         LinkedHashMap<String, String> hashMap = (LinkedHashMap<String, String>) responseParser.parse();
         JSONObject parsed = new JSONObject(hashMap);
-        System.out.println(parsed.toString());
+//        System.out.println(parsed.toString());
         JSONArray parsedImages = (JSONArray) parsed.get("images");
         StringBuilder result = new StringBuilder();
 
