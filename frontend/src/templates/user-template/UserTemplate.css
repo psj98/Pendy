@@ -5,11 +5,22 @@
   height: 100%;
   display: flex;
   flex-direction: row;
+  margin-top: 50px;
+}
+
+@media (max-width: 997px) {
+  .user {
+    flex-direction: column;
+  }
+
+  .calender-container {
+    margin-bottom: 50px;
+  }
 }
 
 /* 달력 스타일 */
 .calender-container {
-  flex: 6;
+  flex: 4 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +35,7 @@
 
 /* 차트 스타일 */
 .chart-container {
-  flex: 3;
+  flex: 2 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,11 +51,16 @@
 
 .bar-content {
   flex: 3;
-  width: 100%;
+  /* width: 100%; */
   flex-direction: column;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.chat-flex-content {
+  display: flex;
+  flex-direction: column;
 }
 
 .spend {
@@ -52,6 +68,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-bottom: 30px;
 }
 
 .spend-text-blue {
@@ -63,4 +80,8 @@
 .spend-text-black {
   font-size: 20px;
   font-weight: 700;
+}
+
+.spend-today-div {
+  margin-top: 20px;
 }

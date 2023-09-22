@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './DayMonthButton.css';
 
 const DayMonthButton = ({ onOptionChange }) => {
   const [selectedOption, setSelectedOption] = useState('option1');
@@ -10,7 +11,7 @@ const DayMonthButton = ({ onOptionChange }) => {
   };
   return (
     <div className="chart-button">
-      <label>
+      <label className="chart-label">
         <input
           type="radio"
           name="chart-option"
@@ -18,17 +19,17 @@ const DayMonthButton = ({ onOptionChange }) => {
           defaultChecked={selectedOption === 'option1'}
           onChange={handleRadioChange}
         />
-        오늘
+        <span className="chart-span">오늘</span>
       </label>
-      <label>
+      <label className="chart-label">
         <input
           type="radio"
           name="chart-option"
           value="option2"
           checked={selectedOption === 'option2'}
           onChange={handleRadioChange}
-        />{' '}
-        월간
+        />
+        <span className="chart-span">월간</span>
       </label>
     </div>
   );

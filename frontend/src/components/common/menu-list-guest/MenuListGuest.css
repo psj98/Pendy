@@ -9,8 +9,8 @@
 }
 
 .hamburger-menu {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,6 +24,7 @@
   position: absolute;
   top: 100%;
   display: none;
+  margin: 0;
 }
 
 .sub-menu.show {
