@@ -7,7 +7,7 @@ from langchain.docstore.document import Document
 
 from ML.openaikey import apikey
 import os
-
+import re
 
 def load_single_document(file_path):
     loader = TextLoader(file_path, encoding="utf-8")
@@ -24,15 +24,27 @@ if __name__=="__main__":
     embeddings = OpenAIEmbeddings()
 
     # file_name = "./news.txt"
+    #유머 파일은 청크 다르게 만들기
     file_path = './TextData'
+    # humor_path = './humor'
+
     transcript = load_documents(file_path)
+    # humor_script = load_documents(humor_path)
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0) # 빠름
+    #humor은 청크 에피소드별로
+    # pattern = r'([0-9]+\.)'
+    #chunks = re.split(pattern, humor_script)
+
+    # humor_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,separators=[pattern] ,chunk_overlap=100)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,separators=["\n\n", "\n", ".", "!", "?", ",", " ", ""] ,chunk_overlap=0)
+
+    # docs 기존에 만들고 + 다른 splitter로 유머별로 chunk화한 docs append하고 임베딩
     docs = text_splitter.split_documents(transcript)
+    # humor_doc = humor_splitter.split_documents(humor_script)
 
+    #합치기
+    # docs.extend(humor_doc)
     #chunk_size : 최대 청크 길이, chunk_overlap : 인접한 청크 간에 중복되는 문자 수
-
-
     db = FAISS.from_documents(docs, embeddings)
     db.save_local(db_path)
 
