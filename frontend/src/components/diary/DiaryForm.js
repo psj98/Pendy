@@ -24,11 +24,20 @@ const DiaryForm = ({ regDate, title, content, comment, stampType }) => {
 
   return (
     <div className="diary-form">
-      <div className="diary-form-date">{regDate}</div>
-      <div className="diary-form-title">{title}</div>
-      <div className="diary-form-content">{content}</div>
-      <div className="diary-comment">
-        <div className="diary-form-comment">{comment}</div>
+      <div className="diary-form-date">
+        {regDate.substring(0, 4)}년&nbsp;{regDate.substring(5, 7)}월&nbsp;
+        {regDate.substring(8, 10)}일
+      </div>
+      <div className="diary-form-title">
+        <div className="diary-title">제목</div>
+        <div className="diary-title-content">{title}</div>
+      </div>
+      <div className="diary-form-content">
+        <div className="diary-content">{content}</div>
+      </div>
+      <div className="diary-form-comment">
+        <div className="diary-comment-text">추천</div>
+        <div className="diary-comment">{comment}</div>
         <div className="diary-form-stamp">
           <img src={stampImageSrc} alt={`Stamp ${stampType}`} />
         </div>
