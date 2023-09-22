@@ -72,11 +72,25 @@ public interface TransactionInfoRepository extends JpaRepository<TransactionInfo
      * @param curDate
      * @return
      */
-    @Query(value = "SELECT c.id AS categoryId, c.name AS categoryName, SUM(t.transaction_amount) AS amount FROM transaction_info t, category c " +
+    @Query(value = "SELECT c.id AS categoryId, c.name AS categoryName, SUM(t.transaction_amount) AS amount " +
+            "FROM transaction_info t, category c " +
             "WHERE c.id = t.category_id " +
             "AND t.account_number IN (SELECT account_number FROM account_info" +
             "                         WHERE member_id = ?1) " +
             "AND DATE_FORMAT(t.trade_date, '%Y-%m') = DATE_FORMAT(?2, '%Y-%m') " +
             "GROUP BY t.category_id;", nativeQuery = true)
     Optional<List<ITransactionInfoList>> findMonthlyStatisticByMemberIdAccountNumberRegDate(UUID memberId, Timestamp curDate);
+
+    /**
+     *
+     */
+    @Query(value = "select c.id AS categoryId, c.name AS categoryName, SUM(t.transaction_amount) AS amount " +
+            "FROM transaction_info t, category c " +
+            "WHERE c.id = t.category_id " +
+            "AND t.account_number IN (SELECT account_number FROM account_info " +
+            "                         WHERE member_id = ?1) " +
+            "AND DATE_FORMAT(t.trade_date, '%Y-%m') BETWEEN DATE_FORMAT(DATE_SUB(?2, INTERVAL 3 MONTH), '%Y-%m') " +
+            "AND DATE_FORMAT(DATE_SUB(?2, INTERVAL 1 MONTH), '%Y-%m') " +
+            "GROUP BY t.category_id;", nativeQuery = true)
+    Optional<List<ITransactionInfoList>> findMonthlyStatisticByMemberIdAccountNumberRegDateForThreeMonth(UUID memberId, Timestamp curDate);
 }

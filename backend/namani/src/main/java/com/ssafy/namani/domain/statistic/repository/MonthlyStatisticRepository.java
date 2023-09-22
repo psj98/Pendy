@@ -46,7 +46,8 @@ public interface MonthlyStatisticRepository extends JpaRepository<MonthlyStatist
      */
     @Query(value = "SELECT m.category_id AS categoryId, c.name AS categoryName, SUM(m.amount) / 30000 AS amount FROM monthly_statistic m, category c " +
             "WHERE m.category_id = c.id " +
-            "AND m.member_id = ?1 AND DATE_FORMAT(m.reg_date, '%Y-%m') BETWEEN DATE_FORMAT(DATE_SUB(?2, INTERVAL 3 MONTH), '%Y-%m') AND DATE_FORMAT(DATE_SUB(?2, INTERVAL 1 MONTH), '%Y-%m') " +
+            "AND m.member_id = ?1 " +
+            "AND DATE_FORMAT(m.reg_date, '%Y-%m') BETWEEN DATE_FORMAT(DATE_SUB(?2, INTERVAL 3 MONTH), '%Y-%m') AND DATE_FORMAT(DATE_SUB(?2, INTERVAL 1 MONTH), '%Y-%m') " +
             "GROUP BY m.category_id", nativeQuery = true)
     Optional<List<IMonthlyStatisticAvg>> findByMemberIdRegDateForThreeMonth(UUID memberId, Timestamp curDate);
 }

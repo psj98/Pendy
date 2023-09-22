@@ -221,45 +221,28 @@ public class StatisticServiceImpl implements StatisticService {
      */
     @Override
     public List<MonthlyStatisticAmountByCategoryResponseDto> getMonthlyStatisticAvgForThreeMonth(UUID memberId, Timestamp curDate) throws BaseException {
-        List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategoryList = new ArrayList<>();
-        List<Category> categoryList = categoryRepository.findAll();
-
         // 사용자 정보 체크
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         if (!memberOptional.isPresent()) {
             throw new BaseException(BaseResponseStatus.INVALID_MEMBER);
         }
 
-        // 월간 통계 정보 체크
-        Optional<List<IMonthlyStatisticAvg>> monthlyStatisticAvgListOptional = monthlyStatisticRepository.findByMemberIdRegDateForThreeMonth(memberId, curDate);
-        if (!monthlyStatisticAvgListOptional.isPresent()) { // 모든 카테고리에 대해 0으로 반환
-            for (Category category : categoryList) {
-                MonthlyStatisticAmountByCategoryResponseDto amountByCategory
-                        = MonthlyStatisticAmountByCategoryResponseDto.builder()
-                        .categoryId(category.getId())
-                        .categoryName(category.getName())
-                        .amount(0)
-                        .build();
-
-                amountByCategoryList.add(amountByCategory);
-            }
-
-            return amountByCategoryList;
+        List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategory = new ArrayList<>();
+        List<Category> categoryList = categoryRepository.findAll();
+        for (Category category : categoryList) {
+            amountByCategory.add(new MonthlyStatisticAmountByCategoryResponseDto(category.getId(), category.getName(), 0));
         }
 
-        // 카테고리 별로 모두 더해서 반환
-        List<IMonthlyStatisticAvg> monthlyStatisticAvgList = monthlyStatisticAvgListOptional.get();
-        for (IMonthlyStatisticAvg iMonthlyStatisticAvg : monthlyStatisticAvgList) {
-            MonthlyStatisticAmountByCategoryResponseDto amountByCategory
-                    = MonthlyStatisticAmountByCategoryResponseDto.builder()
-                    .categoryId(iMonthlyStatisticAvg.getCategoryId())
-                    .categoryName(iMonthlyStatisticAvg.getCategoryName())
-                    .amount(iMonthlyStatisticAvg.getAmount())
+        List<ITransactionInfoList> transactionInfoList = transactionInfoRepository.findMonthlyStatisticByMemberIdAccountNumberRegDateForThreeMonth(memberId, curDate).get();
+        for (ITransactionInfoList transactionInfo : transactionInfoList) {
+            MonthlyStatisticAmountByCategoryResponseDto curAmountByCategory = amountByCategory.get(transactionInfo.getCategoryId() - 1);
+            MonthlyStatisticAmountByCategoryResponseDto newAmountByCategory = curAmountByCategory.toBuilder()
+                    .amount(transactionInfo.getAmount())
                     .build();
 
-            amountByCategoryList.add(amountByCategory);
+            amountByCategory.set(transactionInfo.getCategoryId() - 1, newAmountByCategory);
         }
 
-        return amountByCategoryList;
+        return amountByCategory;
     }
 }
