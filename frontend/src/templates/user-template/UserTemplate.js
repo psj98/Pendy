@@ -145,24 +145,26 @@ const UserTemplate = () => {
         </div>
       </div>
       <div className="chart-container">
-        <DayMonthButton onOptionChange={handleOptionChange} />
-        <div className="chart-content">
-          {responseData.data && (
-            <DonutChart
-              series={chartData}
-              chartLabel={chartLabel}
-              title={chartTitle}
-              legendShow={showLegend}
-              legendFont={legendFontSize}
-              labelShow={showLabels}
-              labelFont={labelFontSize}
-              labelColor={labelColor}
-              valueShow={showValues}
-              valueFont={valueFontSize}
-              valueColor={valueColor}
-              colors={chartColors}
-            />
-          )}
+        <div className="chat-flex-content">
+          <DayMonthButton onOptionChange={handleOptionChange} />
+          <div className="chart-content">
+            {responseData.data && (
+              <DonutChart
+                series={chartData}
+                chartLabel={chartLabel}
+                title={chartTitle}
+                legendShow={showLegend}
+                legendFont={legendFontSize}
+                labelShow={showLabels}
+                labelFont={labelFontSize}
+                labelColor={labelColor}
+                valueShow={showValues}
+                valueFont={valueFontSize}
+                valueColor={valueColor}
+                colors={chartColors}
+              />
+            )}
+          </div>
         </div>
         <div className="bar-content">
           {consumption_goal !== 0 && (
