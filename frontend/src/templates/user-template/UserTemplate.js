@@ -22,7 +22,7 @@ const UserTemplate = () => {
         // yyyy-MM-ddTHH:mm:ss.SSSZ 형식으로 todayDate 값 생성
         // yyyy-MM-ddTHH:mm:ss.SSS+09:00 형식으로 todayDate 값 생성
         const todayDate = format(
-          currentMonth,
+          Date.now(),
           "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'",
         );
         // yyyy-MM-01T00:00:00.000+09:00 형식으로 todayMonth 값 생성
@@ -31,7 +31,8 @@ const UserTemplate = () => {
           "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'",
         );
         const response = await handleCalender(todayDate, todayMonth);
-        console.log(response.data);
+        console.log('res', response.data);
+        console.log('complate load');
         setResponseData(response.data); // response 데이터를 상태로 저장
       } catch (error) {
         console.log(error);
@@ -52,11 +53,13 @@ const UserTemplate = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
   };
 
-  const lastDayOfCurrentMonth = new Date(
-    currentMonth.getFullYear(),
-    currentMonth.getMonth() + 1,
-    0,
-  );
+  const currentDate = new Date(); // 현재 날짜 가져오기
+  const nextMonthDate = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    1,
+  ); // 다음 달의 첫 날 가져오기
+  const lastDayOfCurrentMonth = new Date(nextMonthDate - 1); // 현재 월의 마지막 날 가져오기
 
   // 현재 월의 총 일 수 계산
   const totalDaysInCurrentMonth = lastDayOfCurrentMonth.getDate();
@@ -68,7 +71,7 @@ const UserTemplate = () => {
     setSelectedOption(option);
   };
 
-  // 선택된 옵션에 따라 차트 제목 설정
+  // Chart arguments by selected option
   let chartTitle =
     selectedOption === 'option1' ? '오늘 총 소비액' : '월간 총 소비액';
 
@@ -98,9 +101,14 @@ const UserTemplate = () => {
   let consumption_amount = 0;
 
   if (responseData.data) {
+    // 오늘
+    let monthlyGoalByToday = responseData.data.thisMonthGoalInfo.goalAmount;
+    // 오늘 목표 소비 금액
+    let dailyGoal = monthlyGoalByToday / totalDaysInCurrentMonth;
+
+    // 월간
     // 이번달 목표
-    let monthlyGoal = responseData.data.totalGoal.goalAmount;
-    let dailyGoal = monthlyGoal / totalDaysInCurrentMonth;
+    let monthlyGoalByCalendar = responseData.data.totalGoal.goalAmount;
 
     let statisticData = [];
     // 일간 소비 내역
@@ -111,7 +119,7 @@ const UserTemplate = () => {
     } else {
       // 월간 소비 내역
       statisticData = responseData.data.monthlyStatistic.amountByCategory;
-      consumption_goal = monthlyGoal;
+      consumption_goal = monthlyGoalByCalendar;
       consumption_amount = responseData.data.monthlyStatistic.totalAmount;
     }
 
@@ -119,7 +127,7 @@ const UserTemplate = () => {
     chartData = statisticData.map((item) => item.amount);
   }
 
-  console.log('차트 데이터 입니다. : ', chartData);
+  console.log('차트 데이터 : ', chartData);
   console.log('소비 금액 : ', consumption_amount);
   console.log('목표 금액 : ', consumption_goal);
 
@@ -159,18 +167,24 @@ const UserTemplate = () => {
           </div>
         </div>
         <div className="bar-content">
-          <div className="spend">
-            <div className="spend-text-blue">현재 소비 금액 /</div>&nbsp;
-            <div className="spend-text-black">목표 소비 금액</div>
-          </div>
-          <GoalBar
-            color={'#2A4FFA'}
-            current={consumption_amount}
-            goal={consumption_goal}
-          />
-          <div className="spend-text-black spend-today-div">
-            오늘의 고정 지출
-          </div>
+          {consumption_goal !== 0 && (
+            <div className="spend">
+              <div className="spend-text-blue">현재 소비 금액 /</div>&nbsp;
+              <div className="spend-text-black">목표 소비 금액</div>
+            </div>
+          )}
+          {consumption_goal !== 0 && (
+            <GoalBar
+              color={'#2A4FFA'}
+              current={consumption_amount}
+              goal={consumption_goal}
+            />
+          )}
+          <br />
+
+          {selectedOption === 'option1' && (
+            <div className="spend-text-black">오늘의 고정 지출</div>
+          )}
         </div>
       </div>
     </div>
