@@ -6,6 +6,7 @@ import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
 import handleGoalUpdate from '../../utils/handleGoalUpdate';
+import handleRegistGoal from '../../utils/handleRegistGoal';
 
 const FirstGoalTemplate = () => {
   const [goalByCategory, setGoalByCategory] = useState([]);
@@ -13,8 +14,9 @@ const FirstGoalTemplate = () => {
   const [series, setSeries] = useState([]);
   const [totalGoals, setTotalGoals] = useState([]);
   const [editable, setEditable] = useState(false);
-  const [buttonLabel, setButtonLabel] = useState('목표수정');
+  const [buttonLabel, setButtonLabel] = useState('목표설정');
   const [monthlyTotalAmount, setMonthlyTotalAmount] = useState();
+  const [monthlyAvg, setMonthlyAvg] = useState();
 
   const categoryNameToKor = {
     food: '식비',
@@ -62,6 +64,8 @@ const FirstGoalTemplate = () => {
         const totalGoal = response.data.data.totalGoal;
         console.log(response.data);
 
+        setMonthlyAvg(myMonthlyStatisticAvg);
+
         const monthlyStatisticAmount =
           response.data.data.monthlyStatistic.totalAmount;
         console.log(totalGoal);
@@ -71,9 +75,10 @@ const FirstGoalTemplate = () => {
 
         setGoalByCategory(goalByCategoryList);
         setOriginalGoalByCategory(goalByCategoryList); // Set original state
-        setSeries([20, 20, 20, 20, 20, 20]);
+        setSeries(seriesList);
         // setSeries(seriesList);
         setTotalGoals(totalGoal);
+        console.log(series);
         // console.log(seriesList);
       } catch (error) {
         console.log(error);
@@ -82,10 +87,11 @@ const FirstGoalTemplate = () => {
     fetchData();
   }, []);
 
-  console.log(series);
+  console.log("montly", monthlyAvg)
+
   const handleButtonClick = () => {
     if (editable) {
-      handleUpdate();
+      handleRegist();
     } else {
       setOriginalGoalByCategory(JSON.parse(JSON.stringify(goalByCategory))); // Deep copy
     }
@@ -97,16 +103,16 @@ const FirstGoalTemplate = () => {
       setOriginalGoalByCategory([...originalGoalByCategory]);
     }
     setEditable(!editable);
-    setButtonLabel(editable ? '목표수정' : '수정 완료');
+    setButtonLabel(editable ? '목표설정' : '설정완료');
   };
 
   const handleCancel = () => {
     setGoalByCategory(JSON.parse(JSON.stringify(originalGoalByCategory))); // Reset to original state
     setEditable(false);
-    setButtonLabel('목표수정');
+    setButtonLabel('목표설정');
   };
 
-  const handleUpdate = async () => {
+  const handleRegist = async () => {
     if (editable) {
       try {
         const id = totalGoals.id;
@@ -118,7 +124,7 @@ const FirstGoalTemplate = () => {
           };
         });
 
-        await handleGoalUpdate(id, goalAmount, newGoalByCategory);
+        await handleRegistGoal(id, goalAmount, newGoalByCategory);
 
         const updatedSeries = goalByCategory.map(
           (item) => item.categoryGoalAmount,
@@ -163,74 +169,64 @@ const FirstGoalTemplate = () => {
           />
           {/* </div> */}
 
-          <div className="goal-input-button-container">
-            <div className="goal-inputs-container">
-              <div className="goal-inputs-left">
-                {goalByCategory.slice(0, 4).map((avg, index) => (
-                  <div key={index} className="goal-inputs-category">
-                    <div className="goal-inputs-category-name">
-                      {categoryNameToKor[avg.amount]}
+          
+          {goalByCategory.length > 0 && (
+            <div className="goal-input-button-container">
+              <div className="goal-inputs-container">
+                <div className="goal-inputs-left">
+                  {monthlyAvg.slice(0, 4).map((avg, index) => (
+                    <div key={index} className="goal-inputs-category">
+                      <div className="goal-inputs-category-name">
+                        {categoryNameToKor[avg.amount]}
+                      </div>
+                      <div
+                        className="goal-inputs-rectangle-label"
+                        style={{
+                          backgroundColor: colors[index],
+                        }}
+                      ></div>
+                      <input
+                        type="text"
+                        className="input goal-inputs-amount"
+                        placeholder="숫자로 입력"
+                        variant="outlined"
+                        value={avg.amount || 0}
+                        readOnly={!editable}
+                        onChange={(e) => handleInputChange(e, index)}
+                      />
+                      원
                     </div>
-                    <div
-                      className="goal-inputs-rectangle-label"
-                      style={{
-                        backgroundColor: colors[index],
-                      }}
-                    ></div>
-                    <input
-                      type="text"
-                      className="input goal-inputs-amount"
-                      placeholder="숫자로 입력"
-                      variant="outlined"
-                      value={avg.amount || 0}
-                      readOnly={!editable}
-                      onChange={(e) => handleInputChange(e, index)}
-                    />
-                    원
-                  </div>
-                ))}
-              </div>
-              <div className="goal-inputs-right">
-                {goalByCategory.slice(4, 8).map((avg, index) => (
-                  <div key={index} className="goal-inputs-category">
-                    <div className="goal-inputs-category-name">
-                      {categoryNameToKor[avg.amout]}
+                  ))}
+                </div>
+                <div className="goal-inputs-right">
+                  {monthlyAvg.slice(4, 8).map((avg, index) => (
+                    <div key={index} className="goal-inputs-category">
+                      <div className="goal-inputs-category-name">
+                        {categoryNameToKor[avg.amout]}
+                      </div>
+                      <div
+                        className="goal-inputs-rectangle-label"
+                        style={{
+                          backgroundColor: colors[index + 4],
+                        }}
+                      ></div>
+                      <input
+                        type="text"
+                        className="input goal-inputs-amount"
+                        placeholder="숫자로 입력"
+                        variant="outlined"
+                        value={avg.amout || 0}
+                        readOnly={!editable}
+                        onChange={(e) => handleInputChange(e, index + 4)}
+                      />
+                      원
                     </div>
-                    <div
-                      className="goal-inputs-rectangle-label"
-                      style={{
-                        backgroundColor: colors[index + 4],
-                      }}
-                    ></div>
-                    <input
-                      type="text"
-                      className="input goal-inputs-amount"
-                      placeholder="숫자로 입력"
-                      variant="outlined"
-                      value={avg.amout || 0}
-                      readOnly={!editable}
-                      onChange={(e) => handleInputChange(e, index + 4)}
-                    />
-                    원
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="goal-update-button-div">
-              <button
-                onClick={handleButtonClick}
-                className="signup-button duplicatecheck-button"
-                style={{
-                  margin: '0 0 0 10px',
-                  fontSize: 'smaller',
-                  padding: '5px 10px',
-                }}
-              >
-                {buttonLabel}
-              </button>
-              {editable && (
+              <div className="goal-update-button-div">
                 <button
-                  onClick={handleCancel}
+                  onClick={handleButtonClick}
                   className="signup-button duplicatecheck-button"
                   style={{
                     margin: '0 0 0 10px',
@@ -238,11 +234,24 @@ const FirstGoalTemplate = () => {
                     padding: '5px 10px',
                   }}
                 >
-                  취소
+                  {buttonLabel}
                 </button>
-              )}
+                {editable && (
+                  <button
+                    onClick={handleCancel}
+                    className="signup-button duplicatecheck-button"
+                    style={{
+                      margin: '0 0 0 10px',
+                      fontSize: 'smaller',
+                      padding: '5px 10px',
+                    }}
+                  >
+                    취소
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className="goal-bar-chart">
           <BarChart />
