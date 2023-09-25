@@ -9,8 +9,8 @@
     /* var(--color) var(--midpoint), */ #fff var(--midpoint),
     #fff 100%
   );
-  border-radius: 10px;
-  border: 2px solid #ccc;
+  border-radius: 5px;
+  border: 1px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,7 +28,7 @@
     /* var(--color) var(--midpoint), */ #fff var(--midpoint),
     #fff 100%
   );
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,7 +48,7 @@
   );
   background-blend-mode: var(--midpoint);
   border-radius: 10px;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
