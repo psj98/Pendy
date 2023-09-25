@@ -4,19 +4,13 @@ import DonutChart from '../../components/common/donut-chart/DonutChart';
 import BarChart from '../../components/common/bar-chart/BarChart';
 import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
-import GoalBar from '../../components/common/goal-bar/GoalBar';
-import handleGoalUpdate from '../../utils/handleGoalUpdate';
-import handleRegistGoal from '../../utils/handleRegistGoal';
 
 const FirstGoalTemplate = () => {
-  const [goalByCategory, setGoalByCategory] = useState([]);
-  const [originalGoalByCategory, setOriginalGoalByCategory] = useState([]);
   const [series, setSeries] = useState([]);
-  const [totalGoals, setTotalGoals] = useState([]);
-  const [editable, setEditable] = useState(false);
-  const [buttonLabel, setButtonLabel] = useState('목표설정');
-  const [monthlyTotalAmount, setMonthlyTotalAmount] = useState();
-  const [monthlyAvg, setMonthlyAvg] = useState();
+  const [monthlyAvg, setMonthlyAvg] = useState([]);
+  const [isGoalSet, setIsGoalSet] = useState(false);
+  const [inputValues, setInputValues] = useState({});
+  const [originalValues, setOirinalValues] = useState({});
 
   const categoryNameToKor = {
     food: '식비',
@@ -39,16 +33,6 @@ const FirstGoalTemplate = () => {
     'rgba(189, 236, 235, 0.53)',
   ];
 
-  const handleInputChange = (e, index) => {
-    const value = parseInt(e.target.value) || 0;
-    setGoalByCategory((prevState) =>
-      prevState.map((item, idx) => {
-        if (idx !== index) return item;
-        return { ...item, categoryGoalAmount: value };
-      }),
-    );
-  };
-
   useEffect(() => {
     const age = sessionStorage.getItem('age');
     const salary = sessionStorage.getItem('salary');
@@ -57,29 +41,20 @@ const FirstGoalTemplate = () => {
     const fetchData = async () => {
       try {
         const response = await handleGoalDetail(age, salary, curDate);
-        const goalByCategoryList =
+        const myMonthlyStatisticAvg =
           response.data.data.monthlyStatistic.amountByCategory;
-        const myMonthlyStatisticAvg = response.data.data.monthlyStatisticAvg;
         const seriesList = myMonthlyStatisticAvg.map((index) => index.amount);
-        const totalGoal = response.data.data.totalGoal;
         console.log(response.data);
 
         setMonthlyAvg(myMonthlyStatisticAvg);
 
-        const monthlyStatisticAmount =
-          response.data.data.monthlyStatistic.totalAmount;
-        console.log(totalGoal);
-        console.log(response.data);
-
-        setMonthlyTotalAmount(monthlyStatisticAmount);
-
-        setGoalByCategory(goalByCategoryList);
-        setOriginalGoalByCategory(goalByCategoryList); // Set original state
+        const initialInputValues = {};
+        myMonthlyStatisticAvg.forEach((item) => {
+          initialInputValues[item.categoryName] = item.amount;
+        });
+        setInputValues(initialInputValues);
         setSeries(seriesList);
-        // setSeries(seriesList);
-        setTotalGoals(totalGoal);
         console.log(series);
-        // console.log(seriesList);
       } catch (error) {
         console.log(error);
       }
@@ -87,66 +62,27 @@ const FirstGoalTemplate = () => {
     fetchData();
   }, []);
 
-  console.log("montly", monthlyAvg)
-
-  const handleButtonClick = () => {
-    if (editable) {
-      handleRegist();
-    } else {
-      setOriginalGoalByCategory(JSON.parse(JSON.stringify(goalByCategory))); // Deep copy
-    }
-    handleEditToggle();
+  const handleGoalSetToggle = () => {
+    setIsGoalSet(!isGoalSet);
+  };
+  const handleInputChange = (categoryName, e) => {
+    const newValue = e.target.value;
+    setInputValues({
+      ...inputValues,
+      [categoryName]: newValue,
+    });
   };
 
-  const handleEditToggle = () => {
-    if (!editable) {
-      setOriginalGoalByCategory([...originalGoalByCategory]);
-    }
-    setEditable(!editable);
-    setButtonLabel(editable ? '목표설정' : '설정완료');
-  };
-
-  const handleCancel = () => {
-    setGoalByCategory(JSON.parse(JSON.stringify(originalGoalByCategory))); // Reset to original state
-    setEditable(false);
-    setButtonLabel('목표설정');
-  };
-
-  const handleRegist = async () => {
-    if (editable) {
-      try {
-        const id = totalGoals.id;
-        const goalAmount = totalGoals.goalAmount;
-        const newGoalByCategory = goalByCategory.map((item) => {
-          return {
-            categoryId: item.categoryId, // 예를 들어, categoryName을 categoryId로 변환하는 함수
-            categoryGoalAmount: item.categoryGoalAmount,
-          };
-        });
-
-        await handleRegistGoal(id, goalAmount, newGoalByCategory);
-
-        const updatedSeries = goalByCategory.map(
-          (item) => item.categoryGoalAmount,
-        );
-        setSeries(updatedSeries);
-
-        handleEditToggle();
-      } catch (error) {
-        console.error('Failed to update:', error);
-      }
-    }
-  };
   return (
     <div className="goal-template">
       <h1 style={{ margin: '30px 0' }}>목표 설정</h1>
       <div className="goal-main">
         <div className="goal-container">
           <div className="goal-chart">
-            {goalByCategory.length > 0 && (
+            {monthlyAvg.length > 0 && (
               <DonutChart
                 series={series}
-                title={'오늘 총 소비액'}
+                title={'총 목표 소비액'}
                 legendShow={false}
                 legendFont={20}
                 labelShow={true}
@@ -160,24 +96,14 @@ const FirstGoalTemplate = () => {
             )}
           </div>
 
-          {/* <div className="goal-bar"> */}
-          <GoalBar
-            color={'#2A4FFA'}
-            current={monthlyTotalAmount}
-            goal={totalGoals.goalAmount}
-            type={'update'}
-          />
-          {/* </div> */}
-
-          
-          {goalByCategory.length > 0 && (
+          {monthlyAvg.length > 0 && (
             <div className="goal-input-button-container">
               <div className="goal-inputs-container">
                 <div className="goal-inputs-left">
-                  {monthlyAvg.slice(0, 4).map((avg, index) => (
+                  {monthlyAvg.slice(0, 4).map((category, index) => (
                     <div key={index} className="goal-inputs-category">
                       <div className="goal-inputs-category-name">
-                        {categoryNameToKor[avg.amount]}
+                        {categoryNameToKor[category.categoryName]}
                       </div>
                       <div
                         className="goal-inputs-rectangle-label"
@@ -190,19 +116,21 @@ const FirstGoalTemplate = () => {
                         className="input goal-inputs-amount"
                         placeholder="숫자로 입력"
                         variant="outlined"
-                        value={avg.amount || 0}
-                        readOnly={!editable}
-                        onChange={(e) => handleInputChange(e, index)}
+                        value={inputValues[category.categoryName] || ''}
+                        readOnly={!isGoalSet}
+                        onChange={(e) =>
+                          handleInputChange(category.categoryName, e)
+                        }
                       />
                       원
                     </div>
                   ))}
                 </div>
                 <div className="goal-inputs-right">
-                  {monthlyAvg.slice(4, 8).map((avg, index) => (
+                  {monthlyAvg.slice(4, 8).map((category, index) => (
                     <div key={index} className="goal-inputs-category">
                       <div className="goal-inputs-category-name">
-                        {categoryNameToKor[avg.amout]}
+                        {categoryNameToKor[category.categoryName]}
                       </div>
                       <div
                         className="goal-inputs-rectangle-label"
@@ -215,9 +143,11 @@ const FirstGoalTemplate = () => {
                         className="input goal-inputs-amount"
                         placeholder="숫자로 입력"
                         variant="outlined"
-                        value={avg.amout || 0}
-                        readOnly={!editable}
-                        onChange={(e) => handleInputChange(e, index + 4)}
+                        value={inputValues[category.categoryName] || ''}
+                        readOnly={!isGoalSet}
+                        onChange={(e) =>
+                          handleInputChange(category.categoryName, e)
+                        }
                       />
                       원
                     </div>
@@ -226,25 +156,25 @@ const FirstGoalTemplate = () => {
               </div>
               <div className="goal-update-button-div">
                 <button
-                  onClick={handleButtonClick}
                   className="signup-button duplicatecheck-button"
                   style={{
                     margin: '0 0 0 10px',
                     fontSize: 'smaller',
                     padding: '5px 10px',
                   }}
+                  onClick={handleGoalSetToggle}
                 >
-                  {buttonLabel}
+                  {isGoalSet ? '완료' : '목표 설정'}
                 </button>
-                {editable && (
+                {isGoalSet && (
                   <button
-                    onClick={handleCancel}
                     className="signup-button duplicatecheck-button"
                     style={{
                       margin: '0 0 0 10px',
                       fontSize: 'smaller',
                       padding: '5px 10px',
                     }}
+                    onClick={handleGoalSetToggle}
                   >
                     취소
                   </button>
