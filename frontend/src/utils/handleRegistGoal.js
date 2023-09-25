@@ -1,15 +1,12 @@
 import authAxiosCreate from '../authAxiosCreate';
 
-const handleRegistGoal = (id, goalAmount, goalByCategoryList) => {
+const handleRegistGoal = (goalAmount, goal) => {
   const data = {
-    id: id,
     goalAmount: goalAmount,
-    goalByCategoryList: goalByCategoryList,
+    goalByCategoryList: goal,
   };
 
-  console.log('gbc', id);
-  console.log('gbc', goalAmount);
-  console.log('gbc', goalByCategoryList);
+  console.log('gbc', data);
 
   const serverUrl = '/api/goals/regist';
 

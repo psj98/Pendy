@@ -4,13 +4,13 @@ import DonutChart from '../../components/common/donut-chart/DonutChart';
 import BarChart from '../../components/common/bar-chart/BarChart';
 import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
-
+import handleRegistGoal from '../../utils/handleRegistGoal';
 const FirstGoalTemplate = () => {
   const [series, setSeries] = useState([]);
   const [monthlyAvg, setMonthlyAvg] = useState([]);
   const [isGoalSet, setIsGoalSet] = useState(false);
   const [inputValues, setInputValues] = useState({});
-  const [originalValues, setOirinalValues] = useState({});
+  const [originalValues, setOriginalValues] = useState({});
 
   const categoryNameToKor = {
     food: '식비',
@@ -44,7 +44,7 @@ const FirstGoalTemplate = () => {
         const myMonthlyStatisticAvg =
           response.data.data.monthlyStatistic.amountByCategory;
         const seriesList = myMonthlyStatisticAvg.map((index) => index.amount);
-        console.log(response.data);
+        console.log('resonse', response.data);
 
         setMonthlyAvg(myMonthlyStatisticAvg);
 
@@ -54,7 +54,8 @@ const FirstGoalTemplate = () => {
         });
         setInputValues(initialInputValues);
         setSeries(seriesList);
-        console.log(series);
+        setOriginalValues(initialInputValues);
+        console.log('series', series);
       } catch (error) {
         console.log(error);
       }
@@ -67,10 +68,47 @@ const FirstGoalTemplate = () => {
   };
   const handleInputChange = (categoryName, e) => {
     const newValue = e.target.value;
-    setInputValues({
-      ...inputValues,
-      [categoryName]: newValue,
+    setInputValues((prevValues) => {
+      const updatedValues = {
+        ...prevValues,
+        [categoryName]: newValue,
+      };
+
+      // inputValues를 기반으로 series 업데이트
+      const updatedSeries = monthlyAvg.map(
+        (category) => updatedValues[category.categoryId] || 0,
+      );
+
+      setSeries(updatedSeries);
+
+      return updatedValues;
     });
+  };
+
+  const handleCancel = () => {
+    setInputValues(originalValues);
+    setIsGoalSet(false);
+  };
+
+  const handleComplate = async () => {
+    try {
+      var goalAmount = 0;
+      const goal = Object.keys(inputValues).map((categoryName) => {
+        const amount = inputValues[categoryName];
+        goalAmount += parseInt(amount, 10);
+        const category = monthlyAvg.find(
+          (item) => item.categoryName === categoryName,
+        );
+        return {
+          categoryId: category.categoryId,
+          categoryGoalAmount: parseInt(amount, 10),
+        };
+      });
+
+      await handleRegistGoal(goalAmount, goal);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -162,7 +200,7 @@ const FirstGoalTemplate = () => {
                     fontSize: 'smaller',
                     padding: '5px 10px',
                   }}
-                  onClick={handleGoalSetToggle}
+                  onClick={isGoalSet ? handleComplate : handleGoalSetToggle}
                 >
                   {isGoalSet ? '완료' : '목표 설정'}
                 </button>
@@ -174,7 +212,7 @@ const FirstGoalTemplate = () => {
                       fontSize: 'smaller',
                       padding: '5px 10px',
                     }}
-                    onClick={handleGoalSetToggle}
+                    onClick={handleCancel}
                   >
                     취소
                   </button>
