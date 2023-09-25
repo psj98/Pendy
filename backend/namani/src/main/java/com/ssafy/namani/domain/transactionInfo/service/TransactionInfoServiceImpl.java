@@ -172,7 +172,9 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 	 */
 	@Override
 	public void addTransaction(AccountInfoSendCodeRequestDto accountInfoSendCodeRequestDto) throws BaseException {
-		Optional<AccountInfo> byId = accountInfoRepository.findById(accountInfoSendCodeRequestDto.getAccountNumber());
+//		Optional<AccountInfo> byId = accountInfoRepository.findById(accountInfoSendCodeRequestDto.getAccountNumber());
+		Optional<AccountInfo> byId = accountInfoRepository.findByAccountNumberBankCodeMemberId(accountInfoSendCodeRequestDto.getAccountNumber(), accountInfoSendCodeRequestDto.getBankCode());
+
 		// 거래내역을 추가하려는 계좌번호가 있는지 확인
 		if (byId.isPresent()) {
 			// 랜덤3자리 숫자 발급
