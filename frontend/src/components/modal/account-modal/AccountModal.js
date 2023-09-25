@@ -65,7 +65,7 @@ const AccountModal = ({ index, closeModal, handleAccountChange, accounts }) => {
         startTimer();
       } else if (response.data.code === 3002) {
         console.error(response.data.code + ' ' + response.data.message);
-        alert('계좌 번호가 존재하지 않습니다.');
+        alert('이미 등록된 계좌이거나 존재하지 않는 계좌입니다.');
       } else {
         console.error(response.data.code + ' ' + response.data.message);
         alert('인증에 실패했습니다.');
@@ -193,7 +193,7 @@ const AccountModal = ({ index, closeModal, handleAccountChange, accounts }) => {
                   onChange={(e) => setAuthCode(e.target.value)}
                 />
                 <div className="timer-text">
-                  {parseInt(timer / 60)}:{timer % 60}
+                  {parseInt(timer / 60)}:{String(timer % 60).padEnd(2, "0")}
                 </div>
               </div>
               <div className="modal-code-btn-box">
