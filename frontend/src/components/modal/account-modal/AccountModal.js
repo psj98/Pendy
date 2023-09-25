@@ -192,7 +192,9 @@ const AccountModal = ({ index, closeModal, handleAccountChange, accounts }) => {
                   value={authCode}
                   onChange={(e) => setAuthCode(e.target.value)}
                 />
-                <div className="timer-text">{timer}</div>
+                <div className="timer-text">
+                  {parseInt(timer / 60)}:{timer % 60}
+                </div>
               </div>
               <div className="modal-code-btn-box">
                 <button
