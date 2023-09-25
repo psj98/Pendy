@@ -114,10 +114,14 @@ const AccountModal = ({ index, closeModal, handleAccountChange }) => {
   return (
     <div className="modal">
       <div className="modal-content">
-        <div className="close-button-container">
-          <button onClick={closeModal}>x</button>
+        <div className="modal-header">
+          <div className="modal-title">
+            <h2>계좌 인증</h2>
+          </div>
+          <div className="close-button-container">
+            <button onClick={closeModal}>x</button>
+          </div>
         </div>
-        <h2>계좌 인증</h2>
         <div className="input-container">
           <h3>은행 선택</h3>
           <FormControl fullWidth size="small">
@@ -182,15 +186,15 @@ const AccountModal = ({ index, closeModal, handleAccountChange }) => {
                 />
               </div>
               <div className="modal-input-part2">
-                <div className="modal-input-part2">
-                  <button onClick={onAuthenticationClick}>인증</button>
-                </div>
+                <button onClick={onAuthenticationClick}>인증</button>
               </div>
             </div>
             <div className="timer-text">{timer}초</div>
           </div>
         )}
-        <button onClick={onSaveClick}>등록</button>
+        <div className="modal-button">
+          <button onClick={onSaveClick}>등록</button>
+        </div>
       </div>
     </div>
   );
