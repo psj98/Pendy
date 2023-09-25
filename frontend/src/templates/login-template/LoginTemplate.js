@@ -78,7 +78,7 @@ const LoginTemplate = () => {
           <FaUser className="login-icon" />
           <input
             className="login-input-box email-box"
-            placeholder="이메일"
+            placeholder="이메일을 입력해주세요"
             variant="outlined"
             value={state.email}
             onChange={(e) => setState({ ...state, email: e.target.value })}
@@ -93,7 +93,7 @@ const LoginTemplate = () => {
           <input
             type="password"
             className="login-input-box pw-box"
-            placeholder="비밀번호"
+            placeholder="비밀번호를 입력해주세요"
             variant="outlined"
             value={state.password}
             onChange={(e) => setState({ ...state, password: e.target.value })}
