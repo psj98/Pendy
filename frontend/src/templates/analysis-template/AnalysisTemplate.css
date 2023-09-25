@@ -7,3 +7,31 @@
   margin-right: 8px; /* 원하는 간격으로 조정 */
   /* 추가적인 스타일을 원하는 대로 지정할 수 있습니다. */
 }
+
+.analysis-container,
+.analysis-left-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.analysis-title {
+  margin: 40px 0;
+  width: 100%;
+  text-align: center;
+}
+
+.analysis-main-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.change-month-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

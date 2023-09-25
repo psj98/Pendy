@@ -115,153 +115,158 @@ const AnalysisTemplate = () => {
 
   console.log('응답데이터 : ', aiText);
   return (
-    <div>
-      <h1>소비분석 페이지</h1>
+    <div className="analysis-container">
+      <h1 className="analysis-title">소비분석 페이지</h1>
       {/* currentMonth 값을 출력 */}
       {/* 여기에 소비 분석 컴포넌트 또는 내용을 추가합니다. */}
-      <p> {curMonth}</p>
-      <div className="col-end">
-        <Icon
-          icon="bi:arrow-right-circle-fill"
-          onClick={() => changeMonth(1)}
-        />
-        <Icon
-          icon="bi:arrow-left-circle-fill"
-          onClick={() => changeMonth(-1)}
-        />
-      </div>
-      <div className="chart-content">
-        {responseData.data && (
-          <DonutChart
-            series={chartData}
-            chartLabel={chartLabel}
-            title={chartTitle}
-            legendShow={showLegend}
-            legendFont={legendFontSize}
-            labelShow={showLabels}
-            labelFont={labelFontSize}
-            labelColor={labelColor}
-            valueShow={showValues}
-            valueFont={valueFontSize}
-            valueColor={valueColor}
-            colors={chartColors}
-          />
-        )}
-      </div>
-      <div className="diary-goal-container">
-        <div className="diary-goal-title">
-          <p>월간 분석</p>
+      <div className="analysis-main-container">
+        <div className="analysis-left-container">
+          <div className="change-month-div">
+            <Icon
+              icon="bi:arrow-left-circle-fill"
+              onClick={() => changeMonth(-1)}
+            />
+            <p> {curMonth}</p>
+            <Icon
+              icon="bi:arrow-right-circle-fill"
+              onClick={() => changeMonth(1)}
+            />
+          </div>
+
+          <div className="chart-content">
+            {responseData.data && (
+              <DonutChart
+                series={chartData}
+                chartLabel={chartLabel}
+                title={chartTitle}
+                legendShow={showLegend}
+                legendFont={legendFontSize}
+                labelShow={showLabels}
+                labelFont={labelFontSize}
+                labelColor={labelColor}
+                valueShow={showValues}
+                valueFont={valueFontSize}
+                valueColor={valueColor}
+                colors={chartColors}
+              />
+            )}
+          </div>
+          <div className="diary-goal-container">
+            <div className="diary-goal-title">
+              <p>월간 분석</p>
+            </div>
+            <div className="diary-goal">
+              <div
+                className="goal-indicator"
+                style={{ backgroundColor: '#FAF2E8' }}
+              ></div>
+              <p className="goal-text">{chartLabel[0]}</p>
+              <GoalBar
+                color={'#FAF2E8'}
+                current={chartData[0]}
+                goal={monthlyGoalsByCategory[0]}
+                type={'rectangle'}
+              />
+            </div>
+            <div className="diary-goal">
+              <div
+                className="goal-indicator"
+                style={{ backgroundColor: '#BDECEA' }}
+              ></div>
+              <p className="goal-text">{chartLabel[1]}</p>
+              <GoalBar
+                color={'#BDECEA'}
+                current={chartData[1]}
+                goal={monthlyGoalsByCategory[1]}
+                type={'rectangle'}
+              />
+            </div>
+            <div className="diary-goal">
+              <div
+                className="goal-indicator"
+                style={{ backgroundColor: '#DAB8F1' }}
+              ></div>
+              <p className="goal-text">{chartLabel[2]}</p>
+              <GoalBar
+                color={'#DAB8F1'}
+                current={chartData[2]}
+                goal={monthlyGoalsByCategory[2]}
+                type={'rectangle'}
+              />
+            </div>
+            <div className="diary-goal">
+              <div
+                className="goal-indicator"
+                style={{ backgroundColor: 'rgba(243, 213, 182, 0.63)' }}
+              ></div>
+              <p className="goal-text">{chartLabel[3]}</p>
+              <GoalBar
+                color={'rgba(243, 213, 182, 0.63)'}
+                current={chartData[3]}
+                goal={monthlyGoalsByCategory[3]}
+                type={'rectangle'}
+              />
+            </div>
+            <div className="diary-goal">
+              <div
+                className="goal-indicator"
+                style={{ backgroundColor: 'rgba(208, 228, 197, 0.42)' }}
+              ></div>
+              <p className="goal-text">{chartLabel[4]}</p>
+              <GoalBar
+                color={'rgba(208, 228, 197, 0.42)'}
+                current={chartData[4]}
+                goal={monthlyGoalsByCategory[4]}
+                type={'rectangle'}
+              />
+            </div>
+            <div className="diary-goal">
+              <div
+                className="goal-indicator"
+                style={{ backgroundColor: 'rgba(255, 170, 180, 0.50)' }}
+              ></div>
+              <p className="goal-text">{chartLabel[5]}</p>
+              <GoalBar
+                color={'rgba(255, 170, 180, 0.50)'}
+                current={chartData[5]}
+                goal={monthlyGoalsByCategory[5]}
+                type={'rectangle'}
+              />
+            </div>
+            <div className="diary-goal">
+              <div
+                className="goal-indicator"
+                style={{ backgroundColor: '#CFE4C5' }}
+              ></div>
+              <p className="goal-text">{chartLabel[6]}</p>
+              <GoalBar
+                color={'#CFE4C5'}
+                current={chartData[6]}
+                goal={monthlyGoalsByCategory[6]}
+                type={'rectangle'}
+              />
+            </div>
+            <div className="diary-goal">
+              <div
+                className="goal-indicator"
+                style={{ backgroundColor: 'rgba(189, 236, 235, 0.53)' }}
+              ></div>
+              <p className="goal-text">{chartLabel[7]}</p>
+              <GoalBar
+                color={'rgba(189, 236, 235, 0.53)'}
+                current={chartData[7]}
+                goal={monthlyGoalsByCategory[7]}
+                type={'rectangle'}
+              />
+            </div>
+          </div>
         </div>
-        <div className="diary-goal">
-          <div
-            className="goal-indicator"
-            style={{ backgroundColor: '#FAF2E8' }}
-          ></div>
-          <p className="goal-text">{chartLabel[0]}</p>
-          <GoalBar
-            color={'#FAF2E8'}
-            current={chartData[0]}
-            goal={monthlyGoalsByCategory[0]}
-            type={'rectangle'}
-          />
+        <div className="diary-goal-container">
+          <div className="diary-goal-title">
+            <div>나마니 월간분석</div>
+          </div>
+          <div>{aiText}</div>
         </div>
-        <div className="diary-goal">
-          <div
-            className="goal-indicator"
-            style={{ backgroundColor: '#BDECEA' }}
-          ></div>
-          <p className="goal-text">{chartLabel[1]}</p>
-          <GoalBar
-            color={'#BDECEA'}
-            current={chartData[1]}
-            goal={monthlyGoalsByCategory[1]}
-            type={'rectangle'}
-          />
-        </div>
-        <div className="diary-goal">
-          <div
-            className="goal-indicator"
-            style={{ backgroundColor: '#DAB8F1' }}
-          ></div>
-          <p className="goal-text">{chartLabel[2]}</p>
-          <GoalBar
-            color={'#DAB8F1'}
-            current={chartData[2]}
-            goal={monthlyGoalsByCategory[2]}
-            type={'rectangle'}
-          />
-        </div>
-        <div className="diary-goal">
-          <div
-            className="goal-indicator"
-            style={{ backgroundColor: 'rgba(243, 213, 182, 0.63)' }}
-          ></div>
-          <p className="goal-text">{chartLabel[3]}</p>
-          <GoalBar
-            color={'rgba(243, 213, 182, 0.63)'}
-            current={chartData[3]}
-            goal={monthlyGoalsByCategory[3]}
-            type={'rectangle'}
-          />
-        </div>
-        <div className="diary-goal">
-          <div
-            className="goal-indicator"
-            style={{ backgroundColor: 'rgba(208, 228, 197, 0.42)' }}
-          ></div>
-          <p className="goal-text">{chartLabel[4]}</p>
-          <GoalBar
-            color={'rgba(208, 228, 197, 0.42)'}
-            current={chartData[4]}
-            goal={monthlyGoalsByCategory[4]}
-            type={'rectangle'}
-          />
-        </div>
-        <div className="diary-goal">
-          <div
-            className="goal-indicator"
-            style={{ backgroundColor: 'rgba(255, 170, 180, 0.50)' }}
-          ></div>
-          <p className="goal-text">{chartLabel[5]}</p>
-          <GoalBar
-            color={'rgba(255, 170, 180, 0.50)'}
-            current={chartData[5]}
-            goal={monthlyGoalsByCategory[5]}
-            type={'rectangle'}
-          />
-        </div>
-        <div className="diary-goal">
-          <div
-            className="goal-indicator"
-            style={{ backgroundColor: '#CFE4C5' }}
-          ></div>
-          <p className="goal-text">{chartLabel[6]}</p>
-          <GoalBar
-            color={'#CFE4C5'}
-            current={chartData[6]}
-            goal={monthlyGoalsByCategory[6]}
-            type={'rectangle'}
-          />
-        </div>
-        <div className="diary-goal">
-          <div
-            className="goal-indicator"
-            style={{ backgroundColor: 'rgba(189, 236, 235, 0.53)' }}
-          ></div>
-          <p className="goal-text">{chartLabel[7]}</p>
-          <GoalBar
-            color={'rgba(189, 236, 235, 0.53)'}
-            current={chartData[7]}
-            goal={monthlyGoalsByCategory[7]}
-            type={'rectangle'}
-          />
-        </div>
-      </div>
-      <div className="diary-goal-container">
-        <div className="diary-goal-title">
-          <div>나마니 월간분석</div>
-        </div>
-        <div>{aiText}</div>
       </div>
     </div>
   );
