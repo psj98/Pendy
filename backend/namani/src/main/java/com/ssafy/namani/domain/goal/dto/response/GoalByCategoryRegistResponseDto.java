@@ -2,11 +2,13 @@ package com.ssafy.namani.domain.goal.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class GoalByCategoryRegistResponseDto {
 
     @NotNull
