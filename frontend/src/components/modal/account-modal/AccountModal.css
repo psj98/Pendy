@@ -1,52 +1,37 @@
 /* AccountModal.css */
 
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+.account-modal-content {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
+  justify-content: center;
+  background-color: #fff;
+  padding: 45px;
+  border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
+  position: relative;
 }
 
-.modal-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-title {
-  display: flex;
-  width: 90%;
-  justify-content: center;
-  align-items: center;
-}
-
-.close-button-container {
-  display: flex;
-  justify-content: right;
-  width: 10%;
-  height: 30px;
-}
-
-.close-button-container button {
+.account-close-button {
+  width: 10% !important;
   border: none;
-  width: 30px;
-  height: 30px;
-  font-size: 10px;
-  margin-left: auto;
+  font-size: medium;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.account-modal-title {
+  margin: 20px 0 40px !important;
+}
+
+.account-input-container {
+  text-align: left;
+}
+
+.account-bank-select-form {
+  margin-bottom: 15px;
 }
 
 .modal-input {
@@ -54,35 +39,79 @@
   flex-direction: row;
 }
 
-.input-container {
-  margin-bottom: 10px;
-  text-align: left;
+.modal-input-part1 {
+  flex: 2;
 }
 
-.modal-input-part1 {
-  flex: 3;
-}
 .modal-input-part2 {
-  margin-left: 5px;
   flex: 1;
 }
 
-h2 {
-  margin-bottom: 20px;
+.modal-account-input {
+  width: 100%;
+  margin: 0 0 15px 0 !important;
+  padding: 11px;
+  font-size: medium;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: medium;
+  outline: none;
+}
+
+.modal-account-input:focus-within,
+.modal-code-input:focus-within {
+  border: 1px solid #007bff;
+  z-index: 1;
+}
+
+.modal-code-input-box:focus {
+  outline: none;
+}
+
+.send-code-btn {
+  font-size: medium;
+}
+
+.account-regist-btn {
+  font-size: medium;
+  margin: 25px 0 0;
+}
+
+.modal-code-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 0 10px;
+}
+
+.modal-code-input {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex: 3;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 0 10px 0 0;
+}
+
+.modal-code-input-box {
+  font-size: medium;
+  flex: 1;
+  margin: 0 !important;
+  border: none !important;
+}
+
+.modal-code-btn {
+  font-size: medium;
+  padding: 9px !important;
 }
 
 .timer-text {
-  font-size: 10px;
+  font-size: medium;
   color: red;
   text-align: right;
-}
-
-.modal-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-button button {
-  width: 30%;
 }

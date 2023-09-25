@@ -23,8 +23,21 @@ const SignUpTemplate = () => {
 
   const navigate = useNavigate();
 
+  // 이메일에서 Enter 키를 누른 경우 checkDuplicateEmail 함수 실행
+  const onPressEnterKeyAtEmail = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      checkDuplicateEmail();
+    }
+  };
+
   //이메일 중복 확인
   const checkDuplicateEmail = async () => {
+    if (state.email.length < 8) {
+      alert('이메일을 8자 이상 입력해주세요.');
+      return;
+    }
+
     try {
       const response = await handleDuplicate(state.email);
       console.log('log', response.data.code);
@@ -144,127 +157,129 @@ const SignUpTemplate = () => {
 
   return (
     <div className="signup">
-      <h1 className="signup-title">회원가입</h1>
+      <h1 className="user-signup-title">회원가입</h1>
 
-      {/* 이메일 입력 */}
-      <div className="signup-input1">
-        <input
-          type="text"
-          className="input"
-          placeholder="이메일"
-          variant="outlined"
-          value={state.email}
-          onChange={(e) => setState({ ...state, email: e.target.value })}
-        />
-
-        <button
-          className="signup-button duplicatecheck-button"
-          style={{ fontSize: 'smaller', padding: '5px 10px' }}
-          onClick={checkDuplicateEmail}
-        >
-          중복확인
-        </button>
-      </div>
-
-      {/* 비밀번호 입력 */}
-      <div className="signup-input1">
-        <input
-          type="password"
-          className="input"
-          placeholder="비밀번호"
-          variant="outlined"
-          value={state.password}
-          onChange={(e) => setState({ ...state, password: e.target.value })}
-        />
-        <span className="border"></span>
-      </div>
-
-      {/* 비밀번호 확인 */}
-      <div className="signup-input1">
-        <input
-          type="password"
-          className="input"
-          placeholder="비밀번호 확인"
-          variant="outlined"
-          value={state.repassword}
-          onChange={(e) => setState({ ...state, repassword: e.target.value })}
-        />
-        <span className="border"></span>
-      </div>
-
-      {/* 이름 입력 */}
-      <div className="signup-input1">
-        <input
-          type="text"
-          className="input"
-          placeholder="이름"
-          variant="outlined"
-          value={state.name}
-          onChange={(e) => setState({ ...state, name: e.target.value })}
-        />
-        <span className="border"></span>
-      </div>
-
-      {/* 나이 입력 */}
-      <div className="signup-input-main">
-        <div className="signup-input-sub">
+      <div className="signup-container-box">
+        {/* 이메일 입력 */}
+        <div className="user-signup-input signup-email-input">
           <input
-            type="number"
-            className="input"
-            placeholder="나이"
+            className="signup-input-box signup-email-box"
+            placeholder="이메일"
             variant="outlined"
-            value={state.age}
-            onChange={(e) => setState({ ...state, age: e.target.value })}
+            value={state.email}
+            onChange={(e) => setState({ ...state, email: e.target.value })}
+            onKeyDown={onPressEnterKeyAtEmail}
           />
-          <span className="border"></span>
+
+          <button
+            className="signup-button duplicatecheck-button"
+            style={{ fontSize: 'smaller', padding: '5px 10px' }}
+            onClick={checkDuplicateEmail}
+          >
+            중복확인
+          </button>
         </div>
-        &nbsp;&nbsp;
-        {/* 소득 입력 */}
-        <div className="signup-input-sub">
+
+        {/* 비밀번호 입력 */}
+        <div className="user-signup-input signup-pw-input">
           <input
-            type="number"
-            className="input"
-            placeholder="연봉"
+            type="password"
+            className="signup-input-box signup-pw-box"
+            placeholder="비밀번호"
             variant="outlined"
-            value={state.salary}
-            onChange={(e) => setState({ ...state, salary: e.target.value })}
+            value={state.password}
+            onChange={(e) => setState({ ...state, password: e.target.value })}
           />
-          <span className="border"></span>
         </div>
-      </div>
-      <div className="signup-input-main">
-        {/* 은행 입력 */}
-        <div className="signup-input-sub1">
-          {state.banks.map((bank, index) => (
-            <div key={index} className="signup-input2">
-              <input
-                type="text"
-                className="input"
-                placeholder={`은행`}
-                variant="outlined"
-                value={bank}
-                onClick={() => openModal(index)}
-              />
-              <span className="border"></span>
-            </div>
-          ))}
+
+        {/* 비밀번호 확인 */}
+        <div className="user-signup-input signup-repw-input">
+          <input
+            type="password"
+            className="signup-input-box signup-repw-box"
+            placeholder="비밀번호 확인"
+            variant="outlined"
+            value={state.repassword}
+            onChange={(e) => setState({ ...state, repassword: e.target.value })}
+          />
         </div>
-        &nbsp;&nbsp;
-        {/* 계좌 입력 */}
-        <div className="signup-input-sub2">
-          {state.accounts.map((account, index) => (
-            <div key={index} className="signup-input2">
-              <input
-                type="number"
-                className="input"
-                placeholder={`계좌 ${index + 1}`}
-                variant="outlined"
-                value={account}
-                onClick={() => openModal(index)}
-              />
-              <span className="border"></span>
-              {/* 계좌 제거 버튼 */}
-              {index > 0 && (
+
+        {/* 이름 입력 */}
+        <div className="user-signup-input signup-name-input">
+          <input
+            type="text"
+            className="signup-input-box signup-name-box"
+            placeholder="이름"
+            variant="outlined"
+            value={state.name}
+            onChange={(e) => setState({ ...state, name: e.target.value })}
+          />
+        </div>
+
+        {/* 나이 입력 */}
+        <div className="user-signup-input">
+          <div className="user-signup-input signup-age-input">
+            <input
+              type="number"
+              className="signup-input-box signup-age-box"
+              placeholder="나이"
+              variant="outlined"
+              value={state.age}
+              onChange={(e) => setState({ ...state, age: e.target.value })}
+            />
+          </div>
+          {/* 소득 입력 */}
+          <div className="user-signup-input signup-salary-input">
+            <input
+              type="number"
+              className="signup-input-box signup-salary-box"
+              placeholder="연봉"
+              variant="outlined"
+              value={state.salary}
+              onChange={(e) => setState({ ...state, salary: e.target.value })}
+            />
+          </div>
+        </div>
+
+        <div className="user-signup-input-sub">
+          {/* 은행 입력 */}
+          <div className="signup-input-bank-container">
+            {state.banks.map((bank, index) => (
+              <div
+                key={index}
+                className="signup-bank-input"
+                style={{ '--banktop': index * -1 + 'px' }}
+              >
+                <input
+                  type="text"
+                  className="signup-input-box signup-bank-box"
+                  placeholder={`은행`}
+                  variant="outlined"
+                  value={bank}
+                  onClick={() => openModal(index)}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* 계좌 입력 */}
+          <div className="signup-input-account-container">
+            {state.accounts.map((account, index) => (
+              <div
+                key={index}
+                className="signup-account-input"
+                style={{ '--accounttop': index * -1 + 'px' }}
+              >
+                <input
+                  type="number"
+                  className="signup-input-box signup-account-box"
+                  placeholder={`계좌 ${index + 1}`}
+                  variant="outlined"
+                  value={account}
+                  onClick={() => openModal(index)}
+                />
+
+                {/* 계좌 제거 버튼 */}
                 <Icon
                   icon="ph:minus-fill"
                   color="#007bff"
@@ -272,34 +287,35 @@ const SignUpTemplate = () => {
                   height="30"
                   onClick={() => handleRemoveAccount(index)}
                 />
-              )}
-            </div>
-          ))}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* 계좌 추가 버튼 */}
-      <div className="signup-input2">
-        <Icon
-          icon="ph:plus-fill"
-          color="#007bff"
-          width="30"
-          height="30"
+        {/* 계좌 추가 버튼 */}
+        <button
+          className="signup-button account-plus-btn"
           onClick={handleAddAccount}
-        />
-      </div>
-      <br />
-      <div className="signup-input2">
-        <button className="signup-button" onClick={onSignUpButtonClick}>
-          가입하기
+        >
+          계좌 추가
         </button>
       </div>
+
+      {/* 가입하기 버튼 */}
+      <button
+        className="signup-button signup-btn"
+        onClick={onSignUpButtonClick}
+      >
+        가입하기
+      </button>
+
       {/* 모달 창 */}
       {isModalOpen && (
         <AccountModal
           closeModal={closeModal}
           handleAccountChange={handleAccountChange}
           index={selectedAccountIndex}
+          accounts={state.accounts}
         />
       )}
     </div>
