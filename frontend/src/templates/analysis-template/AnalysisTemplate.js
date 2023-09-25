@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import handleMonthlyAnalysis from '../../utils/handleMonthlyAnalysis';
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
+import { Icon } from '@iconify/react';
 const AnalysisTemplate = () => {
   // useLocation 훅을 사용하여 현재 경로의 search를 읽어옵니다.
   const location = useLocation();
@@ -71,14 +72,64 @@ const AnalysisTemplate = () => {
     'rgba(189, 236, 235, 0.53)',
   ]; // 차트의 섹션 색상 배열
 
+  const dateObj = new Date(currentMonth);
+  // 월을 가져와서 "월"로 변환
+  const monthNames = [
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월',
+  ];
+  const curMonth = monthNames[dateObj.getUTCMonth()];
+  // currentMonth 값 출력
+  console.log('현재 월: ' + curMonth);
+
+  // 월 변경 함수
+  const changeMonth = (delta) => {
+    if (delta === -1 && !responseData.data.hasBeforeMonthlyGoal) {
+      // 이전 월로 이동하는 경우, 이전 월 데이터가 없을 때 클릭이 무시됩니다.
+      return;
+    }
+
+    if (delta === 1 && !responseData.data.hasAfterMonthlyGoal) {
+      // 다음 월로 이동하는 경우, 다음 월 데이터가 없을 때 클릭이 무시됩니다.
+      return;
+    }
+    // currentMonth를 JavaScript Date 객체로 변환
+    const dateObj = new Date(currentMonth);
+    // delta 값에 따라 월을 변경
+    dateObj.setUTCMonth(dateObj.getUTCMonth() + delta);
+    // 변경된 월을 문자열로 변환
+    const newMonth = dateObj.toISOString();
+    // URL을 업데이트하여 페이지 새로고침 없이 변경된 월로 이동
+    window.location.href = `/analysis?currentMonth=${newMonth}`;
+  };
+
   console.log('응답데이터 : ', aiText);
   return (
     <div>
       <h1>소비분석 페이지</h1>
       {/* currentMonth 값을 출력 */}
       {/* 여기에 소비 분석 컴포넌트 또는 내용을 추가합니다. */}
-
-      <p>currentMonth: {currentMonth ? currentMonth.toString() : 'N/A'}</p>
+      <p> {curMonth}</p>
+      <div className="col-end">
+        <Icon
+          icon="bi:arrow-right-circle-fill"
+          onClick={() => changeMonth(1)}
+        />
+        <Icon
+          icon="bi:arrow-left-circle-fill"
+          onClick={() => changeMonth(-1)}
+        />
+      </div>
       <div className="chart-content">
         {responseData.data && (
           <DonutChart
