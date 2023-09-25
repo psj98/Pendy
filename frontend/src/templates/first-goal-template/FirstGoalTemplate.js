@@ -68,6 +68,10 @@ const FirstGoalTemplate = () => {
   };
   const handleInputChange = (categoryName, e) => {
     const newValue = e.target.value;
+
+    // 숫자가 아닌 값이 입력되면 함수를 종료
+    if (isNaN(newValue)) return;
+
     setInputValues((prevValues) => {
       const updatedValues = {
         ...prevValues,
@@ -75,8 +79,8 @@ const FirstGoalTemplate = () => {
       };
 
       // inputValues를 기반으로 series 업데이트
-      const updatedSeries = monthlyAvg.map(
-        (category) => updatedValues[category.categoryId] || 0,
+      const updatedSeries = monthlyAvg.map((category) =>
+        parseInt(updatedValues[category.categoryName] || 0),
       );
 
       setSeries(updatedSeries);
