@@ -23,6 +23,7 @@ import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @EnableScheduling
+@Slf4j
 public class GoalServiceImpl implements GoalService {
 
     private final TotalGoalRepository totalGoalRepository;
@@ -81,7 +83,11 @@ public class GoalServiceImpl implements GoalService {
      */
     @Override
     public void registGoal(UUID memberId, GoalRegistRequestDto goalRegistRequestDto) throws BaseException {
+        log.info("member"+ memberId);
+        log.info("dto" + goalRegistRequestDto.getGoalByCategoryList().toString());
         Optional<Member> memberOptional = memberRepository.findById(memberId);
+
+
 
         // 사용자 정보 체크
         if (!memberOptional.isPresent()) {
@@ -91,21 +97,26 @@ public class GoalServiceImpl implements GoalService {
         Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, Timestamp.valueOf(LocalDateTime.now()));
 
         // 목표 정보 체크
-        if (totalGoalOptional.isPresent()) {
-            throw new BaseException(BaseResponseStatus.TOTAL_GOAL_IS_ALREADY_PRESENT);
-        }
+//        if (totalGoalOptional.isPresent()) {
+//            System.out.println("testtesttest");
+//            throw new BaseException(BaseResponseStatus.TOTAL_GOAL_IS_ALREADY_PRESENT);
+//        }
 
         // 월별 목표 정보 저장
         Integer goalAmount = goalRegistRequestDto.getGoalAmount();
         List<GoalByCategoryRegistResponseDto> goalByCategoryList = goalRegistRequestDto.getGoalByCategoryList();
+        TotalGoal newTotalGoal = totalGoalOptional.get();
 
-        TotalGoal totalGoal = TotalGoal.builder()
+        TotalGoal totalGoal = newTotalGoal.toBuilder()
                 .member(memberOptional.get())
                 .goalAmount(goalAmount)
                 .goalDate(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
 
+        log.info(totalGoal.toString());
         totalGoalRepository.save(totalGoal);
+
+        log.info("success");
 
         // 카테고리 별로 목표 저장
         for (GoalByCategoryRegistResponseDto goalByCategoryRegistResponseDto : goalByCategoryList) {

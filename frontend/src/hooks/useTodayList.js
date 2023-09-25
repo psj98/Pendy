@@ -11,21 +11,24 @@ function useTodayList(regDate) {
   useEffect(() => {
     const getTodayList = async () => {
       try {
-        const data = {
-          lastRegDate: regDate,
-        };
         const serverUrl = '/api/transactions/today-list';
-        const response = await authAxiosCreate.post(serverUrl, data);
-        setTodayList(response.data);
-        setLoading(false);
+        const response = await authAxiosCreate.post(serverUrl, {
+          lastRegDate: regDate,
+        });
+        if (response.data.code === 1000) {
+          console.log('invoke todayList success');
+          setTodayList(response.data);
+          setLoading(false);
+        } else {
+          console.error(response.data.code + ' ' + response.data.message);
+        }
       } catch (error) {
-        console.error('소비 내역을 불러오는 중 에러가 발생했습니다.', error);
+        console.error('invoke todayList failed', error);
         setLoading(false);
       }
     };
-
     getTodayList();
-  }, []);
+  }, [regDate]);
 
   return { todayList, loading };
 }

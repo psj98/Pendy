@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './SignUpTemplate.css';
 import { Icon } from '@iconify/react';
 import handleSignup from '../../utils/handleSignup';
-import AccountModal from '../../components/signup/account-modal/AccountModal';
+import AccountModal from '../../components/modal/account-modal/AccountModal';
 import { useNavigate } from 'react-router-dom';
 import handleDuplicate from '../../utils/handleCheckDuplicate';
 

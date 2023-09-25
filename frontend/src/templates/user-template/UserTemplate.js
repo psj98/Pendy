@@ -9,6 +9,7 @@ import GoalBar from '../../components/common/goal-bar/GoalBar';
 import DayMonthButton from '../../components/main/day-month-button/DayMonthButton';
 import handleCalender from '../../utils/handleCalender';
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 
 //유저 전용 메인 페이지
 const UserTemplate = () => {
@@ -41,7 +42,7 @@ const UserTemplate = () => {
 
     fetchData();
   }, [currentMonth]);
-  console.log('usertemplate ' + currentMonth);
+  console.log('현재 월 : ' + currentMonth);
 
   // 달력을 이전달로 넘기는 기능
   const prevMonth = () => {
@@ -64,7 +65,7 @@ const UserTemplate = () => {
   // 현재 월의 총 일 수 계산
   const totalDaysInCurrentMonth = lastDayOfCurrentMonth.getDate();
 
-  console.log('현재 월의 총 일 수:', totalDaysInCurrentMonth);
+  // console.log('현재 월의 총 일 수:', totalDaysInCurrentMonth);
 
   // DayMonthButton에서 선택된 옵션을 받아와서 상태 업데이트
   const handleOptionChange = (option) => {
@@ -127,10 +128,10 @@ const UserTemplate = () => {
     chartData = statisticData.map((item) => item.amount);
   }
 
-  console.log('차트 데이터 : ', chartData);
-  console.log('소비 금액 : ', consumption_amount);
-  console.log('목표 금액 : ', consumption_goal);
-
+  // console.log('차트 데이터 : ', chartData);
+  // console.log('소비 금액 : ', consumption_amount);
+  // console.log('목표 금액 : ', consumption_goal);
+  console.log('currentMonth in UserTemplate: ', currentMonth);
   return (
     <div className="user">
       <div className="calender-container">
@@ -186,6 +187,16 @@ const UserTemplate = () => {
             <div className="spend-text-black">오늘의 고정 지출</div>
           )}
         </div>
+      </div>
+      <div>
+        {/* 소비분석 페이지로 이동하면서 currentMonth 값을 전달 */}
+        <Link
+          to={`/analysis?currentMonth=${encodeURIComponent(
+            currentMonth.toISOString(),
+          )}`}
+        >
+          소비분석
+        </Link>
       </div>
     </div>
   );
