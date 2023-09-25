@@ -5,6 +5,7 @@ import handleMonthlyAnalysis from '../../utils/handleMonthlyAnalysis';
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
 import { Icon } from '@iconify/react';
+
 const AnalysisTemplate = () => {
   // useLocation 훅을 사용하여 현재 경로의 search를 읽어옵니다.
   const location = useLocation();
@@ -12,6 +13,9 @@ const AnalysisTemplate = () => {
   const currentMonth = searchParams.get('currentMonth');
 
   const [responseData, setResponseData] = useState([]);
+  const [goalByCategory, setGoalByCategory] = useState([]);
+  const [monthlyStatistic, setMonthlyStatistic] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,6 +23,8 @@ const AnalysisTemplate = () => {
         console.log('res', response.data);
         console.log('Load complete');
         setResponseData(response.data); // response 데이터를 상태로 저장
+        setGoalByCategory(response.data.data.goalByCategory);
+        setMonthlyStatistic(response.data.data.monthlyStatistic.amountByCategory);
       } catch (error) {
         console.log(error);
       }
@@ -53,6 +59,7 @@ const AnalysisTemplate = () => {
     // ai 텍스트
     aiText = responseData.data.totalGoal.aiAnlaysis;
   }
+
   const showLegend = false; // 범례를 표시할지 여부
   const legendFontSize = '12px'; // 범례의 글꼴 크기
   const showLabels = true; // 라벨 표시 여부
@@ -88,6 +95,18 @@ const AnalysisTemplate = () => {
     '11월',
     '12월',
   ];
+
+  const categoryNameToKor = {
+    food: '식비',
+    traffic: '교통',
+    online: '온라인 쇼핑',
+    offline: '오프라인 쇼핑',
+    cafe: '카페/간식',
+    housing: '고정지출',
+    fashion: '패션/미용',
+    culture: '문화/여가',
+  };
+
   const curMonth = monthNames[dateObj.getUTCMonth()];
   // currentMonth 값 출력
   console.log('현재 월: ' + curMonth);
@@ -123,17 +142,20 @@ const AnalysisTemplate = () => {
         <div className="analysis-left-container">
           <div className="change-month-div">
             <Icon
+              className={!responseData.hasBeforeMonthlyGoal ? "left-arrow" : "left-arrow-active"}
               icon="bi:arrow-left-circle-fill"
               onClick={() => changeMonth(-1)}
             />
-            <p> {curMonth}</p>
+            <h2 className='cur-month-text'>{curMonth}</h2>
             <Icon
+              className={!responseData.hasBeforeMonthlyGoal ? "right-arrow" : "right-arrow-active"}
               icon="bi:arrow-right-circle-fill"
               onClick={() => changeMonth(1)}
             />
           </div>
 
-          <div className="chart-content">
+          {/* 도넛 차트 */}
+          <div className="analysis-goal-chart">
             {responseData.data && (
               <DonutChart
                 series={chartData}
@@ -151,124 +173,66 @@ const AnalysisTemplate = () => {
               />
             )}
           </div>
-          <div className="diary-goal-container">
-            <div className="diary-goal-title">
-              <p>월간 분석</p>
+
+          <div className="category-bar-container">
+            <div className="analysis-category-bar-left">
+              {goalByCategory.slice(0, 4).map((category, index) => (
+                <div key={index} className="analysis-category-bar">
+                  <div className="analysis-category-name">
+                    {categoryNameToKor[category.categoryName]}
+                  </div>
+                  <div
+                    className="analysis-rectangle-label"
+                    style={{
+                      backgroundColor: chartColors[index],
+                    }}
+                  ></div>
+                  <div className='analysis-goal-bar'>
+                    <GoalBar
+                      color={chartColors[index]}
+                      current={monthlyStatistic[index].amount}
+                      goal={category.categoryGoalAmount}
+                      type={'default'}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="diary-goal">
-              <div
-                className="goal-indicator"
-                style={{ backgroundColor: '#FAF2E8' }}
-              ></div>
-              <p className="goal-text">{chartLabel[0]}</p>
-              <GoalBar
-                color={'#FAF2E8'}
-                current={chartData[0]}
-                goal={monthlyGoalsByCategory[0]}
-                type={'rectangle'}
-              />
-            </div>
-            <div className="diary-goal">
-              <div
-                className="goal-indicator"
-                style={{ backgroundColor: '#BDECEA' }}
-              ></div>
-              <p className="goal-text">{chartLabel[1]}</p>
-              <GoalBar
-                color={'#BDECEA'}
-                current={chartData[1]}
-                goal={monthlyGoalsByCategory[1]}
-                type={'rectangle'}
-              />
-            </div>
-            <div className="diary-goal">
-              <div
-                className="goal-indicator"
-                style={{ backgroundColor: '#DAB8F1' }}
-              ></div>
-              <p className="goal-text">{chartLabel[2]}</p>
-              <GoalBar
-                color={'#DAB8F1'}
-                current={chartData[2]}
-                goal={monthlyGoalsByCategory[2]}
-                type={'rectangle'}
-              />
-            </div>
-            <div className="diary-goal">
-              <div
-                className="goal-indicator"
-                style={{ backgroundColor: 'rgba(243, 213, 182, 0.63)' }}
-              ></div>
-              <p className="goal-text">{chartLabel[3]}</p>
-              <GoalBar
-                color={'rgba(243, 213, 182, 0.63)'}
-                current={chartData[3]}
-                goal={monthlyGoalsByCategory[3]}
-                type={'rectangle'}
-              />
-            </div>
-            <div className="diary-goal">
-              <div
-                className="goal-indicator"
-                style={{ backgroundColor: 'rgba(208, 228, 197, 0.42)' }}
-              ></div>
-              <p className="goal-text">{chartLabel[4]}</p>
-              <GoalBar
-                color={'rgba(208, 228, 197, 0.42)'}
-                current={chartData[4]}
-                goal={monthlyGoalsByCategory[4]}
-                type={'rectangle'}
-              />
-            </div>
-            <div className="diary-goal">
-              <div
-                className="goal-indicator"
-                style={{ backgroundColor: 'rgba(255, 170, 180, 0.50)' }}
-              ></div>
-              <p className="goal-text">{chartLabel[5]}</p>
-              <GoalBar
-                color={'rgba(255, 170, 180, 0.50)'}
-                current={chartData[5]}
-                goal={monthlyGoalsByCategory[5]}
-                type={'rectangle'}
-              />
-            </div>
-            <div className="diary-goal">
-              <div
-                className="goal-indicator"
-                style={{ backgroundColor: '#CFE4C5' }}
-              ></div>
-              <p className="goal-text">{chartLabel[6]}</p>
-              <GoalBar
-                color={'#CFE4C5'}
-                current={chartData[6]}
-                goal={monthlyGoalsByCategory[6]}
-                type={'rectangle'}
-              />
-            </div>
-            <div className="diary-goal">
-              <div
-                className="goal-indicator"
-                style={{ backgroundColor: 'rgba(189, 236, 235, 0.53)' }}
-              ></div>
-              <p className="goal-text">{chartLabel[7]}</p>
-              <GoalBar
-                color={'rgba(189, 236, 235, 0.53)'}
-                current={chartData[7]}
-                goal={monthlyGoalsByCategory[7]}
-                type={'rectangle'}
-              />
+            <div className="analysis-category-bar-right">
+              {goalByCategory.slice(4, 8).map((category, index) => (
+                <div key={index} className="analysis-category-bar">
+                  <div className="analysis-category-name">
+                    {categoryNameToKor[category.categoryName]}
+                  </div>
+                  <div
+                    className="analysis-rectangle-label"
+                    style={{
+                      backgroundColor: chartColors[index + 4],
+                    }}
+                  ></div>
+                  <div className='analysis-goal-bar'>
+                    <GoalBar
+                      color={chartColors[index + 4]}
+                      current={monthlyStatistic[index + 4].amount}
+                      goal={category.categoryGoalAmount}
+                      type={'default'}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-        <div className="diary-goal-container">
-          <div className="diary-goal-title">
-            <div>나마니 월간분석</div>
+        <div className="analysis-right-container">
+          <h2 className="analysis-monthly-ai-title">
+            나마니 월간분석
+          </h2>
+          <div className='analysis-monthly-ai-text'>
+            {aiText}
           </div>
-          <div>{aiText}</div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
