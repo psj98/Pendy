@@ -6,7 +6,7 @@ const RepasswordTemplate = () => {
 
   return (
     <div className="repassword">
-      <h1 className="repassword-title">비밀번호 재설정</h1>
+      <h1 className="repassword-title">비밀번호 변경</h1>
 
       <div className="repassword-container-box">
         {/* 비밀번호 입력 */}
@@ -14,7 +14,7 @@ const RepasswordTemplate = () => {
           <input
             className="repassword-input-box repassword-first-box"
             type="password"
-            placeholder="비밀번호를 입력해주세요"
+            placeholder="비밀번호"
             variant="outlined"
             value={state.password}
             onChange={(e) => setState({ ...state, password: e.target.value })}
@@ -26,7 +26,7 @@ const RepasswordTemplate = () => {
           <input
             className="repassword-input-box repassword-second-box"
             type="password"
-            placeholder="비밀번호를 다시 한번 입력해주세요"
+            placeholder="비밀번호 재입력"
             variant="outlined"
             value={state.repassword}
             onChange={(e) => setState({ ...state, repassword: e.target.value })}
