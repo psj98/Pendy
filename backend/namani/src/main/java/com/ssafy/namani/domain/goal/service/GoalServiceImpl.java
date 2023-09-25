@@ -228,6 +228,9 @@ public class GoalServiceImpl implements GoalService {
         Integer salary = goalDetailRequestDto.getSalary();
         Timestamp curDate = goalDetailRequestDto.getCurDate();
 
+        System.out.printf("gimoti %d, %d", age, salary);
+        System.out.println(curDate);
+
         /* 월별 목표 조회 */
         TotalGoalDetailResponseDto totalGoal = getTotalGoal(memberId, curDate);
         System.out.println(totalGoal.getId());
@@ -244,6 +247,7 @@ public class GoalServiceImpl implements GoalService {
         /* 이전 3달간 연령대 + 연봉대에 맞는 평균 소비 조회 */
         List<AvgConsumptionAmountForThreeMonthResponseDto> avgConsumptionAmountAvg = avgConsumptionAmountService.getAvgConsumptionAmountForThreeMonth(age, salary, curDate);
 
+        log.info("1234"+ avgConsumptionAmountAvg.toString());
         /* 목표 조회 데이터 정보 저장 및 반환 */
         GoalDetailResponseDto goalDetailResponseDto = GoalDetailResponseDto.builder()
                 .totalGoal(totalGoal)
@@ -253,6 +257,7 @@ public class GoalServiceImpl implements GoalService {
                 .avgConsumptionAmountAvg(avgConsumptionAmountAvg)
                 .build();
 
+        log.info("hid" +  goalDetailResponseDto.toString());
         return goalDetailResponseDto;
     }
 

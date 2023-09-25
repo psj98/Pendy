@@ -15,6 +15,7 @@ import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoReposit
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @EnableScheduling
+@Slf4j
 public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountService {
 
     private final AvgConsumptionAmountRepository avgConsumptionAmountRepository;
@@ -204,6 +206,8 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
 
             avgConsumptionAmountAvgList.set(iAvgConsumptionAmountAvg.getCategoryId() - 1, newAmountByCategory);
         }
+
+        log.info("1"+ avgConsumptionAmountAvgList.toString());
 
         return avgConsumptionAmountAvgList;
     }
