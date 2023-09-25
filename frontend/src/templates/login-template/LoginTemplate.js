@@ -34,7 +34,7 @@ const LoginTemplate = () => {
           if (isCheckGoal) {
             navigate('/', { replace: true });
           } else {
-            navigate('/goal', { replace: true });
+            navigate('/first-goal', { replace: true });
           }
         });
       } else {

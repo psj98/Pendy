@@ -62,7 +62,7 @@ const GoalTemplate = () => {
         const monthlyStatisticAmount =
           response.data.data.monthlyStatistic.totalAmount;
         console.log(totalGoal);
-        console.log(response.data.data);
+        console.log(response.data);
 
         setMonthlyTotalAmount(monthlyStatisticAmount);
         setGoalByCategory(goalByCategoryList);
