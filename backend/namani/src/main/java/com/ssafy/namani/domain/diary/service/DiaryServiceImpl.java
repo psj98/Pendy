@@ -348,7 +348,7 @@ public class DiaryServiceImpl implements DiaryService {
         Boolean hasBeforeMonthlyGoal = true;
         Optional<TotalGoal> beforeMonthGoal = totalGoalRepository.findByCurDate(memberId, beforeMonthTimestamp);
         // 목표 없음 ERROR
-        if (beforeMonthGoal.isEmpty()) {
+        if (beforeMonthGoal.isEmpty() || beforeMonthGoal.get().getGoalAmount() == 0) {
             hasBeforeMonthlyGoal = false;
         }
 
@@ -363,7 +363,7 @@ public class DiaryServiceImpl implements DiaryService {
         Boolean hasAfterMonthlyGoal = true;
         Optional<TotalGoal> afterMonthGoal = totalGoalRepository.findByCurDate(memberId, afterMonthTimestamp);
         // 목표 없음 ERROR
-        if (afterMonthGoal.isEmpty()) {
+        if (afterMonthGoal.isEmpty() || afterMonthGoal.get().getGoalAmount() == 0) {
             hasAfterMonthlyGoal = false;
         }
 
