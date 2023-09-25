@@ -78,13 +78,12 @@ const LoginTemplate = () => {
           <FaUser className="login-icon" />
           <input
             className="login-input-box email-box"
-            placeholder="이메일을 입력해주세요"
+            placeholder="이메일"
             variant="outlined"
             value={state.email}
             onChange={(e) => setState({ ...state, email: e.target.value })}
             onKeyDown={onPressEnterKey}
           />
-          <span className="border"></span>
         </div>
 
         {/* 비밀번호 입력 */}
@@ -93,13 +92,12 @@ const LoginTemplate = () => {
           <input
             type="password"
             className="login-input-box pw-box"
-            placeholder="비밀번호를 입력해주세요"
+            placeholder="비밀번호"
             variant="outlined"
             value={state.password}
             onChange={(e) => setState({ ...state, password: e.target.value })}
             onKeyDown={onPressEnterKey}
           />
-          <span className="border"></span>
         </div>
 
         {/* 로그인 버튼 */}
