@@ -68,7 +68,9 @@ public class GoalController {
                 throw new BaseException(BaseResponseStatus.SESSION_EXPIRATION);
             }
 
+            System.out.println("test");
             UUID memberId = jwtService.getMemberIdFromToken(token); // token으로 memberId 조회
+            System.out.println("testets");
             goalService.registGoal(memberId, goalRegistRequestDto);
             log.info("call comp");
             return baseResponseService.getSuccessNoDataResponse();

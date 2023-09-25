@@ -5,6 +5,8 @@ import BarChart from '../../components/common/bar-chart/BarChart';
 import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
 import handleRegistGoal from '../../utils/handleRegistGoal';
+import { useNavigate } from 'react-router-dom';
+
 const FirstGoalTemplate = () => {
   const [series, setSeries] = useState([]);
   const [monthlyAvg, setMonthlyAvg] = useState([]);
@@ -32,6 +34,8 @@ const FirstGoalTemplate = () => {
     '#CFE4C5',
     'rgba(189, 236, 235, 0.53)',
   ];
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const age = sessionStorage.getItem('age');
@@ -109,7 +113,13 @@ const FirstGoalTemplate = () => {
         };
       });
 
-      await handleRegistGoal(goalAmount, goal);
+      const response = await handleRegistGoal(goalAmount, goal);
+      if (response.data.code === 6001) {
+        alert(response.data.message);
+      } else {
+        alert('목표 설정이 완료되었습니다.');
+        navigate('/');
+      }
     } catch (error) {
       console.log(error);
     }
