@@ -84,27 +84,27 @@ public class GoalServiceImpl implements GoalService {
      * @throws BaseException
      */
     @Override
-    @Transactional
     public void registGoal(UUID memberId, GoalRegistRequestDto goalRegistRequestDto) throws BaseException {
-
-
         log.info("call the method reigstGoal");
-        Optional<Member> memberOptional = memberRepository.findById(memberId);
-        Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByMember_Id(memberOptional.get().getId());
-
-        Long totalGoalId = totalGoalOptional.get().getId();
-        Optional<List<GoalByCategory>> allByTotalGoalId = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId);
-
 
         // 사용자 정보 체크
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
         if (!memberOptional.isPresent()) {
             throw new BaseException(BaseResponseStatus.NOT_FOUND_MEMBER);
         }
 
+        // 월별 목표 가져오기
+        Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByMember_Id(memberOptional.get().getId());
+        TotalGoal newTotalGoal = totalGoalOptional.get();
+        Long totalGoalId = newTotalGoal.getId();
 
-        if(allByTotalGoalId.isPresent()){
-            goalByCategoryRepository.deleteByTotalGoalId(totalGoalId);
-        }
+//        Optional<List<GoalByCategory>> allByTotalGoalId = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId);
+//
+//        log.info("allBytotalgoalId" + allByTotalGoalId);
+
+//        if(allByTotalGoalId.isPresent()){
+//            goalByCategoryRepository.deleteByTotalGoalId(totalGoalId);
+//        }
 
         // 목표 정보 체크
 //        // 이미 존재하면 그냥 지워버리기.
@@ -115,7 +115,6 @@ public class GoalServiceImpl implements GoalService {
         // 월별 목표 정보 저장
         Integer goalAmount = goalRegistRequestDto.getGoalAmount();
         List<GoalByCategoryRegistResponseDto> goalByCategoryList = goalRegistRequestDto.getGoalByCategoryList();
-        TotalGoal newTotalGoal = totalGoalOptional.get();
 
         TotalGoal totalGoal = newTotalGoal.toBuilder()
                 .member(memberOptional.get())
@@ -137,13 +136,12 @@ public class GoalServiceImpl implements GoalService {
                 throw new BaseException(BaseResponseStatus.CATEGORY_NOT_FOUND);
             }
 
-            GoalByCategory goalByCategory = GoalByCategory.builder()
-                    .totalGoal(totalGoal)
-                    .category(categoryOptional.get())
+            GoalByCategory goalByCategory = goalByCategoryRepository.findByCategoryIdTotalGoalId(goalByCategoryRegistResponseDto.getCategoryId(), totalGoalId).get();
+            GoalByCategory newGoalByCategory = goalByCategory.toBuilder()
                     .categoryGoalAmount(goalByCategoryRegistResponseDto.getCategoryGoalAmount())
                     .build();
 
-            goalByCategoryRepository.save(goalByCategory);
+            goalByCategoryRepository.save(newGoalByCategory);
         }
     }
 
