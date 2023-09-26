@@ -19,13 +19,13 @@ def load_documents(source_dir):
 
 if __name__=="__main__":
 
-    db_path = "./vector_faissdb"
+    db_path = "../vector_faissdb"
     os.environ["OPENAI_API_KEY"] = apikey
     embeddings = OpenAIEmbeddings()
 
     # file_name = "./news.txt"
     #유머 파일은 청크 다르게 만들기
-    file_path = './TextData'
+    file_path = '../TextData'
     # humor_path = './humor'
 
     transcript = load_documents(file_path)
