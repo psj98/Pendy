@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: 'The Jamsil 3';
 }
 
 .emotion-container {
@@ -95,6 +96,7 @@
   align-items: center;
   width: 97%;
   margin-bottom: 10px;
+  font-family: 'The Jamsil 3';
 }
 
 .emotion-option-button {
@@ -129,6 +131,7 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  font-family: 'The Jamsil 3';
 }
 
 .emotion-button:hover {
