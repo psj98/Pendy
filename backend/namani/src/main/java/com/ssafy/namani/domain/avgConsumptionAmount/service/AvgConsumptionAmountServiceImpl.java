@@ -128,16 +128,10 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
         }
 
         // 연령대, 연봉대로 AgeSalary 정보 가져오기
-        Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
-
-        // AgeSalary 정보가 없는 경우
-        if (!ageSalaryOptional.isPresent()) {
-            throw new BaseException(BaseResponseStatus.NO_AGE_SALARY_INFO_BY_AGE_SALARY);
-        }
+        AgeSalary ageSalary = ageSalaryRepository.findByAgeSalary(age, salary).get();
 
         // 모든 거래 내역에 대해 평균 소비 정보 업데이트 실행
         List<TransactionInfo> transactionInfoList = transactionInfoOptional.get();
-        AgeSalary ageSalary = ageSalaryOptional.get();
         for (TransactionInfo transactionInfo : transactionInfoList) {
             // 입금인 경우, 스킵
             if (transactionInfo.getTransactionType() == 1) {
