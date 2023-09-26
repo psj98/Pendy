@@ -98,10 +98,7 @@ public class MemberServiceImpl implements MemberService {
         AgeSalary ageSalary = ageSalaryOptional.get();
         Integer peopleNum = ageSalary.getPeopleNum() + 1; // 인원수
 
-        AgeSalary newAgeSalary = AgeSalary.builder()
-                .id(ageSalary.getId())
-                .age(ageSalary.getAge())
-                .salary(ageSalary.getSalary())
+        AgeSalary newAgeSalary = ageSalary.toBuilder()
                 .peopleNum(peopleNum)
                 .build();
 
