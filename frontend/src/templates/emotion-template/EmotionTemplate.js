@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import './EmotionTemplate.css';
 import useTodayList from '../../hooks/useTodayList';
-import { CiFaceSmile, CiFaceMeh, CiFaceFrown } from 'react-icons/ci';
-import { TfiFaceSmile, TfiFaceSad } from 'react-icons/tfi';
 import handleEmotionRegist from '../../utils/handleEmotionRegist';
 import { useNavigate } from 'react-router-dom';
 
 const EmotionTemplate = () => {
   const regDate = '2023-09-25T00:00:00';
-  //eslint-disable-next-line
+  const emoji = [1, 2, 3, 4, 5];
   const { todayList, loading } = useTodayList(regDate);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [emotionList, setEmotionList] = useState([]);
@@ -22,11 +20,9 @@ const EmotionTemplate = () => {
     navigate('/diary', { replace: true });
   }
 
-  //console.log(todayList);
   console.log(todayList.data);
 
   // emotionList에 데이터 추가
-  //eslint-disable-next-line
   const addEmotionData = (id, emotionId) => {
     const existingIndex = emotionList.findIndex(
       (item) => item.transactionId === id,
@@ -83,151 +79,125 @@ const EmotionTemplate = () => {
 
   return (
     <div className="emotion-template">
-      <div className="emotion-title">
-        <div className="emotion-main-title">소비 자가진단</div>
-        <div className="emotion-sub-title">
-          오늘 소비한 내역에 대한 내 감정을 표현해주세요!
+      <div className="emotion-container">
+        <div className="emotion-title">
+          <h1 className="emotion-main-title">소비 자가진단</h1>
+          <p className="emotion-sub-title">
+            오늘 소비한 내역에 대한 내 감정을 표현해주세요!
+          </p>
         </div>
-      </div>
-      <div className="emotion-content">
-        <div className="emotion-option">
-          <div className="emotion-option-left">
-            {todayList.data.map(
-              (list, index) =>
-                index % 2 === 0 && (
-                  <div key={index} className="emotion-list">
-                    <div className="emotion-content-container">
-                      <div className="emotion-text">{list.name}</div>
-                      <div className="emotion-text">
-                        {list.transactionAmount}원
+        <div className="emotion-content">
+          <div className="emotion-option">
+            <div className="emotion-option-left">
+              {todayList.data.map(
+                (list, index) =>
+                  index % 2 === 0 && (
+                    <div key={index} className="emotion-list">
+                      <div className="emotion-content-container">
+                        <div className="emotion-text">{list.name}</div>
+                        <div className="emotion-text">
+                          {list.transactionAmount}원
+                        </div>
                       </div>
-                    </div>
-                    <div className="emotion-option-button-container">
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={5}
-                          checked={selectedOptions[index] === 5}
-                          onChange={() => handleRadioChange(index, 5)}
+                      <div className="emotion-option-button-container">
+                        {emoji.map((num) => (
+                          <div className="emotion-option-button">
+                            <input
+                              type="radio"
+                              name={`chart-option-${index}`}
+                              value={num.num}
+                              checked={selectedOptions[index] === num}
+                              onChange={() => handleRadioChange(index, num)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="emotion-choose">
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-terrible.png"
+                          alt="매우나쁨"
                         />
-                      </div>
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={4}
-                          checked={selectedOptions[index] === 4}
-                          onChange={() => handleRadioChange(index, 4)}
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-bad.png"
+                          alt="나쁨"
                         />
-                      </div>
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={3}
-                          checked={selectedOptions[index] === 3}
-                          onChange={() => handleRadioChange(index, 3)}
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-soso.png"
+                          alt="보통"
                         />
-                      </div>
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={2}
-                          checked={selectedOptions[index] === 2}
-                          onChange={() => handleRadioChange(index, 2)}
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-good.png"
+                          alt="좋음"
                         />
-                      </div>
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={1}
-                          checked={selectedOptions[index] === 1}
-                          onChange={() => handleRadioChange(index, 1)}
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-amazing.png"
+                          alt="매우좋음"
                         />
                       </div>
                     </div>
-                    <div className="emotion-choose">
-                      <TfiFaceSmile />
-                      <CiFaceSmile />
-                      <CiFaceMeh />
-                      <CiFaceFrown />
-                      <TfiFaceSad />
-                    </div>
-                  </div>
-                ),
-            )}
-          </div>
-          <div className="emotion-option-right">
-            {todayList.data.map(
-              (list, index) =>
-                index % 2 !== 0 && (
-                  <div key={index} className="emotion-list">
-                    <div className="emotion-content-container">
-                      <div className="emotion-text">{list.name}</div>
-                      <div className="emotion-text">
-                        {list.transactionAmount}원
+                  ),
+              )}
+            </div>
+            <div className="emotion-option-right">
+              {todayList.data.map(
+                (list, index) =>
+                  index % 2 !== 0 && (
+                    <div key={index} className="emotion-list">
+                      <div className="emotion-content-container">
+                        <div className="emotion-text">{list.name}</div>
+                        <div className="emotion-text">
+                          {list.transactionAmount}원
+                        </div>
                       </div>
-                    </div>
-                    <div className="emotion-option-button-container">
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={5}
-                          checked={selectedOptions[index] === 5}
-                          onChange={() => handleRadioChange(index, 5)}
+                      <div className="emotion-option-button-container">
+                        {emoji.map((num) => (
+                          <div className="emotion-option-button">
+                            <input
+                              type="radio"
+                              name={`chart-option-${index}`}
+                              value={num.num}
+                              checked={selectedOptions[index] === num}
+                              onChange={() => handleRadioChange(index, num)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="emotion-choose">
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-terrible.png"
+                          alt="매우나쁨"
                         />
-                      </div>
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={4}
-                          checked={selectedOptions[index] === 4}
-                          onChange={() => handleRadioChange(index, 4)}
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-bad.png"
+                          alt="나쁨"
                         />
-                      </div>
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={3}
-                          checked={selectedOptions[index] === 3}
-                          onChange={() => handleRadioChange(index, 3)}
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-soso.png"
+                          alt="보통"
                         />
-                      </div>
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={2}
-                          checked={selectedOptions[index] === 2}
-                          onChange={() => handleRadioChange(index, 2)}
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-good.png"
+                          alt="좋음"
                         />
-                      </div>
-                      <div className="emotion-option-button">
-                        <input
-                          type="radio"
-                          name={`chart-option-${index}`}
-                          value={1}
-                          checked={selectedOptions[index] === 1}
-                          onChange={() => handleRadioChange(index, 1)}
+                        <img
+                          className="face-emoji"
+                          src="/emoji-img/emoji-amazing.png"
+                          alt="매우좋음"
                         />
                       </div>
                     </div>
-                    <div className="emotion-choose">
-                      <TfiFaceSmile />
-                      <CiFaceSmile />
-                      <CiFaceMeh />
-                      <CiFaceFrown />
-                      <TfiFaceSad />
-                    </div>
-                  </div>
-                ),
-            )}
+                  ),
+              )}
+            </div>
           </div>
         </div>
         <div className="emotion-button-container">

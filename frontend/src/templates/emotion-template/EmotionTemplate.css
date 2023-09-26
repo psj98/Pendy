@@ -2,37 +2,39 @@
 
 .emotion-template {
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emotion-container {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: 90vh;
+  width: 90%;
 }
 
 .emotion-title {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
   width: 100%;
-  height: 10vh;
-  margin-bottom: 30px;
+  margin: 20px 0;
 }
 
-.emotion-main-title {
-  margin-left: 20px;
-  font-size: 30px;
-  font-weight: 700;
-}
 .emotion-sub-title {
-  margin-left: 10px;
-  font-size: 20px;
+  margin-left: 20px;
+  align-self: self-end;
+  font-size: medium;
+  color: #909090;
+  font-weight: bold;
 }
 
 .emotion-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 90%;
+  height: 450px;
+  overflow: auto;
 }
 
 .emotion-option {
@@ -44,24 +46,23 @@
 }
 
 .emotion-option-left {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
   height: 100%;
-  border-right: 1px solid black;
+  border-right: 1px solid rgb(200, 200, 200);
 }
 
 .emotion-option-right {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
   height: 100%;
+  border-left: 1px solid rgb(200, 200, 200);
 }
 
 .emotion-list {
@@ -70,6 +71,7 @@
   justify-content: center;
   align-items: center;
   width: 80%;
+  margin-bottom: 25px;
 }
 
 .emotion-content-container {
@@ -82,8 +84,8 @@
 }
 
 .emotion-text {
-  font-weight: 700;
-  font-size: 16px;
+  font-size: medium;
+  font-weight: bold;
 }
 
 .emotion-option-button-container {
@@ -91,9 +93,10 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 97%;
   margin-bottom: 10px;
 }
+
 .emotion-option-button {
   display: flex;
 }
@@ -104,18 +107,16 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 20px;
 }
-.emotion- .emotion-button {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+
+.face-emoji {
+  width: 35px;
 }
 
 .emotion-button-container {
   display: flex;
-  justify-content: right;
+  justify-content: center;
+  margin-top: 30px;
   width: 90%;
 }
 
@@ -123,9 +124,13 @@
   background-color: #007bff;
   color: white;
   border: none;
-  width: 15%;
+  width: 10%;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+}
+
+.emotion-button:hover {
+  background-color: #0056b3;
 }
