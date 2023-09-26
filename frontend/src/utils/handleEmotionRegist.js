@@ -7,8 +7,8 @@ const handleEmotionRegist = async (emotionList) => {
   const serverUrl = '/api/diaries/regist';
   try {
     const response = await authAxiosCreate.post(serverUrl, emotionList);
-    const goalResponse = response.data.data.check;
-    return goalResponse;
+    console.log(response);
+    return response;
   } catch (error) {
     console.error('Goal Check failed', error);
     throw error;
