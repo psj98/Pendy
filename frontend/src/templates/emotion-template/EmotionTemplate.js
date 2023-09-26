@@ -23,16 +23,28 @@ const EmotionTemplate = () => {
   }
 
   //console.log(todayList);
-  //console.log(todayList.data);
+  console.log(todayList.data);
 
   // emotionList에 데이터 추가
   //eslint-disable-next-line
-  const addEmotionData = (transactionId, emotionId) => {
-    const newEmotionData = {
-      transactionId,
-      emotionId,
-    };
-    setEmotionList([...emotionList, newEmotionData]);
+  const addEmotionData = (id, emotionId) => {
+    const existingIndex = emotionList.findIndex(
+      (item) => item.transactionId === id,
+    );
+    if (existingIndex !== -1) {
+      const updatedEmotionList = [...emotionList];
+      updatedEmotionList[existingIndex] = {
+        transactionId: id,
+        emotionId: emotionId,
+      };
+      setEmotionList(updatedEmotionList);
+    } else {
+      const newEmotionData = {
+        transactionId: id,
+        emotionId: emotionId,
+      };
+      setEmotionList([...emotionList, newEmotionData]);
+    }
   };
 
   // 각 옵션 변경
@@ -40,24 +52,32 @@ const EmotionTemplate = () => {
     const newSelectedOptions = [...selectedOptions];
     newSelectedOptions[index] = option;
     setSelectedOptions(newSelectedOptions);
+
+    const transactionId = todayList.data[index].id;
+    addEmotionData(transactionId, option);
   };
 
   // 감정 등록 및 일기 생성
   const onEmotionRegistClick = async (event) => {
     event.preventDefault();
-    try {
-      const response = await handleEmotionRegist(emotionList);
-      console.log(response);
-      if (response.data.code === 1000) {
-        console.log('emotion regist success');
-        navigate('/diary', { replace: true });
-      } else {
-        console.error(response.data.code + ' ' + response.data.message);
+    console.log(emotionList);
+    if (todayList.data.length === emotionList.length) {
+      try {
+        const response = await handleEmotionRegist(emotionList);
+        console.log(response);
+        if (response.data.code === 1000) {
+          console.log('emotion regist success');
+          navigate('/diary', { replace: true });
+        } else {
+          console.error(response.data.code + ' ' + response.data.message);
+          alert('등록에 실패하셨습니다');
+        }
+      } catch (error) {
+        console.error('emotion regist failed');
         alert('등록에 실패하셨습니다');
       }
-    } catch (error) {
-      console.error('emotion regist failed');
-      alert('등록에 실패하셨습니다');
+    } else {
+      alert('아직 평가하지 않은 항목이 있습니다.');
     }
   };
 
@@ -87,45 +107,45 @@ const EmotionTemplate = () => {
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option1'}
-                          onChange={() => handleRadioChange(index, 'option1')}
+                          value={5}
+                          checked={selectedOptions[index] === 5}
+                          onChange={() => handleRadioChange(index, 5)}
                         />
                       </div>
                       <div className="emotion-option-button">
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option2'}
-                          onChange={() => handleRadioChange(index, 'option2')}
+                          value={4}
+                          checked={selectedOptions[index] === 4}
+                          onChange={() => handleRadioChange(index, 4)}
                         />
                       </div>
                       <div className="emotion-option-button">
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option3'}
-                          onChange={() => handleRadioChange(index, 'option3')}
+                          value={3}
+                          checked={selectedOptions[index] === 3}
+                          onChange={() => handleRadioChange(index, 3)}
                         />
                       </div>
                       <div className="emotion-option-button">
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option4'}
-                          onChange={() => handleRadioChange(index, 'option4')}
+                          value={2}
+                          checked={selectedOptions[index] === 2}
+                          onChange={() => handleRadioChange(index, 2)}
                         />
                       </div>
                       <div className="emotion-option-button">
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option5'}
-                          onChange={() => handleRadioChange(index, 'option5')}
+                          value={1}
+                          checked={selectedOptions[index] === 1}
+                          onChange={() => handleRadioChange(index, 1)}
                         />
                       </div>
                     </div>
@@ -156,45 +176,45 @@ const EmotionTemplate = () => {
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option1'}
-                          onChange={() => handleRadioChange(index, 'option1')}
+                          value={5}
+                          checked={selectedOptions[index] === 5}
+                          onChange={() => handleRadioChange(index, 5)}
                         />
                       </div>
                       <div className="emotion-option-button">
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option2'}
-                          onChange={() => handleRadioChange(index, 'option2')}
+                          value={4}
+                          checked={selectedOptions[index] === 4}
+                          onChange={() => handleRadioChange(index, 4)}
                         />
                       </div>
                       <div className="emotion-option-button">
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option3'}
-                          onChange={() => handleRadioChange(index, 'option3')}
+                          value={3}
+                          checked={selectedOptions[index] === 3}
+                          onChange={() => handleRadioChange(index, 3)}
                         />
                       </div>
                       <div className="emotion-option-button">
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option4'}
-                          onChange={() => handleRadioChange(index, 'option4')}
+                          value={2}
+                          checked={selectedOptions[index] === 2}
+                          onChange={() => handleRadioChange(index, 2)}
                         />
                       </div>
                       <div className="emotion-option-button">
                         <input
                           type="radio"
                           name={`chart-option-${index}`}
-                          value="option2"
-                          checked={selectedOptions[index] === 'option5'}
-                          onChange={() => handleRadioChange(index, 'option5')}
+                          value={1}
+                          checked={selectedOptions[index] === 1}
+                          onChange={() => handleRadioChange(index, 1)}
                         />
                       </div>
                     </div>

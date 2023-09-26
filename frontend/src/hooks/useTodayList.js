@@ -19,8 +19,13 @@ function useTodayList(regDate) {
           console.log('invoke todayList success');
           setTodayList(response.data);
           setLoading(false);
+        } else if (response.data.code === 5001) {
+          console.log(response.data.code + ' ' + response.data.message);
+          setTodayList(response.data);
+          setLoading(false);
         } else {
           console.error(response.data.code + ' ' + response.data.message);
+          setLoading(false);
         }
       } catch (error) {
         console.error('invoke todayList failed', error);

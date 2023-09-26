@@ -73,8 +73,15 @@
 }
 .diary-goal {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 10px;
+}
+
+.diary-goal-category {
+  display: flex;
+  justify-content: flex-start;
+  width: 80%;
 }
