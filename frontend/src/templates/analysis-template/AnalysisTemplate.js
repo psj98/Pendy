@@ -24,7 +24,9 @@ const AnalysisTemplate = () => {
         console.log('Load complete');
         setResponseData(response.data); // response 데이터를 상태로 저장
         setGoalByCategory(response.data.data.goalByCategory);
-        setMonthlyStatistic(response.data.data.monthlyStatistic.amountByCategory);
+        setMonthlyStatistic(
+          response.data.data.monthlyStatistic.amountByCategory,
+        );
       } catch (error) {
         console.log(error);
       }
@@ -142,13 +144,21 @@ const AnalysisTemplate = () => {
         <div className="analysis-left-container">
           <div className="change-month-div">
             <Icon
-              className={!responseData.hasBeforeMonthlyGoal ? "left-arrow" : "left-arrow-active"}
+              className={
+                !responseData.hasBeforeMonthlyGoal
+                  ? 'left-arrow'
+                  : 'left-arrow-active'
+              }
               icon="bi:arrow-left-circle-fill"
               onClick={() => changeMonth(-1)}
             />
-            <h2 className='cur-month-text'>{curMonth}</h2>
+            <h2 className="cur-month-text">{curMonth}</h2>
             <Icon
-              className={!responseData.hasBeforeMonthlyGoal ? "right-arrow" : "right-arrow-active"}
+              className={
+                !responseData.hasBeforeMonthlyGoal
+                  ? 'right-arrow'
+                  : 'right-arrow-active'
+              }
               icon="bi:arrow-right-circle-fill"
               onClick={() => changeMonth(1)}
             />
@@ -187,7 +197,7 @@ const AnalysisTemplate = () => {
                       backgroundColor: chartColors[index],
                     }}
                   ></div>
-                  <div className='analysis-goal-bar'>
+                  <div className="analysis-goal-bar">
                     <GoalBar
                       color={chartColors[index]}
                       current={monthlyStatistic[index].amount}
@@ -210,7 +220,7 @@ const AnalysisTemplate = () => {
                       backgroundColor: chartColors[index + 4],
                     }}
                   ></div>
-                  <div className='analysis-goal-bar'>
+                  <div className="analysis-goal-bar">
                     <GoalBar
                       color={chartColors[index + 4]}
                       current={monthlyStatistic[index + 4].amount}
@@ -224,15 +234,11 @@ const AnalysisTemplate = () => {
           </div>
         </div>
         <div className="analysis-right-container">
-          <h2 className="analysis-monthly-ai-title">
-            나마니 월간분석
-          </h2>
-          <div className='analysis-monthly-ai-text'>
-            {aiText}
-          </div>
+          <h2 className="analysis-monthly-ai-title">나마니 월간분석</h2>
+          <div className="analysis-monthly-ai-text">{aiText}</div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
