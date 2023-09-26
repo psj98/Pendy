@@ -24,11 +24,9 @@ const Header = ({ isLoggedIn }) => {
 
   return (
     <div className="header">
-      <div className="header-logo-container">
-        <Link to={'/'} className="header-link-content">
-          PENDY
-        </Link>
-      </div>
+      <Link to={'/'} className="header-link-content">
+        PENDY
+      </Link>
       <div className="header-menu-container">
         <div className="menu-list">
           {isLoggedIn ? (
