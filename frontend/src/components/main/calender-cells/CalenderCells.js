@@ -3,23 +3,21 @@ import './CalenderCells.css';
 import { format } from 'date-fns';
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
 import { isSameMonth, isSameDay, addDays } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 // 캘린더 cell
 const CalenderCells = ({ currentMonth, diaries }) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const todayDate = new Date();
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
   const endDate = endOfWeek(monthEnd);
+  const navigate = useNavigate();
 
   const rows = [];
   let days = [];
   let day = startDate;
   let formattedDate = '';
-  // 날짜 선택
-  const onDateClick = (day) => {
-    setSelectedDate(day);
-  };
 
   //일기가 있을 경우 점 표시
   const getDotStyle = (day) => {
@@ -29,11 +27,22 @@ const CalenderCells = ({ currentMonth, diaries }) => {
     return hasDiary;
   };
 
+  //일기가 있을 경우 스탬프 가져오기
   const getStampType = (day) => {
-    const diary = diaries.find((diary) =>
+    const hasDiary = diaries.find((diary) =>
       isSameDay(new Date(diary.regDate), day),
     );
-    return diary ? diary.stampType : null;
+    return hasDiary ? hasDiary.stampType : null;
+  };
+
+  // 해당 날짜 일기로 이동
+  const onDiaryClick = (day) => {
+    const hasDiary = diaries.find((diary) =>
+      isSameDay(new Date(diary.regDate), day),
+    );
+    if (hasDiary) {
+      navigate(`diary/${hasDiary.id}`);
+    }
   };
 
   while (day <= endDate) {
@@ -45,14 +54,14 @@ const CalenderCells = ({ currentMonth, diaries }) => {
           className={`col cell ${
             !isSameMonth(day, monthStart)
               ? 'disabled'
-              : isSameDay(day, selectedDate)
+              : isSameDay(day, todayDate)
               ? 'selected'
               : format(currentMonth, 'M') !== format(day, 'M')
               ? 'not-valid'
               : 'valid'
           }`}
           key={day}
-          onClick={() => onDateClick(cloneDay)}
+          onClick={() => onDiaryClick(cloneDay)}
           style={{
             backgroundImage:
               getStampType(day) !== null
