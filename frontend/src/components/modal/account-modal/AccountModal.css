@@ -11,6 +11,7 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   position: relative;
+  font-family: 'The Jamsil 3';
 }
 
 .account-close-button {

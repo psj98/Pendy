@@ -1,6 +1,7 @@
 /* AnalysisTemplate.css */
 /* 사각형 모양 */
 .goal-indicator {
+  font-family: 'The Jamsil 2';
   width: 16px;
   height: 16px;
   display: inline-block; /* 인라인 요소로 배치 */

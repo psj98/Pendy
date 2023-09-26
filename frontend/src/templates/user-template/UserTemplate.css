@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: row;
   margin-top: 50px;
+  font-family: 'The Jamsil 3';
 }
 
 @media (max-width: 997px) {
@@ -24,6 +25,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'The Jamsil 2';
 }
 
 .calender-content {
@@ -104,4 +106,5 @@
   font-family: 'Source Sans Pro', sans-serif;
   cursor: pointer;
   text-align: center;
+  font-family: 'The Jamsil 2';
 }

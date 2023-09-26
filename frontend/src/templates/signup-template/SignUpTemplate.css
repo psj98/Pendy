@@ -10,6 +10,7 @@
   margin: 0 auto;
   padding: 20px;
   border-radius: 5px;
+  font-family: 'The Jamsil 3';
 }
 
 /* 제목 스타일 */
@@ -187,6 +188,7 @@ input[type='number']::-webkit-inner-spin-button {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  font-family: 'The Jamsil 2 Light';
 }
 
 .signup-button:hover {
@@ -215,6 +217,7 @@ input[type='number']::-webkit-inner-spin-button {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  font-family: 'The Jamsil 3 Regular';
 }
 
 /* 모달 내용 컨테이너 */
@@ -275,10 +278,12 @@ input[type='number']::-webkit-inner-spin-button {
   width: auto; /* 너비를 자동으로 설정 */
   font-size: 10px; /* 폰트 크기 감소 */
   white-space: nowrap;
+  font-family: 'The Jamsil 3';
 }
 
 .signup-btn {
   width: 20%;
   padding: 10px 5px;
   font-size: medium;
+  font-family: 'The Jamsil 3';
 }

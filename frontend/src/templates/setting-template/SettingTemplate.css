@@ -10,6 +10,7 @@
   margin: 0 auto;
   padding: 20px;
   border-radius: 5px;
+  font-family: 'The Jamsil 4';
 }
 
 /* 제목 스타일 */
@@ -18,6 +19,7 @@
   color: #007bff;
   width: 80%;
   text-align: center;
+  font-family: 'The Jamsil 3';
 }
 
 .setting-container-box {
@@ -40,6 +42,7 @@
   width: 90%;
   position: relative;
   background: transparent;
+  font-family: 'The Jamsil 2';
 }
 
 .setting-input-box {
@@ -118,6 +121,7 @@ input[type='number']::-webkit-inner-spin-button {
   color: white;
   background-color: #007bff;
   cursor: pointer;
+  font-family: 'The Jamsil 3';
 }
 
 .setting-button:hover {

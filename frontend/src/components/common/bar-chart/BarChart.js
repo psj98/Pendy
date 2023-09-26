@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './BarChart.css';
 import ReactApexChart from 'react-apexcharts';
-
 const BarChart = ({ series, avgConsumptions }) => {
   //eslint-disable-next-line
 
@@ -35,6 +34,7 @@ const BarChart = ({ series, avgConsumptions }) => {
     <ReactApexChart
       options={{
         chart: {
+          fontFamily: 'The Jamsil 3',
           type: 'bar',
           toolbar: {
             show: false,
@@ -47,7 +47,15 @@ const BarChart = ({ series, avgConsumptions }) => {
           },
         },
         legend: {
-          position: 'left', // Move the legend to the right side
+          position: 'top', // Move the legend to the right side
+          fontSize: '15 px',
+        },
+        dataLabels: {
+          style: {
+            fontSize: '10px',
+            fontFamily: 'The Jamsil 1',
+            fontWeight: 'light',
+          },
         },
         xaxis: {
           categories: chartData.categories,

@@ -26,6 +26,7 @@ const DonutChart = ({
 
   const options = {
     chart: {
+      fontFamily: 'The Jamsil 3',
       width: '100%',
     },
     chartOptions: {},
