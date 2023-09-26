@@ -42,6 +42,8 @@ const CalenderCells = ({ currentMonth, diaries }) => {
     );
     if (hasDiary) {
       navigate(`diary/${hasDiary.id}`);
+    } else if (isSameDay(new Date(), day)) {
+      navigate('/emotion');
     }
   };
 
