@@ -55,15 +55,6 @@ const UserTemplate = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
   };
 
-  const navigate = useNavigate();
-
-  const handleButtonClick = () => {
-    const path = `/analysis?currentMonth=${encodeURIComponent(
-      currentMonth.toISOString(),
-    )}`;
-    navigate(path);
-  };
-
   const currentDate = new Date(); // 현재 날짜 가져오기
   const nextMonthDate = new Date(
     currentDate.getFullYear(),
@@ -198,14 +189,7 @@ const UserTemplate = () => {
           )}
         </div>
       </div>
-      <div>
-        {/* 소비분석 페이지로 이동하면서 currentMonth 값을 전달 */}
-        <div className="elements">
-          <button className="custom-button" onClick={handleButtonClick}>
-            소비분석
-          </button>
-        </div>
-      </div>
+      <div></div>
     </div>
   );
 };

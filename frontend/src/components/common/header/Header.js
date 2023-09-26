@@ -5,6 +5,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 const Header = ({ isLoggedIn }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const currentMonth = new Date(); // 직접 현재 날짜 값을 설정합니다.
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -34,12 +35,27 @@ const Header = ({ isLoggedIn }) => {
             <div className="sub-menu">
               <div className="sub-menu-container">
                 <Link
+                  to={{
+                    pathname: '/analysis',
+                    search: `?currentMonth=${encodeURIComponent(
+                      currentMonth.toISOString(),
+                    )}`,
+                  }}
+                  className={`link-content ${
+                    isActive('/analysis') ? 'active-link' : ''
+                  }`}
+                >
+                  월간소비분석
+                </Link>
+              </div>
+              <div className="sub-menu-container">
+                <Link
                   to={'/setting'}
                   className={`link-content ${
                     isActive('/setting') ? 'active-link' : ''
                   }`}
                 >
-                  개인정보
+                  마이페이지
                 </Link>
               </div>
               <div className="sub-menu-container">

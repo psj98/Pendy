@@ -37,16 +37,14 @@
   font-weight: bold;
   color: #007bff;
   text-decoration: none;
-  outline: none; /* Link 클릭 시 생기는 외곽선 제거 */
 }
 
 .link-content {
+  color: black;
   transition:
     font-size 0.3s,
     font-weight 0.3s;
   text-decoration: none;
-
-  outline: none; /* Link 클릭 시 생기는 외곽선 제거 */
 }
 
 .link-content.active-link {
@@ -55,6 +53,7 @@
   font-weight: bold;
   font-size: 1.1em;
 }
+
 .link-content:visited {
   color: inherit; /* 이전의 색상을 상속받도록 설정 */
   text-decoration: none; /* 밑줄 제거 */
