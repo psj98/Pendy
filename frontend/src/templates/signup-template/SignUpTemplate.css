@@ -13,22 +13,48 @@
 }
 
 /* 제목 스타일 */
-.signup-title {
+.user-signup-title {
   margin-bottom: 50px;
   color: #007bff;
   width: 80%;
   text-align: center;
-  font-size: xx-large;
+}
+
+.signup-container-box {
+  width: 80%;
+  border: 2px solid rgb(213, 213, 213);
+  border-radius: 5px;
+  margin-bottom: 30px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 입력 필드 스타일 */
-.signup-input1 {
+.user-signup-input,
+.user-signup-input-sub {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 15px;
-  width: 80%;
+  width: 90%;
   position: relative;
+}
+
+.user-signup-input-sub {
+  margin-top: 35px;
+}
+
+.user-signup-input input,
+.user-signup-input-sub input {
+  background: transparent;
+}
+
+.account-plus-btn {
+  width: 20% !important;
+  font-size: smaller !important;
+  padding: 5px 10px !important;
 }
 
 .signup-input2 {
@@ -40,43 +66,124 @@
   position: relative;
 }
 
-.signup-input-main {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-  width: 80%;
-  position: relative;
+.signup-input-box {
+  font-size: medium;
+  text-indent: 5px;
+  border: 0;
+  padding: 10px 0;
+  width: 100%;
 }
 
-.signup-input-sub {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 80%;
-  position: relative;
+.signup-input-box:focus {
+  outline: none;
 }
 
-.signup-input-sub1 {
+/* 메인 입력 필드 스타일 */
+.signup-email-input {
+  border: 1px solid rgb(213, 213, 213);
+  border-radius: 5px 5px 0 0;
+  padding: 5px 10px;
+}
+
+.signup-pw-input {
+  border: 1px solid rgb(213, 213, 213);
+  padding: 5px 10px;
+  top: -1px;
+}
+
+.signup-repw-input {
+  border: 1px solid rgb(213, 213, 213);
+  padding: 5px 10px;
+  top: -2px;
+}
+
+.signup-name-input {
+  border: 1px solid rgb(213, 213, 213);
+  padding: 5px 10px;
+  top: -3px;
+}
+
+.signup-age-input {
+  border: 1px solid rgb(213, 213, 213);
+  border-radius: 0 0 0 5px;
+  padding: 5px 10px;
+  top: -3.5px;
+}
+
+.signup-salary-input {
+  border: 1px solid rgb(213, 213, 213);
+  border-radius: 0 0 5px 0;
+  padding: 5px 10px;
+  top: -3.5px;
+}
+
+.signup-email-input:focus-within,
+.signup-pw-input:focus-within,
+.signup-repw-input:focus-within,
+.signup-name-input:focus-within,
+.signup-age-input:focus-within,
+.signup-salary-input:focus-within {
+  border: 1px solid #007bff;
+  z-index: 1;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 계좌 입력 필드 스타일 */
+.signup-input-bank-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  position: relative;
 }
 
-.signup-input-sub2 {
-  flex: 3;
+.signup-input-account-container {
+  flex: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
   position: relative;
+}
+
+.signup-bank-input {
+  position: relative;
+  border: 1px solid rgb(213, 213, 213);
+  padding: 5px 10px;
+  top: var(--banktop);
+}
+
+.signup-bank-input:first-child {
+  border-radius: 5px 0 0 0 !important;
+}
+
+.signup-bank-input:last-child {
+  border-radius: 0 0 0 5px;
+  margin-bottom: 30px;
+}
+
+.signup-account-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid rgb(213, 213, 213);
+  padding: 5px 10px;
+  top: var(--accounttop);
+  position: relative;
+}
+
+.signup-account-input:first-child {
+  border-radius: 0 5px 0 0 !important;
+}
+
+.signup-account-input:last-child {
+  border-radius: 0 0 5px 0;
+  margin-bottom: 30px;
 }
 
 /* 버튼 스타일 */
@@ -125,7 +232,7 @@
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  width: 300px;
+  width: 450px;
 }
 
 /* 모달 내용 스타일링 예제 */
@@ -172,9 +279,15 @@
 }
 
 .duplicatecheck-button {
-  margin-left: 30px;
+  margin-left: 10px;
   padding: 7px 10px; /* 기존 패딩의 절반 크기로 조절 */
   width: auto; /* 너비를 자동으로 설정 */
   font-size: 10px; /* 폰트 크기 감소 */
   white-space: nowrap;
+}
+
+.signup-btn {
+  width: 20%;
+  padding: 10px 5px;
+  font-size: medium;
 }

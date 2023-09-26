@@ -23,9 +23,9 @@ const DiaryTemplate = () => {
     return <div>Loading...</div>;
   }
 
-  console.log('diaryDetail');
-  console.log(diaryDetail);
-  console.log(diaryDetail.data.diary);
+  // console.log('diaryDetail');
+  // console.log(diaryDetail);
+  // console.log(diaryDetail.data.diary);
   const regDate = diaryDetail.data.diary.regDate;
   const title = diaryDetail.data.diary.title;
   const content = diaryDetail.data.diary.content;
