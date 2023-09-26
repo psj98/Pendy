@@ -41,8 +41,12 @@
 
 .col.cell {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   background-color: white;
+  background-size: 80% auto;
+  background-position: center bottom;
+  background-repeat: no-repeat;
 }
 
 .col.cell.valid:hover {
@@ -51,6 +55,9 @@
   transform: scale(1.01);
   border: none;
   background: rgba(128, 128, 128, 0.5);
+  background-size: 80% auto;
+  background-position: center bottom;
+  background-repeat: no-repeat;
 }
 
 .col.cell.selected {
@@ -60,9 +67,12 @@
   background: #007bff;
   color: #fff;
   font-weight: 600;
+  background-size: 80% auto;
+  background-position: center bottom;
+  background-repeat: no-repeat;
 }
 
-.dot-container {
+.calender-dot-container {
   position: relative;
   top: 5px;
   right: 5px;
@@ -73,7 +83,7 @@
   justify-content: center;
 }
 
-.dot {
+.calender-dot {
   width: 8px;
   height: 8px;
   background-color: red;

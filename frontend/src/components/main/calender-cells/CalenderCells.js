@@ -16,7 +16,6 @@ const CalenderCells = ({ currentMonth, diaries }) => {
   let days = [];
   let day = startDate;
   let formattedDate = '';
-
   // 날짜 선택
   const onDateClick = (day) => {
     setSelectedDate(day);
@@ -28,6 +27,13 @@ const CalenderCells = ({ currentMonth, diaries }) => {
       isSameDay(new Date(diary.regDate), day),
     );
     return hasDiary;
+  };
+
+  const getStampType = (day) => {
+    const diary = diaries.find((diary) =>
+      isSameDay(new Date(diary.regDate), day),
+    );
+    return diary ? diary.stampType : null;
   };
 
   while (day <= endDate) {
@@ -47,6 +53,12 @@ const CalenderCells = ({ currentMonth, diaries }) => {
           }`}
           key={day}
           onClick={() => onDateClick(cloneDay)}
+          style={{
+            backgroundImage:
+              getStampType(day) !== null
+                ? `url(/stamp${getStampType(day)}.png)`
+                : 'none',
+          }}
         >
           <span
             className={
@@ -58,8 +70,8 @@ const CalenderCells = ({ currentMonth, diaries }) => {
             {formattedDate}
           </span>
           {getDotStyle(day) && (
-            <div className="dot-container">
-              <div className="dot"></div>
+            <div className="calender-dot-container">
+              <div className="calender-dot"></div>
             </div>
           )}
         </div>,
