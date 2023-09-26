@@ -1,7 +1,8 @@
 package com.ssafy.namani.domain.clovaOCR.service;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.ssafy.namani.domain.clovaOCR.dto.request.ClovaOCRRequestDto;
+//import com.ssafy.namani.domain.clovaOCR.dto.request.ClovaOCRRequestDto;
+import com.ssafy.namani.domain.clovaOCR.dto.response.ClovaOCRResponseDto;
 import com.ssafy.namani.domain.s3.dto.response.S3ResponseDto;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseService;
@@ -23,6 +24,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
@@ -30,16 +32,20 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class ClovaOCRServiceImpl implements ClovaOCRService {
+    // custom api
     public static String CLOVA_SECRET = "SnBveHB4WFlMSmtUeHZNSmJablVtR1VpTFlRREFFdEE=";
     public static String CLOVA_API_URL = "https://v5cw7ku89t.apigw.ntruss.com/custom/v1/25124/1f41da20bfd452e64f995a675c04846e86ca91378e358cef9c819761f3cefc62/infer";
 
+    // document api ( 영수증 특화 )
+//    public static String CLOVA_SECRET = "U3BLT2FlS0JQTWZvVnZNZ3RySGhxUmNIUmZVRkVrSW4=";
+//    public static String CLOVA_API_URL = "https://t3ky57orz4.apigw.ntruss.com/custom/v1/25207/d94e1f9c46f6ca3d0bdb16db4e84f44457a8ae9e945ebc22624cdf246dda5f04/document/receipt";
 
     /**
      * CLOVA OCR에 요청 및 수신
      * @param request
      * @return String result
      */
-    public String execute(S3ResponseDto request){
+    public ClovaOCRResponseDto execute(S3ResponseDto request){
         try{
             // total time check start
             StopWatch totalTime = new StopWatch();
@@ -60,7 +66,6 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
             responseTime.start();
 
             StringBuilder response = getResponseData(connection);
-
             responseTime.stop();
             System.out.println("response 수신시간 : "+ responseTime.getTotalTimeMillis()+"ms");
 
@@ -68,8 +73,7 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
             StopWatch parseTime = new StopWatch();
             parseTime.start();
 
-            // StringBuilder로 결과 받는 다는거 생각!!!!
-            StringBuilder result = parseResponseData(response);
+            ClovaOCRResponseDto result = parseResponseData(response);
 
             parseTime.stop();
             System.out.println("parse 시간 : " + parseTime.getTotalTimeMillis()+"ms");
@@ -78,7 +82,7 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
             System.out.println("Total 시간 : "+ totalTime.getTotalTimeMillis()+ "ms");
 
 //            System.out.println(result.toString());
-            return result.toString();
+            return result;
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -185,25 +189,47 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
      * @return StringBuilder result
      * @throws BaseException
      */
-    private static StringBuilder parseResponseData(StringBuilder response) throws BaseException, ParseException {
+    private static ClovaOCRResponseDto parseResponseData(StringBuilder response) throws BaseException, ParseException {
         JSONParser responseParser = new JSONParser(response.toString());
         LinkedHashMap<String, String> hashMap = (LinkedHashMap<String, String>) responseParser.parse();
         JSONObject parsed = new JSONObject(hashMap);
-//        System.out.println(parsed.toString());
         JSONArray parsedImages = (JSONArray) parsed.get("images");
-        StringBuilder result = new StringBuilder();
+        ClovaOCRResponseDto responseDto = new ClovaOCRResponseDto();
 
         if (parsedImages != null){
             JSONObject parsedImage = (JSONObject) parsedImages.get(0);
             JSONArray parsedTexts = (JSONArray) parsedImage.get("fields");
 
+            // 필드별로 분류해서 DTO에 저장
             for(int i=0;i<parsedTexts.length();i++){
                 JSONObject current = (JSONObject) parsedTexts.get(i);
-                result.append((String) current.get("inferText")).append(" ");
+                String text = ((String) current.get("inferText")).replaceAll(System.getProperty("line.separator"), "");
+                text = text.replaceAll(" ","");
+
+                // 장소와 시간은 공백 제거
+                if(current.get("name").equals("place")){
+                    responseDto.setPlace(text);
+                }else if(current.get("name").equals("total")){
+                    responseDto.setTotal(Integer.parseInt(text));
+                }else if(current.get("name").equals("date")){
+                    responseDto.setDate(text);
+                }else if(current.get("name").equals("isafternoon")){
+                    responseDto.setIsAfternoon(text);
+                }else if(current.get("name").equals("time")){
+                    responseDto.setTime(text);
+                }
+//                result.append((String) current.get("inferText")).append(" ");
             }
+
+            Timestamp tempTimestamp = Timestamp.valueOf((responseDto.getDate()+" "+responseDto.getTime()));
+            long addMillis = 43_200_200; // 12 시간 (ms)
+            if(responseDto.getIsAfternoon().equals("오후")){
+                tempTimestamp = new Timestamp(tempTimestamp.getTime()+addMillis);
+            }
+            responseDto.setDateTime(tempTimestamp);
         }
 
-        return result;
+        return responseDto;
 //        throw new BaseException(BaseResponseStatus.CLOVA_PARSING_ERROR);
 
     }

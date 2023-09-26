@@ -1,5 +1,6 @@
 package com.ssafy.namani.domain.s3.controller;
 
+import com.ssafy.namani.domain.clovaOCR.dto.response.ClovaOCRResponseDto;
 import com.ssafy.namani.domain.clovaOCR.service.ClovaOCRService;
 import com.ssafy.namani.domain.s3.dto.response.S3ResponseDto;
 import com.ssafy.namani.domain.s3.service.S3Service;
@@ -47,13 +48,11 @@ public class S3Controller {
             return baseResponseService.getFailureResponse(e.status);
         }
 
-//        System.out.println(s3ResponseDto.getOriginalName() + " "+s3ResponseDto.getStoredName() + " "+s3ResponseDto.getExtensionName()+ " "+s3ResponseDto.getAccessUrl());
 
         // Clova OCR에 이미지 텍스트 추출 요청
         try {
             // String 에서 ResponseDto 로 변경해야함, ClovaOCRServiceImpl에서 StringBuilder로 return 하는거 생각해야함
-            String clovaResponseDto = clovaOCRService.execute(s3ResponseDto);
-            System.out.println(clovaResponseDto);
+            ClovaOCRResponseDto clovaResponseDto = clovaOCRService.execute(s3ResponseDto);
 
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);
