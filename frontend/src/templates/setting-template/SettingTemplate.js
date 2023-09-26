@@ -64,89 +64,85 @@ const SettingTemplate = () => {
 
   return (
     <div className="signup">
-      <p className="signup-title">개인 정보 수정</p>
+      <h1 className="user-setting-title">개인 정보 수정</h1>
 
-      {/* 이메일 입력 */}
-      <div className="signup-input">
-        <input
-          type="email"
-          className="input"
-          placeholder="이메일"
-          variant="outlined"
-          value={state.email}
-          readOnly
-        />
-        <span className="border"></span>
-      </div>
-
-      {/* 비밀번호 입력 */}
-      <div className="signup-input">
-        <input
-          type="password"
-          className="input"
-          placeholder="비밀번호"
-          variant="outlined"
-          value={state.password}
-          onChange={(e) => setState({ ...state, password: e.target.value })}
-        />
-        <span className="border"></span>
-      </div>
-
-      {/* 비밀번호 확인 */}
-      <div className="signup-input">
-        <input
-          type="password"
-          className="input"
-          placeholder="비밀번호 확인"
-          variant="outlined"
-          value={state.repassword}
-          onChange={(e) => setState({ ...state, repassword: e.target.value })}
-        />
-        <span className="border"></span>
-      </div>
-
-      {/* 이름 입력 */}
-      <div className="signup-input">
-        <input
-          type="text"
-          className="input"
-          placeholder="이름"
-          variant="outlined"
-          value={state.name}
-          readOnly
-        />
-        <span className="border"></span>
-      </div>
-
-      {/* 나이 입력 */}
-      <div className="signup-input-main">
-        <div className="signup-input-sub">
+      <div className="setting-container-box">
+        {/* 이메일 입력 */}
+        <div className="user-setting-input setting-email-input">
           <input
-            type="number"
-            className="input"
-            placeholder="나이"
+            type="email"
+            className="setting-input-box setting-email-box"
+            placeholder="이메일"
             variant="outlined"
-            value={state.age}
-            onChange={(e) => setState({ ...state, age: e.target.value })}
+            value={state.email}
+            readOnly
           />
-          <span className="border"></span>
         </div>
-        &nbsp;&nbsp;
-        {/* 소득 입력 */}
-        <div className="signup-input-sub">
+
+        {/* 비밀번호 입력 */}
+        <div className="user-setting-input setting-pw-input">
           <input
-            type="number"
-            className="input"
-            placeholder="연봉"
+            type="password"
+            className="setting-input-box setting-pw-box"
+            placeholder="비밀번호"
             variant="outlined"
-            value={state.salary}
-            onChange={(e) => setState({ ...state, salary: e.target.value })}
+            value={state.password}
+            onChange={(e) => setState({ ...state, password: e.target.value })}
           />
-          <span className="border"></span>
         </div>
-      </div>
-      <div className="signup-input">
-        <button className="signup-button" onClick={onModifyButtonClick}>
+
+        {/* 비밀번호 확인 */}
+        <div className="user-setting-input setting-repw-input">
+          <input
+            type="password"
+            className="setting-input-box setting-repw-box"
+            placeholder="비밀번호 확인"
+            variant="outlined"
+            value={state.repassword}
+            onChange={(e) => setState({ ...state, repassword: e.target.value })}
+          />
+        </div>
+
+        {/* 이름 입력 */}
+        <div className="user-setting-input setting-name-input">
+          <input
+            type="text"
+            className="setting-input-box setting-name-box"
+            placeholder="이름"
+            variant="outlined"
+            value={state.name}
+            readOnly
+          />
+        </div>
+
+        {/* 나이 입력 */}
+        <div className="user-setting-input">
+          <div className="user-setting-input setting-age-input">
+            <input
+              type="number"
+              className="setting-input-box setting-age-box"
+              placeholder="나이"
+              variant="outlined"
+              value={state.age}
+              onChange={(e) => setState({ ...state, age: e.target.value })}
+            />
+          </div>
+          {/* 소득 입력 */}
+          <div className="user-setting-input setting-salary-input">
+            <input
+              type="number"
+              className="setting-input-box setting-salary-box"
+              placeholder="연봉"
+              variant="outlined"
+              value={state.salary}
+              onChange={(e) => setState({ ...state, salary: e.target.value })}
+            />
+          </div>
+        </div>
+        <button
+          className="setting-button setting-btn"
+          onClick={onModifyButtonClick}
+        >
           수정하기
         </button>
       </div>
