@@ -17,7 +17,8 @@ const EmotionTemplate = () => {
   }
 
   if (todayList.data.length === 0) {
-    navigate('/diary', { replace: true });
+    alert('금일 소비내역이 없습니다.');
+    navigate('/');
   }
 
   console.log(todayList.data);
