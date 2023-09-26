@@ -15,6 +15,7 @@ const GoalTemplate = () => {
   const [totalGoals, setTotalGoals] = useState([]);
   const [editable, setEditable] = useState(false);
   const [buttonLabel, setButtonLabel] = useState('수정');
+  const [avgConsumptions, setAvgConsumption] = useState([]);
   const categoryNameToKor = {
     food: '식비',
     traffic: '교통',
@@ -61,9 +62,11 @@ const GoalTemplate = () => {
         const totalGoal = response.data.data.totalGoal;
         const monthlyStatisticAmount =
           response.data.data.monthlyStatistic.totalAmount;
-        console.log(totalGoal);
-        console.log(response.data);
+        const avgCon = response.data.data.avgConsumptionAmountAvg.map(
+          (index) => index.amount,
+        );
 
+        setAvgConsumption(avgCon);
         setMonthlyTotalAmount(monthlyStatisticAmount);
         setGoalByCategory(goalByCategoryList);
         setOriginalGoalByCategory(goalByCategoryList); // Set original state
@@ -247,9 +250,11 @@ const GoalTemplate = () => {
             </div>
           </div>
         </div>
-        <div className="goal-bar-chart">
-          <BarChart />
-        </div>
+        {series.length > 0 && (
+          <div className="goal-bar-chart">
+            <BarChart series={series} avgConsumptions={avgConsumptions} />
+          </div>
+        )}
       </div>
     </div>
   );

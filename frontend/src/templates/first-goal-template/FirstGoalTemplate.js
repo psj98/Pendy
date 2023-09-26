@@ -13,6 +13,7 @@ const FirstGoalTemplate = () => {
   const [isGoalSet, setIsGoalSet] = useState(false);
   const [inputValues, setInputValues] = useState({});
   const [originalValues, setOriginalValues] = useState({});
+  const [avgConsumptions, setAvgConsumption] = useState({});
 
   const categoryNameToKor = {
     food: '식비',
@@ -49,6 +50,11 @@ const FirstGoalTemplate = () => {
           response.data.data.monthlyStatistic.amountByCategory;
         const seriesList = myMonthlyStatisticAvg.map((index) => index.amount);
         console.log('resonse', response.data);
+        const avgCom = response.data.data.avgConsumptionAmountAvg.map(
+          (index) => index.amount,
+        );
+
+        console.log('avgCom', avgCom);
 
         setMonthlyAvg(myMonthlyStatisticAvg);
 
@@ -59,6 +65,7 @@ const FirstGoalTemplate = () => {
         setInputValues(initialInputValues);
         setSeries(seriesList);
         setOriginalValues(initialInputValues);
+        setAvgConsumption(avgCom);
         console.log('series', series);
       } catch (error) {
         console.log(error);
@@ -125,6 +132,8 @@ const FirstGoalTemplate = () => {
     }
   };
 
+  console.log(series);
+
   return (
     <div className="goal-template">
       <h1 style={{ margin: '30px 0' }}>목표 설정</h1>
@@ -168,7 +177,7 @@ const FirstGoalTemplate = () => {
                         className="input goal-inputs-amount"
                         placeholder="숫자로 입력"
                         variant="outlined"
-                        value={inputValues[category.categoryName] || ''}
+                        value={inputValues[category.categoryName] || 0}
                         readOnly={!isGoalSet}
                         onChange={(e) =>
                           handleInputChange(category.categoryName, e)
@@ -195,7 +204,7 @@ const FirstGoalTemplate = () => {
                         className="input goal-inputs-amount"
                         placeholder="숫자로 입력"
                         variant="outlined"
-                        value={inputValues[category.categoryName] || ''}
+                        value={inputValues[category.categoryName] || 0}
                         readOnly={!isGoalSet}
                         onChange={(e) =>
                           handleInputChange(category.categoryName, e)
@@ -235,9 +244,11 @@ const FirstGoalTemplate = () => {
             </div>
           )}
         </div>
-        <div className="goal-bar-chart">
-          <BarChart />
-        </div>
+        {series.length > 0 && (
+          <div className="goal-bar-chart">
+            <BarChart series={series} avgConsumptions={avgConsumptions} />
+          </div>
+        )}
       </div>
     </div>
   );

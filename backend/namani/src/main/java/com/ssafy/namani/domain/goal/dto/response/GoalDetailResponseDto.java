@@ -6,12 +6,14 @@ import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRe
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class GoalDetailResponseDto {
 
     @NotNull

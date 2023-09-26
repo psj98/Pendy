@@ -23,10 +23,12 @@ import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
@@ -82,11 +84,16 @@ public class GoalServiceImpl implements GoalService {
      * @throws BaseException
      */
     @Override
+    @Transactional
     public void registGoal(UUID memberId, GoalRegistRequestDto goalRegistRequestDto) throws BaseException {
-        log.info("member"+ memberId);
-        log.info("dto" + goalRegistRequestDto.getGoalByCategoryList().toString());
-        Optional<Member> memberOptional = memberRepository.findById(memberId);
 
+
+        log.info("call the method reigstGoal");
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByMember_Id(memberOptional.get().getId());
+
+        Long totalGoalId = totalGoalOptional.get().getId();
+        Optional<List<GoalByCategory>> allByTotalGoalId = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId);
 
 
         // 사용자 정보 체크
@@ -94,12 +101,15 @@ public class GoalServiceImpl implements GoalService {
             throw new BaseException(BaseResponseStatus.NOT_FOUND_MEMBER);
         }
 
-        Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, Timestamp.valueOf(LocalDateTime.now()));
+
+        if(allByTotalGoalId.isPresent()){
+            goalByCategoryRepository.deleteByTotalGoalId(totalGoalId);
+        }
 
         // 목표 정보 체크
+//        // 이미 존재하면 그냥 지워버리기.
 //        if (totalGoalOptional.isPresent()) {
-//            System.out.println("testtesttest");
-//            throw new BaseException(BaseResponseStatus.TOTAL_GOAL_IS_ALREADY_PRESENT);
+//            totalGoalRepository.deleteById(totalGoalId);
 //        }
 
         // 월별 목표 정보 저장
@@ -228,6 +238,9 @@ public class GoalServiceImpl implements GoalService {
         Integer salary = goalDetailRequestDto.getSalary();
         Timestamp curDate = goalDetailRequestDto.getCurDate();
 
+        System.out.printf("gimoti %d, %d", age, salary);
+        System.out.println(curDate);
+
         /* 월별 목표 조회 */
         TotalGoalDetailResponseDto totalGoal = getTotalGoal(memberId, curDate);
         System.out.println(totalGoal.getId());
@@ -244,6 +257,7 @@ public class GoalServiceImpl implements GoalService {
         /* 이전 3달간 연령대 + 연봉대에 맞는 평균 소비 조회 */
         List<AvgConsumptionAmountForThreeMonthResponseDto> avgConsumptionAmountAvg = avgConsumptionAmountService.getAvgConsumptionAmountForThreeMonth(age, salary, curDate);
 
+        log.info("1234"+ avgConsumptionAmountAvg.toString());
         /* 목표 조회 데이터 정보 저장 및 반환 */
         GoalDetailResponseDto goalDetailResponseDto = GoalDetailResponseDto.builder()
                 .totalGoal(totalGoal)
@@ -253,6 +267,7 @@ public class GoalServiceImpl implements GoalService {
                 .avgConsumptionAmountAvg(avgConsumptionAmountAvg)
                 .build();
 
+        log.info("hid" +  goalDetailResponseDto.toString());
         return goalDetailResponseDto;
     }
 
