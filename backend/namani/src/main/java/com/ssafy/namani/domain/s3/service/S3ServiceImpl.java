@@ -49,6 +49,12 @@ public class S3ServiceImpl implements S3Service {
         return responseDto;
     }
 
+
+    /**
+     * OCR 텍스트 추출을 사용후 S3 에서 이미지 삭제하는 메소드
+     * @param responseDto
+     * @throws BaseException
+     */
     @Override
     public void deleteImage(S3ResponseDto responseDto) throws BaseException {
 

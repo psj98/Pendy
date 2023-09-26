@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ClovaOCRService {
 
-    // String 에서 RepsonseDto 로 수정해야함
     ClovaOCRResponseDto execute(S3ResponseDto request) throws BaseException;
 
 }

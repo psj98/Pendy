@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.ssafy.namani.domain.clovaOCR.dto.response.ClovaOCRResponseDto;
+import com.ssafy.namani.domain.jwt.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,20 +45,22 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 	private final AgeSalaryRepository ageSalaryRepository;
 	private final AvgConsumptionAmountRepository avgConsumptionAmountRepository;
 	private final EmotionRepository emotionRepository;
+	private final JwtService jwtService;
 
 	@Autowired
 	public TransactionInfoServiceImpl(TransactionInfoRepository transactionInfoRepository,
-		AccountInfoRepository accountInfoRepository,
-		CategoryRepository categoryRepository,
-		AgeSalaryRepository ageSalaryRepository,
-		AvgConsumptionAmountRepository avgConsumptionAmountRepository,
-		EmotionRepository emotionRepository) {
+									  AccountInfoRepository accountInfoRepository,
+									  CategoryRepository categoryRepository,
+									  AgeSalaryRepository ageSalaryRepository,
+									  AvgConsumptionAmountRepository avgConsumptionAmountRepository,
+									  EmotionRepository emotionRepository, JwtService jwtService) {
 		this.transactionInfoRepository = transactionInfoRepository;
 		this.accountInfoRepository = accountInfoRepository;
 		this.categoryRepository = categoryRepository;
 		this.ageSalaryRepository = ageSalaryRepository;
 		this.avgConsumptionAmountRepository = avgConsumptionAmountRepository;
 		this.emotionRepository = emotionRepository;
+		this.jwtService = jwtService;
 	}
 
 	/**
@@ -163,6 +167,108 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 		int newBalance = accountInfo.getBalance();
 
 		return new TransactionInfoRegistResponseDto(Integer.toString(newBalance));
+	}
+
+	/**
+	 * ClovaOCR로 추출한 데이터 거래내역에 추가
+	 * 
+	 * @param token
+	 * @param clovaOCRResponseDto
+	 */
+	@Override
+	public void addReceiptTransaction(String token, ClovaOCRResponseDto clovaOCRResponseDto) throws BaseException {
+		try{
+			if(token == null || token.equals("")) throw new BaseException(BaseResponseStatus.SESSION_EXPIRATION);
+
+			System.out.println(clovaOCRResponseDto.getTotal()+" "+clovaOCRResponseDto.getPlace()+ " "+clovaOCRResponseDto.getDateTime());
+
+			UUID memberId = jwtService.getMemberIdFromToken(token);
+			List<AccountInfo> byId = accountInfoRepository.findByMember_Id(memberId);
+
+			if(byId.isEmpty()) throw new BaseException(BaseResponseStatus.ACCOUNT_NOT_FOUND);
+
+			AccountInfo accountInfo = byId.get(0);
+			TransactionInfo transactionInfo;
+
+			AvgConsumptionAmount newAvgConsumptionAmount = null;
+
+				// 영수증 데이터는 오프라인 매장으로 정함 (임시)
+				Optional<Category> category = categoryRepository.findById(4);
+				Optional<Emotion> emotion = emotionRepository.findById(3);
+				transactionInfo = TransactionInfo.builder()
+						.accountInfo(accountInfo)
+						.category(category.get())
+						.emotion(emotion.get())
+						.transactionName(clovaOCRResponseDto.getPlace())
+						.transactionAmount(clovaOCRResponseDto.getTotal())
+						.transactionType(2)
+						.afterBalance(accountInfo.getBalance() - clovaOCRResponseDto.getTotal())
+						.build();
+
+				if (accountInfo.getMember() != null) {
+					Integer age = accountInfo.getMember().getAge() / 10 * 10;
+					Integer salary = accountInfo.getMember().getSalary() / 10000000 * 1000;
+
+					// 연령대, 연봉대에 해당하는 정보 조회
+					Optional<AgeSalary> ageSalaryOptional = ageSalaryRepository.findByAgeSalary(age, salary);
+
+					// 연령대, 연봉대에 해당하는 정보 없음
+					if (!ageSalaryOptional.isPresent()) {
+						throw new BaseException(BaseResponseStatus.NO_AGE_SALARY_INFO_BY_AGE_SALARY);
+					}
+
+					AgeSalary ageSalary = ageSalaryOptional.get();
+
+					// 나이-소득 구간, 카테고리, 현재 연월에 해당하는 평균 소비 정보 조회
+					Optional<AvgConsumptionAmount> avgConsumptionAmountOptional = avgConsumptionAmountRepository.findByAgeSalaryIdCategoryId(
+							ageSalary.getId(), category.get().getId(), Timestamp.valueOf(LocalDateTime.now()));
+
+					AvgConsumptionAmount avgConsumptionAmount;
+					// 나이-소득 구간, 카테고리, 현재 연월에 해당하는 평균 소비 정보 없음
+					if (avgConsumptionAmountOptional.isEmpty()) {
+						// throw new BaseException(
+						// 	BaseResponseStatus.NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_CATEGORY_ID_AND_REG_DATE);
+
+						avgConsumptionAmount = AvgConsumptionAmount.builder()
+								.ageSalary(ageSalary)
+								.category(category.get())
+								.sumAmount(0)
+								.regDate(Timestamp.valueOf(LocalDateTime.now()))
+								.build();
+
+						avgConsumptionAmountRepository.save(avgConsumptionAmount);
+					} else {
+						avgConsumptionAmount = avgConsumptionAmountOptional.get();
+					}
+
+					// 평균 소비 정보 총합 수정
+					// avgConsumptionAmount = avgConsumptionAmountOptional.get();
+					newAvgConsumptionAmount = AvgConsumptionAmount.builder()
+							.id(avgConsumptionAmount.getId())
+							.ageSalary(avgConsumptionAmount.getAgeSalary())
+							.category(avgConsumptionAmount.getCategory())
+							.sumAmount(
+									avgConsumptionAmount.getSumAmount() + clovaOCRResponseDto.getTotal())
+							.regDate(avgConsumptionAmount.getRegDate())
+							.build();
+				}
+
+			// 계좌 잔액 업데이트
+			accountInfo.updateBalance(2,
+					clovaOCRResponseDto.getTotal());
+			transactionInfoRepository.save(transactionInfo);
+
+			// 출금인 경우에만 평균 소비 정보 업데이트
+			if (newAvgConsumptionAmount != null) {
+				avgConsumptionAmountRepository.save(newAvgConsumptionAmount); // 평균 소비 정보 업데이트
+			}
+
+//			int newBalance = accountInfo.getBalance();
+
+		} catch (BaseException e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	/**
