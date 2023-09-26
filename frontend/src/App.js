@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import './font/font.css';
 
 import useLogin from './hooks/useLogin';
 
@@ -16,7 +17,6 @@ import AnalysisTemplate from './templates/analysis-template/AnalysisTemplate';
 import DiaryTemplate from './templates/diary-template/DiaryTemplate';
 import FirstGoalTemplate from './templates/first-goal-template/FirstGoalTemplate';
 import EmotionTemplate from './templates/emotion-template/EmotionTemplate';
-import './font/font.css';
 
 // 로그인 페이지
 import LoginPage from './pages/login-page/LoginPage';
