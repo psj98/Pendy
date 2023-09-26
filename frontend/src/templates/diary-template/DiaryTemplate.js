@@ -4,11 +4,20 @@ import DiaryForm from '../../components/diary/DiaryForm';
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
 import useDiaryDetail from '../../hooks/useDiaryDetail';
+import { useParams } from 'react-router-dom';
 
 const DiaryTemplate = () => {
-  const { diaryDetail, loading } = useDiaryDetail(1);
-  const series = [1, 1, 1, 1, 1, 1, 1];
-  const colors = [
+  const { id } = useParams();
+  const { diaryDetail, loading } = useDiaryDetail(id);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const series = diaryDetail.data.dailyStatistic.amountByCategory.map(
+    (item) => item.amount,
+  );
+  const chartColors = [
     '#FAF2E8',
     '#BDECEA',
     '#DAB8F1',
@@ -19,18 +28,16 @@ const DiaryTemplate = () => {
     'rgba(189, 236, 235, 0.53)',
   ];
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // console.log('diaryDetail');
-  // console.log(diaryDetail);
-  // console.log(diaryDetail.data.diary);
   const regDate = diaryDetail.data.diary.regDate;
   const title = diaryDetail.data.diary.title;
   const content = diaryDetail.data.diary.content;
   const comment = diaryDetail.data.diary.comment;
   const stampType = diaryDetail.data.diary.stampType;
+
+  // 해당 월의 마지막날 구하기
+  const dateObject = new Date(regDate);
+  dateObject.setMonth(dateObject.getMonth() + 1, 0);
+  const lastDayOfMonth = dateObject.getDate();
 
   return (
     <div className="diary-container">
@@ -60,7 +67,7 @@ const DiaryTemplate = () => {
             valueFont={16}
             valueShow={true}
             valueColor={'black'}
-            colors={colors}
+            colors={chartColors}
           />
           <div className="chart-legend"></div>
         </div>
@@ -68,70 +75,19 @@ const DiaryTemplate = () => {
           <div className="diary-goal-title">
             <p>남은 목표 금액</p>
           </div>
-          <div className="diary-goal">
-            <GoalBar
-              color={'#FAF2E8'}
-              current={120}
-              goal={200}
-              type={'rectangle'}
-            />
-          </div>
-          <div className="diary-goal">
-            <GoalBar
-              color={'#BDECEA'}
-              current={120}
-              goal={200}
-              type={'rectangle'}
-            />
-          </div>
-          <div className="diary-goal">
-            <GoalBar
-              color={'#DAB8F1'}
-              current={120}
-              goal={200}
-              type={'rectangle'}
-            />
-          </div>
-          <div className="diary-goal">
-            <GoalBar
-              color={'rgba(243, 213, 182, 0.63)'}
-              current={60}
-              goal={200}
-              type={'rectangle'}
-            />
-          </div>
-          <div className="diary-goal">
-            <GoalBar
-              color={'rgba(208, 228, 197, 0.42)'}
-              current={120}
-              goal={200}
-              type={'rectangle'}
-            />
-          </div>
-          <div className="diary-goal">
-            <GoalBar
-              color={'rgba(255, 170, 180, 0.50)'}
-              current={120}
-              goal={200}
-              type={'rectangle'}
-            />
-          </div>
-          <div className="diary-goal">
-            <GoalBar
-              color={'#CFE4C5'}
-              current={120}
-              goal={200}
-              type={'rectangle'}
-            />
-          </div>
-          <div className="diary-goal">
-            <GoalBar
-              color={'rgba(189, 236, 235, 0.53)'}
-              current={120}
-              goal={200}
-              type={'rectangle'}
-            />
-          </div>
+          {diaryDetail.data.goalByCategory.map((goalByCategory, index) => (
+            <div key={index} className="diary-goal">
+              <div className="diary-goal-category">
+                {goalByCategory.categoryName}
+              </div>
+              <GoalBar
+                color={chartColors[index]}
+                current={series[index]}
+                goal={goalByCategory.categoryGoalAmount / lastDayOfMonth}
+                type={'rectangle'}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
