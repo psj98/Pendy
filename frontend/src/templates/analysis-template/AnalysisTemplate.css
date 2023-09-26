@@ -38,6 +38,7 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  font-family: 'The Jamsil 3';
 }
 
 .change-month-div {
@@ -46,6 +47,7 @@
   align-items: center;
   justify-content: center;
   width: 70%;
+  font-family: 'The Jamsil 2';
 }
 
 .left-arrow,
