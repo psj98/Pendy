@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import './BarChart.css';
 import ReactApexChart from 'react-apexcharts';
 
-const BarChart = () => {
+const BarChart = ({ series, avgConsumptions }) => {
   //eslint-disable-next-line
+
+  const actualAvgConsumption = Array.isArray(avgConsumptions)
+    ? avgConsumptions
+    : [];
   const [chartData, setChartData] = useState({
     categories: [
       '식비',
@@ -17,37 +21,42 @@ const BarChart = () => {
     ],
     series: [
       {
-        name: '평균 소비 금액',
-        data: [10, 18, 13, 25, 7, 14, 20, 12],
+        name: '나의 평균 소비 금액',
+        data: series || [],
       },
       {
-        name: '나의 소비 금액',
-        data: [15, 8, 20, 10, 12, 16, 22, 19],
+        name: '나와 비슷한 조건의 소비 금액',
+        data: actualAvgConsumption || [],
       },
     ],
   });
 
   return (
-    <div className="bar-chart-container">
-      <div className="bar-chart-wrapper">
-        <ReactApexChart
-          options={{
-            chart: {
-              type: 'bar',
-              toolbar: {
-                show: false,
-              },
-            },
-            xaxis: {
-              categories: chartData.categories,
-            },
-            colors: ['#0076BE', '#AADAFF'],
-          }}
-          series={chartData.series}
-          type="bar"
-        />
-      </div>
-    </div>
+    <ReactApexChart
+      options={{
+        chart: {
+          type: 'bar',
+          toolbar: {
+            show: false,
+          },
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: '75%',
+            distributed: false,
+          },
+        },
+        legend: {
+          position: 'left', // Move the legend to the right side
+        },
+        xaxis: {
+          categories: chartData.categories,
+        },
+        colors: ['#0076BE', '#AADAFF'],
+      }}
+      series={chartData.series}
+      type="bar"
+    />
   );
 };
 

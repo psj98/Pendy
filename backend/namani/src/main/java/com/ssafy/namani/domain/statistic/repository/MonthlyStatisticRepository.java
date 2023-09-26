@@ -19,7 +19,7 @@ public interface MonthlyStatisticRepository extends JpaRepository<MonthlyStatist
      *
      * @param memberId
      * @param curDate
-     * @return Optional<List<MonthlyStatistic>>
+     * @return Optional<List < MonthlyStatistic>>
      */
     @Query(value = "SELECT * FROM monthly_statistic m " +
             "WHERE m.member_id = ?1 AND DATE_FORMAT(m.reg_date, '%Y-%m') = DATE_FORMAT(?2, '%Y-%m')", nativeQuery = true)
@@ -39,14 +39,15 @@ public interface MonthlyStatisticRepository extends JpaRepository<MonthlyStatist
 
     /**
      * 사용자 + 카테고리 + 특정 연월로 이전 3달간의 통계 정보를 가져오는 메서드
-     * 
+     *
      * @param memberId
      * @param curDate
-     * @return Optional<List<IMonthlyStatisticSum>>
+     * @return Optional<List < IMonthlyStatisticSum>>
      */
     @Query(value = "SELECT m.category_id AS categoryId, c.name AS categoryName, SUM(m.amount) / 30000 AS amount FROM monthly_statistic m, category c " +
             "WHERE m.category_id = c.id " +
-            "AND m.member_id = ?1 AND DATE_FORMAT(m.reg_date, '%Y-%m') BETWEEN DATE_FORMAT(DATE_SUB(?2, INTERVAL 3 MONTH), '%Y-%m') AND DATE_FORMAT(DATE_SUB(?2, INTERVAL 1 MONTH), '%Y-%m') " +
+            "AND m.member_id = ?1 " +
+            "AND DATE_FORMAT(m.reg_date, '%Y-%m') BETWEEN DATE_FORMAT(DATE_SUB(?2, INTERVAL 3 MONTH), '%Y-%m') AND DATE_FORMAT(DATE_SUB(?2, INTERVAL 1 MONTH), '%Y-%m') " +
             "GROUP BY m.category_id", nativeQuery = true)
     Optional<List<IMonthlyStatisticAvg>> findByMemberIdRegDateForThreeMonth(UUID memberId, Timestamp curDate);
 }

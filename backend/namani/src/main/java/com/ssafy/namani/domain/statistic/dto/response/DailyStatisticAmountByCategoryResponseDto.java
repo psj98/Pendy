@@ -19,7 +19,7 @@ public class DailyStatisticAmountByCategoryResponseDto {
     @NotNull
     private Integer amount; // 통계값
 
-    @Builder
+    @Builder(toBuilder = true)
     public DailyStatisticAmountByCategoryResponseDto(Integer categoryId, String categoryName, Integer amount) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;

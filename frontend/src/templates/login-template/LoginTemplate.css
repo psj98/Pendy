@@ -1,6 +1,7 @@
 /* LoginTemplate.css */
 
 /* 로그인 스타일 */
+
 .login {
   display: flex;
   flex-direction: column;
@@ -14,10 +15,21 @@
 
 /* 제목 스타일 */
 .login-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   color: #007bff;
+  width: 80%;
+  text-align: center;
+}
+
+.login-container-box {
+  width: 80%;
+  border: 2px solid rgb(213, 213, 213);
+  border-radius: 5px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 입력 필드 스타일 */
@@ -25,9 +37,50 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 15px;
-  width: 80%;
+  width: 90%;
   position: relative;
+}
+
+.email-input {
+  border: 1px solid rgb(213, 213, 213);
+  border-radius: 5px 5px 0 0;
+  padding: 5px 10px;
+}
+
+.pw-input {
+  border: 1px solid rgb(213, 213, 213);
+  border-radius: 0 0 5px 5px;
+  padding: 5px 10px;
+  margin-bottom: 15px;
+  top: -1px;
+}
+
+.email-box,
+.pw-box {
+  border-radius: 10px 10px 0 0;
+}
+
+.login-input-box {
+  font-size: medium;
+  text-indent: 5px;
+  border: 0;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.login-input-box:focus {
+  outline: none;
+}
+
+.email-input:focus-within,
+.pw-input:focus-within {
+  border: 1px solid #007bff;
+  z-index: 1;
+}
+
+.login-button-div {
+  width: 100% !important;
+  margin-top: 20px;
 }
 
 /* 버튼 스타일 */
@@ -35,11 +88,16 @@
   background-color: #007bff;
   color: white;
   border: none;
-  width: 80%;
+  width: 90%;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+}
+
+.login-icon {
+  margin-right: 5px;
+  color: #b8b8b8;
 }
 
 .login-button:hover {
@@ -48,10 +106,18 @@
 
 /* 링크 스타일 */
 .login-link {
-  color: black;
+  color: rgb(106, 106, 106);
   text-decoration: none;
 }
 
 .login-link:hover {
   text-decoration: underline;
+}
+
+.login-pw-sign-up-container {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 25px;
 }

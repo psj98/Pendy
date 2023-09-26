@@ -33,4 +33,7 @@ public interface TotalGoalRepository extends JpaRepository<TotalGoal, Long> {
 		"FROM total_goal t " +
 		"WHERE t.member_id = ?1 AND DATE_FORMAT(t.goal_date, '%Y-%m') = DATE_FORMAT(?2, '%Y-%m')", nativeQuery = true)
 	String findAfterMonth(UUID memberId, Timestamp curDate);
+
+	Optional<TotalGoal> findByMember_Id(UUID memberID);
+
 }

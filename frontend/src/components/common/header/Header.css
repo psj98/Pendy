@@ -5,20 +5,13 @@
   top: 0;
   left: 0;
   right: 0;
+  padding: 0 20px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 60px;
-
+  height: 10vh;
   background-color: #f8f8ff;
   z-index: 1;
-}
-
-.header-logo-container {
-  width: 15%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .header-link-content {
@@ -28,13 +21,6 @@
   text-decoration: none;
 }
 
-.header-blank {
-  width: 75%;
-}
-
 .header-menu-container {
-  width: 10%;
-  display: flex;
-  justify-content: right;
-  align-items: center;
+  cursor: pointer;
 }

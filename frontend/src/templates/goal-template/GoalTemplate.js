@@ -2,11 +2,30 @@ import React, { useEffect, useState } from 'react';
 import './GoalTemplate.css';
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import BarChart from '../../components/common/bar-chart/BarChart';
+import GoalBar from '../../components/common/goal-bar/GoalBar';
 import handleGoalDetail from '../../utils/handleGoalDetail';
 import format from 'date-fns/format';
+import handleGoalUpdate from '../../utils/handleGoalUpdate';
+
 const GoalTemplate = () => {
-  const [categoryGoalAmounts, setCategoryGoalAmounts] = useState([]);
-  const series = [1, 1, 1, 1, 1, 1, 1, 1];
+  const [goalByCategory, setGoalByCategory] = useState([]);
+  const [originalGoalByCategory, setOriginalGoalByCategory] = useState([]);
+  const [monthlyTotalAmount, setMonthlyTotalAmount] = useState();
+  const [series, setSeries] = useState([]);
+  const [totalGoals, setTotalGoals] = useState([]);
+  const [editable, setEditable] = useState(false);
+  const [buttonLabel, setButtonLabel] = useState('수정');
+  const [avgConsumptions, setAvgConsumption] = useState([]);
+  const categoryNameToKor = {
+    food: '식비',
+    traffic: '교통',
+    online: '온라인 쇼핑',
+    offline: '오프라인 쇼핑',
+    cafe: '카페/간식',
+    housing: '고정지출',
+    fashion: '패션/미용',
+    culture: '문화/여가',
+  };
   const colors = [
     '#FAF2E8',
     '#BDECEA',
@@ -18,8 +37,17 @@ const GoalTemplate = () => {
     'rgba(189, 236, 235, 0.53)',
   ];
 
+  const handleInputChange = (e, index) => {
+    const value = parseInt(e.target.value) || 0;
+    setGoalByCategory((prevState) =>
+      prevState.map((item, idx) => {
+        if (idx !== index) return item;
+        return { ...item, categoryGoalAmount: value };
+      }),
+    );
+  };
+
   useEffect(() => {
-    //age, salary
     const age = sessionStorage.getItem('age');
     const salary = sessionStorage.getItem('salary');
     const curDate = format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'");
@@ -27,71 +55,206 @@ const GoalTemplate = () => {
     const fetchData = async () => {
       try {
         const response = await handleGoalDetail(age, salary, curDate);
-
-        const amounts = response.data.data.goalByCategoryList.map(
-          (item) => item.categoryGoalAmount,
+        const goalByCategoryList = response.data.data.goalByCategoryList;
+        const seriesList = goalByCategoryList.map(
+          (index) => index.categoryGoalAmount,
+        );
+        const totalGoal = response.data.data.totalGoal;
+        const monthlyStatisticAmount =
+          response.data.data.monthlyStatistic.totalAmount;
+        const avgCon = response.data.data.avgConsumptionAmountAvg.map(
+          (index) => index.amount,
         );
 
-        setCategoryGoalAmounts(amounts);
+        setAvgConsumption(avgCon);
+        setMonthlyTotalAmount(monthlyStatisticAmount);
+        setGoalByCategory(goalByCategoryList);
+        setOriginalGoalByCategory(goalByCategoryList); // Set original state
+        setSeries(seriesList);
+        setTotalGoals(totalGoal);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, []);
+  const handleButtonClick = () => {
+    if (editable) {
+      handleUpdate();
+    } else {
+      setOriginalGoalByCategory(JSON.parse(JSON.stringify(goalByCategory))); // Deep copy
+    }
+    handleEditToggle();
+  };
 
-  // console.log(categoryGoalAmounts);
+  const handleEditToggle = () => {
+    if (!editable) {
+      setOriginalGoalByCategory([...originalGoalByCategory]);
+    }
+    setEditable(!editable);
+    setButtonLabel(editable ? '수정' : '확인');
+  };
 
+  const handleCancel = () => {
+    setGoalByCategory(JSON.parse(JSON.stringify(originalGoalByCategory))); // Reset to original state
+    setEditable(false);
+    setButtonLabel('수정');
+  };
+
+  const handleUpdate = async () => {
+    if (editable) {
+      try {
+        const id = totalGoals.id;
+        var goalAmount = 0;
+        const newGoalByCategory = goalByCategory.map((item) => {
+          goalAmount += item.categoryGoalAmount;
+          return {
+            categoryName: item.categoryName,
+            categoryId: item.categoryId, // 예를 들어, categoryName을 categoryId로 변환하는 함수
+            categoryGoalAmount: item.categoryGoalAmount,
+          };
+        });
+
+        const newTotalGoals = totalGoals;
+        newTotalGoals.goalAmount = goalAmount;
+
+        await handleGoalUpdate(id, goalAmount, newGoalByCategory);
+        setTotalGoals(newTotalGoals);
+        setOriginalGoalByCategory(newGoalByCategory);
+
+        // const age = sessionStorage.getItem('age');
+        // const salary = sessionStorage.getItem('salary');
+        // const curDate = format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'");
+
+        const updatedSeries = goalByCategory.map(
+          (item) => item.categoryGoalAmount,
+        );
+        setSeries(updatedSeries);
+
+        handleEditToggle();
+      } catch (error) {
+        console.error('Failed to update:', error);
+      }
+    }
+  };
   return (
     <div className="goal-template">
-      <div className="goal-container">
-        <div className="goal-chart">
-          <DonutChart
-            series={series}
-            title={'오늘 총 소비액'}
-            legendShow={false}
-            legendFont={20}
-            labelShow={true}
-            labelFont={18}
-            labelColor={'black'}
-            valueFont={16}
-            valueShow={true}
-            valueColor={'black'}
-            colors={colors}
-          />
-        </div>
-        <div className="goal-inputs-container">
-          <div className="goal-inputs-left">
-            {categoryGoalAmounts.slice(0, 4).map((amount, index) => (
-              <div key={index}>
-                <input
-                  type="text"
-                  placeholder={`Input ${index + 1}`}
-                  value={amount || ''}
-                  readOnly
-                />
-                원
-              </div>
-            ))}
+      <h1 style={{ margin: '30px 0' }}>목표 설정</h1>
+      <div className="goal-main">
+        <div className="goal-container">
+          <div className="goal-chart">
+            {goalByCategory.length > 0 && (
+              <DonutChart
+                series={series}
+                title={'총 목표 소비액'}
+                legendShow={false}
+                legendFont={20}
+                labelShow={true}
+                labelFont={18}
+                labelColor={'black'}
+                valueFont={16}
+                valueShow={true}
+                valueColor={'black'}
+                colors={colors}
+              />
+            )}
           </div>
 
-          <div className="goal-inputs-right">
-            {categoryGoalAmounts.slice(4, 8).map((amount, index) => (
-              <div key={index + 4}>
-                <input
-                  type="text"
-                  placeholder={`Input ${index + 5}`}
-                  value={amount || ''}
-                  readOnly
-                />
-                원
+          {/* <div className="goal-bar"> */}
+          <GoalBar
+            color={'#2A4FFA'}
+            current={monthlyTotalAmount}
+            goal={totalGoals.goalAmount}
+            type={'update'}
+          />
+          {/* </div> */}
+
+          <div className="goal-input-button-container">
+            <div className="goal-inputs-container">
+              <div className="goal-inputs-left">
+                {goalByCategory.slice(0, 4).map((category, index) => (
+                  <div key={index} className="goal-inputs-category">
+                    <div className="goal-inputs-category-name">
+                      {categoryNameToKor[category.categoryName]}
+                    </div>
+                    <div
+                      className="goal-inputs-rectangle-label"
+                      style={{
+                        backgroundColor: colors[index],
+                      }}
+                    ></div>
+                    <input
+                      type="text"
+                      className="input goal-inputs-amount"
+                      placeholder="숫자로 입력"
+                      variant="outlined"
+                      value={category.categoryGoalAmount || 0}
+                      readOnly={!editable}
+                      onChange={(e) => handleInputChange(e, index)}
+                    />
+                    원
+                  </div>
+                ))}
               </div>
-            ))}
+              <div className="goal-inputs-right">
+                {goalByCategory.slice(4, 8).map((category, index) => (
+                  <div key={index} className="goal-inputs-category">
+                    <div className="goal-inputs-category-name">
+                      {categoryNameToKor[category.categoryName]}
+                    </div>
+                    <div
+                      className="goal-inputs-rectangle-label"
+                      style={{
+                        backgroundColor: colors[index + 4],
+                      }}
+                    ></div>
+                    <input
+                      type="text"
+                      className="input goal-inputs-amount"
+                      placeholder="숫자로 입력"
+                      variant="outlined"
+                      value={category.categoryGoalAmount || 0}
+                      readOnly={!editable}
+                      onChange={(e) => handleInputChange(e, index + 4)}
+                    />
+                    원
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="goal-update-button-div">
+              <button
+                onClick={handleButtonClick}
+                className="signup-button duplicatecheck-button"
+                style={{
+                  margin: '0 0 0 10px',
+                  fontSize: 'smaller',
+                  padding: '5px 10px',
+                }}
+              >
+                {buttonLabel}
+              </button>
+              {editable && (
+                <button
+                  onClick={handleCancel}
+                  className="signup-button duplicatecheck-button"
+                  style={{
+                    margin: '0 0 0 10px',
+                    fontSize: 'smaller',
+                    padding: '5px 10px',
+                  }}
+                >
+                  취소
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="goal-bar-chart">
-        <BarChart />
+        {series.length > 0 && (
+          <div className="goal-bar-chart">
+            <BarChart series={series} avgConsumptions={avgConsumptions} />
+          </div>
+        )}
       </div>
     </div>
   );
