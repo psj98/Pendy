@@ -42,14 +42,24 @@
 }
 
 .col.cell {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   background-color: white;
+  background-size: 80% auto;
+  background-position: center bottom;
+  background-repeat: no-repeat;
 }
+
 .col.cell.valid:hover {
   cursor: pointer;
   box-shadow: 1.5px 1.5px 0.1em #444;
   transform: scale(1.01);
   border: none;
   background: rgba(128, 128, 128, 0.5);
+  background-size: 80% auto;
+  background-position: center bottom;
+  background-repeat: no-repeat;
 }
 
 .col.cell.selected {
@@ -59,4 +69,25 @@
   background: #007bff;
   color: #fff;
   font-weight: 600;
+  background-size: 80% auto;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+
+.calender-dot-container {
+  position: relative;
+  top: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calender-dot {
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
 }
