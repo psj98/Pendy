@@ -5,7 +5,7 @@ import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
 import { isSameMonth, isSameDay, addDays } from 'date-fns';
 
 // 캘린더 cell
-const CalenderCells = ({ currentMonth }) => {
+const CalenderCells = ({ currentMonth, diaries }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
@@ -20,6 +20,14 @@ const CalenderCells = ({ currentMonth }) => {
   // 날짜 선택
   const onDateClick = (day) => {
     setSelectedDate(day);
+  };
+
+  //일기가 있을 경우 점 표시
+  const getDotStyle = (day) => {
+    const hasDiary = diaries.some((diary) =>
+      isSameDay(new Date(diary.regDate), day),
+    );
+    return hasDiary;
   };
 
   while (day <= endDate) {
@@ -49,6 +57,11 @@ const CalenderCells = ({ currentMonth }) => {
           >
             {formattedDate}
           </span>
+          {getDotStyle(day) && (
+            <div className="dot-container">
+              <div className="dot"></div>
+            </div>
+          )}
         </div>,
       );
       day = addDays(day, 1);

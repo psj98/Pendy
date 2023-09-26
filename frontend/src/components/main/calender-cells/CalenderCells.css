@@ -40,8 +40,11 @@
 }
 
 .col.cell {
+  display: flex;
+  justify-content: space-between;
   background-color: white;
 }
+
 .col.cell.valid:hover {
   cursor: pointer;
   box-shadow: 1.5px 1.5px 0.1em #444;
@@ -57,4 +60,22 @@
   background: #007bff;
   color: #fff;
   font-weight: 600;
+}
+
+.dot-container {
+  position: relative;
+  top: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
 }
