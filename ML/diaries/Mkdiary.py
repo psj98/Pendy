@@ -3,7 +3,7 @@
 from langchain.llms import OpenAI
 
 #GPT
-from openaikey import apikey
+from ML.openaikey import apikey
 
 #키 등록
 import os
@@ -25,7 +25,7 @@ def mkdiary(req):
         "title":"제목 예시",
         "content": "오늘은 그냥 잠만 잤다", # text
         "comment ": "참 잘했어요", # text
-        "stamp_type": 5 # int
+        "stampType": 5 # int
     }
 
     # tempurature : 0 ~ 1 로 높아질수록 랜덤한 답변 생성 / 창의력
@@ -43,7 +43,7 @@ def mkdiary(req):
     # 받아온 req로 res_plain_txt 수정
         # 접근하기 쉽게 데이터프레임화
     # BaseModel로 col을 명시해서 col_name와도 문제가 없습니다
-    req = req.json()
+    # req = req.json()
     req = json.loads(req)
 
     req_cols = list(req.keys())
@@ -59,7 +59,7 @@ def mkdiary(req):
     consume_list = "[Consume List]\n{"
     for i in req_consume_list.columns:
         consume_one = str(i) + ":" + str(req_consume_list[i][0]) + "Won " + str(
-            feeling[(req_consume_list[i][1])]) + "\n"
+            feeling[(req_consume_list[i][1]-1)]) + "\n"
         consume_list += consume_one
     consume_list += "}\n"
 
@@ -69,22 +69,27 @@ def mkdiary(req):
     instructions = """
        [Instructions]
        - Write a diary entry in Korean following the instructions below, referring to the 'Response Format' and 'Consume List'
-       - Be sure to follow the 'Response Format' and do not respond otherwise.
-       - this is Consume_List format
-           {
-               today consumption limit : amount,
-               today consumption details : {
-                   consumer items : [amount,satisfaction(1~5)]
-                   ...
-               }
-           }
-       [Response Format]
+       - Be sure to follow the 'Response Format' with "title", "content", "comment", and "stampType" as keys and do not respond otherwise.
+       
+       [Consume_List]
+       ```
        {
-           "title": "write a title over 10 characters"
+           today consumption limit : amount,
+           today consumption details : {
+               consumer items : [amount,satisfaction(1~5)]
+               ...
+           }
+       }
+       ```
+       [Response Format]
+       ```
+       {
+           "title": "write a title over 10 characters",
            "content": "like an 75-years-old, write a fun diary content over 50 characters",
            "comment": "As an elementary school teacher, give comment",
            "stampType": "assign a score judging the spending details from a range of 1 to 5, int"
        }
+       ```
     """
 
     # 구버전, 개요 확인용으로 남겨두었습니다
@@ -111,7 +116,12 @@ def mkdiary(req):
     # ret["content"]
     # ret["comment"]
     # ret["stamp_type"]
-    ret = json.loads(res_plain_txt)
+    print(res_plain_txt)
+
+    # ret = json.loads(res_plain_txt)
+
+
+
     return ret
 
     # food : 식비
@@ -122,3 +132,18 @@ def mkdiary(req):
     # housing : 주거/통신
     # fashion : 패션/미용
     # culture : 문화/여가
+
+if __name__=="__main__":
+    my_data = {
+        "ConsumptionLimit": 30000,
+        "ConsumptionDetails": {
+            "순대국밥": [9000, 3],
+            "메가커피": [2000, 4],
+        }
+    }
+
+    my_request = json.dumps(my_data)
+    ret = mkdiary(my_request)
+
+
+    print(ret)
