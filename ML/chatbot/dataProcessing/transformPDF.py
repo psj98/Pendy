@@ -12,7 +12,7 @@ if __name__=="__main__":
 
 
     # 단일 pdf에서 일단 저장하는 코드
-    dir_path = "pdfdir"
+    dir_path = "../pdfdir"
     # pdf_path = "df"
     # txt_path = "df"
 
