@@ -5,8 +5,9 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores.faiss import FAISS
 from langchain.docstore.document import Document
 
-# from ML.openaikey import apikey
-# import os
+import os
+from dotenv import load_dotenv
+
 import re
 
 def load_single_document(file_path):
@@ -18,9 +19,10 @@ def load_documents(source_dir):
     return [load_single_document(f"{source_dir}/{file_name}") for file_name in all_files]
 
 if __name__=="__main__":
+    load_dotenv()
+    os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
 
     db_path = "../vector_faissdb"
-    os.environ["OPENAI_API_KEY"] = apikey
     embeddings = OpenAIEmbeddings()
 
     # file_name = "./news.txt"
