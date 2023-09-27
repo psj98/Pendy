@@ -15,13 +15,6 @@ from langchain.prompts.chat import (
 #FAISS ( vector db )
 from langchain.vectorstores import FAISS
 
-#GPT
-# from ML.openaikey import apikey
-
-#키 등록
-import os
-# os.environ["OPENAI_API_KEY"] = apikey
-
 # 데이터프레임
 import pandas as pd
 
@@ -88,6 +81,11 @@ def namani(request_data):
     return result_data
 
 if __name__=="__main__":
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
+
     req = {
         "preMessage": "",
         "tempMessage": "재미있는 이야기"
