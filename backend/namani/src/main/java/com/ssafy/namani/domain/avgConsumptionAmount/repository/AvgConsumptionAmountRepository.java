@@ -45,7 +45,7 @@ public interface AvgConsumptionAmountRepository extends JpaRepository<AvgConsump
      * @param curDate
      * @return Optional<List<IAvgConsumptionAmountAvg>>
      */
-    @Query(value = "SELECT a.category_id AS categoryId, c.name AS categoryName, SUM(a.sum_amount) / 30000 / ?1 AS amount " +
+    @Query(value = "SELECT a.category_id AS categoryId, c.name AS categoryName, SUM(a.sum_amount) / ?1 AS amount " +
             "FROM avg_consumption_amount a, category c " +
             "WHERE a.category_id = c.id " +
             "AND a.age_salary_id = ?2 AND DATE_FORMAT(a.reg_date, '%Y-%m') BETWEEN DATE_FORMAT(DATE_SUB(?3, INTERVAL 3 MONTH), '%Y-%m') AND DATE_FORMAT(DATE_SUB(?3, INTERVAL 1 MONTH), '%Y-%m') " +

@@ -3,11 +3,13 @@ package com.ssafy.namani.domain.avgConsumptionAmount.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class AvgConsumptionAmountForThreeMonthResponseDto {
 
     @NotNull
@@ -19,10 +21,10 @@ public class AvgConsumptionAmountForThreeMonthResponseDto {
     @NotNull
     private Integer amount; // 평균 소비 금액
 
-    @Builder
-    public AvgConsumptionAmountForThreeMonthResponseDto(Integer amount, Integer categoryId, String categoryName) {
-        this.amount = amount;
+    @Builder(toBuilder = true)
+    public AvgConsumptionAmountForThreeMonthResponseDto(Integer categoryId, String categoryName, Integer amount) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+        this.amount = amount;
     }
 }
