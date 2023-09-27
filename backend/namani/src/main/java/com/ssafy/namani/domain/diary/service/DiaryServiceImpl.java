@@ -83,10 +83,16 @@ public class DiaryServiceImpl implements DiaryService {
             diaryCalendarList.add(diaryCalendarResponseDto);
         }
 
-        /* 월간 목표 조회 */
+        /* todayDate 기준 월간 목표 조회 - 현재 월(now)에 대한 목표 */
+        TotalGoalDetailResponseDto ThisMonthGoalInfo = goalService.getTotalGoal(memberId, todayDate);
+
+        /* todayDate 카테고리 별 목표 조회 */
+        List<GoalByCategoryDetailResponseDto> ThisMonthGoalByCategoryList = goalService.getGoalByCategoryList(ThisMonthGoalInfo.getId());
+
+        /* todayMonth 기준 월간 목표 조회 */
         TotalGoalDetailResponseDto totalGoal = goalService.getTotalGoal(memberId, todayMonth);
 
-        /* 카테고리 별 목표 조회 */
+        /* todayMonth 카테고리 별 목표 조회 */
         List<GoalByCategoryDetailResponseDto> goalByCategoryList = goalService.getGoalByCategoryList(totalGoal.getId());
 
         /* 특정 일에 해당하는 DailyStatistic 조회 */
@@ -117,6 +123,8 @@ public class DiaryServiceImpl implements DiaryService {
         /* 일기 목록 전달 */
         DiaryListResponseDto diaryListResponseDto = DiaryListResponseDto.builder()
                 .diaryList(diaryCalendarList)
+                .ThisMonthGoalInfo(ThisMonthGoalInfo)
+                .ThisMonthGoalByCategoryList(ThisMonthGoalByCategoryList)
                 .totalGoal(totalGoal)
                 .goalByCategoryList(goalByCategoryList)
                 .monthlyStatistic(monthlyStatistic)
@@ -340,7 +348,7 @@ public class DiaryServiceImpl implements DiaryService {
         Boolean hasBeforeMonthlyGoal = true;
         Optional<TotalGoal> beforeMonthGoal = totalGoalRepository.findByCurDate(memberId, beforeMonthTimestamp);
         // 목표 없음 ERROR
-        if (beforeMonthGoal.isEmpty()) {
+        if (beforeMonthGoal.isEmpty() || beforeMonthGoal.get().getGoalAmount() == 0) {
             hasBeforeMonthlyGoal = false;
         }
 
@@ -355,7 +363,7 @@ public class DiaryServiceImpl implements DiaryService {
         Boolean hasAfterMonthlyGoal = true;
         Optional<TotalGoal> afterMonthGoal = totalGoalRepository.findByCurDate(memberId, afterMonthTimestamp);
         // 목표 없음 ERROR
-        if (afterMonthGoal.isEmpty()) {
+        if (afterMonthGoal.isEmpty() || afterMonthGoal.get().getGoalAmount() == 0) {
             hasAfterMonthlyGoal = false;
         }
 

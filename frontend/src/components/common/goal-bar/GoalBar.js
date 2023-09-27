@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './GoalBar.css';
 
-const GoalBar = () => {
-  const current = 120;
-  const goal = 230;
-  const [midpoint] = useState(`${(current / goal) * 100}%`);
+const GoalBar = ({ color, current, goal, type, textcolor }) => {
+  const midpoint = (current / goal) * 100 + '%';
+  const barType = type != null ? type : 'default';
+  const textColor = textcolor === 'red' ? 'red' : 'black';
 
   return (
-    <div className="goal-bar" style={{ '--midpoint': midpoint }}>
+    <div
+      className={[`goal-bar-${barType}`].join(' ')}
+      style={{
+        '--midpoint': midpoint,
+        '--color': color,
+        '--textcolor': textColor,
+      }}
+    >
       <p>{Math.round((current / goal) * 100)}%</p>
     </div>
   );
