@@ -23,12 +23,10 @@ import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
