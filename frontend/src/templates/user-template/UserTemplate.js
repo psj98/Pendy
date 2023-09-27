@@ -195,10 +195,6 @@ const UserTemplate = () => {
               goal={consumption_goal}
             />
           )}
-          <br />
-          {selectedOption === 'option1' && (
-            <div className="spend-text-black">오늘의 고정 지출</div>
-          )}
         </div>
       </div>
       <div>
