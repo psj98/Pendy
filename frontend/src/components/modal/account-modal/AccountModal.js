@@ -52,11 +52,6 @@ const AccountModal = ({ index, closeModal, handleAccountChange, accounts }) => {
   const onSendCodeClick = async (event) => {
     event.preventDefault();
     try {
-      if (accounts.includes(accountNumber)) {
-        alert('이미 등록한 계좌입니다.');
-        return;
-      }
-
       const response = await handleSendCode(bankCode, accountNumber);
       if (response.data.code === 1000) {
         console.log('SendCode success');
@@ -193,7 +188,7 @@ const AccountModal = ({ index, closeModal, handleAccountChange, accounts }) => {
                   onChange={(e) => setAuthCode(e.target.value)}
                 />
                 <div className="timer-text">
-                  {parseInt(timer / 60)}:{String(timer % 60).padEnd(2, "0")}
+                  {parseInt(timer / 60)}:{String(timer % 60).padEnd(2, '0')}
                 </div>
               </div>
               <div className="modal-code-btn-box">
