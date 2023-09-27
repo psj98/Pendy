@@ -63,7 +63,7 @@ const Header = ({ isLoggedIn }) => {
                     isActive('/goal') ? 'active-link' : ''
                   }`}
                 >
-                  목표설정
+                  내 목표
                 </Link>
               </div>
               <div className="sub-menu-container" onClick={onClickLogout}>
