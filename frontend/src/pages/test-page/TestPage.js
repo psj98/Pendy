@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './TestPage.css';
 import EmotionModal from '../../components/modal/emotion-modal/EmotionModal';
+import ChatBot from '../../components/common/chat-bot/ChatBot';
 
 // import DonutChart from '../../components/common/donut-chart/DonutChart';
 // import Header from '../../components/common/header/Header';
@@ -24,6 +25,9 @@ const TestPage = () => {
     <div className="test-page">
       <button onClick={() => openModal()}>버튼 클릭</button>
       {isModalOpen && <EmotionModal closeModal={closeModal} />}
+      <div className="test-chat">
+        <ChatBot />
+      </div>
     </div>
   );
 };
