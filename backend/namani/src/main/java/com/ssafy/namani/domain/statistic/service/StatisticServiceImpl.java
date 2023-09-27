@@ -9,7 +9,6 @@ import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticDetailByRegD
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticAmountByCategoryResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticDetailByRegDateResponseDto;
 import com.ssafy.namani.domain.statistic.entity.DailyStatistic;
-import com.ssafy.namani.domain.statistic.entity.IMonthlyStatisticAvg;
 import com.ssafy.namani.domain.statistic.entity.MonthlyStatistic;
 import com.ssafy.namani.domain.statistic.repository.DailyStatisticRepository;
 import com.ssafy.namani.domain.statistic.repository.MonthlyStatisticRepository;
@@ -22,7 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service

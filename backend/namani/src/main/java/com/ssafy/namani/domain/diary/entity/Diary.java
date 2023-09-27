@@ -25,6 +25,9 @@ public class Diary {
 	private Member member; // 사용자
 
 	@NotNull
+	private String title; // 일기 제목
+
+	@NotNull
 	private String content; // 일기 내용
 
 	@NotNull
@@ -36,13 +39,14 @@ public class Diary {
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp regDate; // 일기 등록 날짜
 
-    @Builder(toBuilder = true)
-    public Diary(Long id, Member member, String content, String comment, Integer stampType, Timestamp regDate) {
-        this.id = id;
-        this.member = member;
-        this.content = content;
-        this.comment = comment;
-        this.stampType = stampType;
-        this.regDate = regDate;
-    }
+	@Builder(toBuilder = true)
+	public Diary(Long id, Member member, String title, String content, String comment, Integer stampType, Timestamp regDate) {
+		this.id = id;
+		this.member = member;
+		this.title = title;
+		this.content = content;
+		this.comment = comment;
+		this.stampType = stampType;
+		this.regDate = regDate;
+	}
 }

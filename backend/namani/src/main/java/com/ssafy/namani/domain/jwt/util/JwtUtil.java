@@ -1,4 +1,5 @@
 package com.ssafy.namani.domain.jwt.util;
+
 import com.ssafy.namani.domain.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;

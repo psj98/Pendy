@@ -1,29 +1,17 @@
 package com.ssafy.namani.domain.s3.controller;
 
-import com.ssafy.namani.domain.accountInfo.entity.AccountInfo;
-import com.ssafy.namani.domain.accountInfo.repository.AccountInfoRepository;
-import com.ssafy.namani.domain.avgConsumptionAmount.entity.AvgConsumptionAmount;
 import com.ssafy.namani.domain.clovaOCR.dto.response.ClovaOCRResponseDto;
 import com.ssafy.namani.domain.clovaOCR.service.ClovaOCRService;
-import com.ssafy.namani.domain.jwt.service.JwtService;
-import com.ssafy.namani.domain.member.service.MemberService;
 import com.ssafy.namani.domain.s3.dto.response.S3ResponseDto;
 import com.ssafy.namani.domain.s3.service.S3Service;
-import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
 import com.ssafy.namani.domain.transactionInfo.service.TransactionInfoService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
-import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @RestController

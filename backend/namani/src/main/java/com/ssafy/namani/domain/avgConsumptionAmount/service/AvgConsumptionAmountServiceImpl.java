@@ -9,7 +9,6 @@ import com.ssafy.namani.domain.avgConsumptionAmount.entity.IAvgConsumptionAmount
 import com.ssafy.namani.domain.avgConsumptionAmount.repository.AvgConsumptionAmountRepository;
 import com.ssafy.namani.domain.category.entity.Category;
 import com.ssafy.namani.domain.category.repository.CategoryRepository;
-import com.ssafy.namani.domain.statistic.dto.response.MonthlyStatisticAmountByCategoryResponseDto;
 import com.ssafy.namani.domain.transactionInfo.entity.TransactionInfo;
 import com.ssafy.namani.domain.transactionInfo.repository.TransactionInfoRepository;
 import com.ssafy.namani.global.response.BaseException;
@@ -188,7 +187,6 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
             throw new BaseException(BaseResponseStatus.NO_AGE_SALARY_INFO_BY_AGE_SALARY);
         }
 
-
         // 평균 소비 정보 체크
         AgeSalary ageSalary = ageSalaryOptional.get();
         List<IAvgConsumptionAmountAvg> iAvgConsumptionAmountAvgList = avgConsumptionAmountRepository.findByAgeSalaryIdRegDateForThreeMonth(ageSalary.getPeopleNum(), ageSalary.getId(), curDate).get();
@@ -200,8 +198,6 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
 
             avgConsumptionAmountAvgList.set(iAvgConsumptionAmountAvg.getCategoryId() - 1, newAmountByCategory);
         }
-
-        log.info("1"+ avgConsumptionAmountAvgList.toString());
 
         return avgConsumptionAmountAvgList;
     }

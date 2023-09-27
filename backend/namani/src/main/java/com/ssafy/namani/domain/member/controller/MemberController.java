@@ -1,22 +1,18 @@
 package com.ssafy.namani.domain.member.controller;
 
-
 import com.ssafy.namani.domain.jwt.service.JwtService;
 import com.ssafy.namani.domain.member.dto.request.MemberDuplicationCheckRequestDto;
 import com.ssafy.namani.domain.member.dto.request.MemberLoginRequestDto;
+import com.ssafy.namani.domain.member.dto.request.MemberRegisterRequestDto;
 import com.ssafy.namani.domain.member.dto.request.MemberUpdateRequestDto;
 import com.ssafy.namani.domain.member.dto.response.MemberLoginResponseDto;
 import com.ssafy.namani.domain.member.service.MemberService;
-import com.ssafy.namani.domain.member.dto.request.MemberRegisterRequestDto;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;

@@ -3,7 +3,6 @@ package com.ssafy.namani.domain.accountInfo.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor

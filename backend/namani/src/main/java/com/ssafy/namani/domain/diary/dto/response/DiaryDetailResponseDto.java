@@ -3,7 +3,6 @@ package com.ssafy.namani.domain.diary.dto.response;
 import com.ssafy.namani.domain.diary.entity.Diary;
 import com.ssafy.namani.domain.goal.dto.response.GoalByCategoryDetailResponseDto;
 import com.ssafy.namani.domain.statistic.dto.response.DailyStatisticDetailByRegDateResponseDto;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
