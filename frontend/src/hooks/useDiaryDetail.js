@@ -2,35 +2,37 @@
 import authAxiosCreate from '../authAxiosCreate';
 import { useEffect, useState } from 'react';
 
-const useDiaryDetail = (id) => {
+const useDiaryDetail = (id, regDate) => {
   console.log('useDiaryDetail');
-  console.log(id);
   const [diaryDetail, setDiaryDetail] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [diaryLoading, setDiaryLoading] = useState(true);
+  const data = {
+    id: id,
+    regDate: regDate,
+  };
 
   useEffect(() => {
     const getDiaryDetail = async () => {
       try {
-        const regDate = new Date();
-        const data = {
-          id: id,
-          regDate: regDate,
-        };
-
         const serverUrl = '/api/diaries/after';
         const response = await authAxiosCreate.post(serverUrl, data);
-        setDiaryDetail(response.data);
+        if (response.data.code === 1000) {
+          console.log('load diary detail success');
+          setDiaryDetail(response.data);
+        } else {
+          console.error(response.data.code + ' ' + response.data.message);
+        }
+        setDiaryLoading(false);
       } catch (error) {
-        console.error('일기 내용을 불러오는 중 에러가 발생했습니다.', error);
-      } finally {
-        setLoading(false);
+        console.error('load diary detail failed', error);
+        setDiaryLoading(false);
       }
     };
 
     getDiaryDetail();
-  }, [id]);
+  }, [id, regDate]);
 
-  return { diaryDetail, loading };
+  return { diaryDetail, diaryLoading };
 };
 
 export default useDiaryDetail;

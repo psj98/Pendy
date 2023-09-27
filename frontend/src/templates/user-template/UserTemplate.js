@@ -9,12 +9,16 @@ import GoalBar from '../../components/common/goal-bar/GoalBar';
 import DayMonthButton from '../../components/main/day-month-button/DayMonthButton';
 import handleCalender from '../../utils/handleCalender';
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 //유저 전용 메인 페이지
 const UserTemplate = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [responseData, setResponseData] = useState([]);
   const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
+
+  let diaries = [];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +36,7 @@ const UserTemplate = () => {
         );
         const response = await handleCalender(todayDate, todayMonth);
         console.log('res', response.data);
-        console.log('complate load');
+        console.log('complete load');
         setResponseData(response.data); // response 데이터를 상태로 저장
       } catch (error) {
         console.log(error);
@@ -41,7 +45,7 @@ const UserTemplate = () => {
 
     fetchData();
   }, [currentMonth]);
-  console.log('usertemplate ' + currentMonth);
+  console.log('현재 월 : ' + currentMonth);
 
   // 달력을 이전달로 넘기는 기능
   const prevMonth = () => {
@@ -64,7 +68,7 @@ const UserTemplate = () => {
   // 현재 월의 총 일 수 계산
   const totalDaysInCurrentMonth = lastDayOfCurrentMonth.getDate();
 
-  console.log('현재 월의 총 일 수:', totalDaysInCurrentMonth);
+  // console.log('현재 월의 총 일 수:', totalDaysInCurrentMonth);
 
   // DayMonthButton에서 선택된 옵션을 받아와서 상태 업데이트
   const handleOptionChange = (option) => {
@@ -105,6 +109,8 @@ const UserTemplate = () => {
     let monthlyGoalByToday = responseData.data.thisMonthGoalInfo.goalAmount;
     // 오늘 목표 소비 금액
     let dailyGoal = monthlyGoalByToday / totalDaysInCurrentMonth;
+    //일기 리스트
+    diaries = responseData.data.diaryList;
 
     // 월간
     // 이번달 목표
@@ -127,10 +133,10 @@ const UserTemplate = () => {
     chartData = statisticData.map((item) => item.amount);
   }
 
-  console.log('차트 데이터 : ', chartData);
-  console.log('소비 금액 : ', consumption_amount);
-  console.log('목표 금액 : ', consumption_goal);
-
+  // console.log('차트 데이터 : ', chartData);
+  // console.log('소비 금액 : ', consumption_amount);
+  // console.log('목표 금액 : ', consumption_goal);
+  console.log('currentMonth in UserTemplate: ', currentMonth);
   return (
     <div className="user">
       <div className="calender-container">
@@ -141,7 +147,7 @@ const UserTemplate = () => {
             nextMonth={nextMonth}
           />
           <CalenderDays />
-          <CalenderCells currentMonth={currentMonth} />
+          <CalenderCells currentMonth={currentMonth} diaries={diaries} />
         </div>
       </div>
       <div className="chart-container">
@@ -180,13 +186,9 @@ const UserTemplate = () => {
               goal={consumption_goal}
             />
           )}
-          <br />
-
-          {selectedOption === 'option1' && (
-            <div className="spend-text-black">오늘의 고정 지출</div>
-          )}
         </div>
       </div>
+      <div></div>
     </div>
   );
 };

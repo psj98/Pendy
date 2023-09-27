@@ -9,14 +9,15 @@
     /* var(--color) var(--midpoint), */ #fff var(--midpoint),
     #fff 100%
   );
-  border-radius: 10px;
-  border: 2px solid #ccc;
+  border-radius: 5px;
+  border: 1px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   font-size: 16px;
   font-weight: 700;
+  font-family: 'The Jamsil 3';
 }
 
 .goal-bar-rectangle {
@@ -28,7 +29,7 @@
     /* var(--color) var(--midpoint), */ #fff var(--midpoint),
     #fff 100%
   );
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,7 +49,7 @@
   );
   background-blend-mode: var(--midpoint);
   border-radius: 10px;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,4 +57,25 @@
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 40px;
+}
+
+.goal-bar-diary {
+  width: 60%;
+  height: 35px;
+  background: linear-gradient(
+    to right,
+    var(--color) 0%,
+    /* var(--color) var(--midpoint), */ #fff var(--midpoint),
+    #fff 100%
+  );
+  background-blend-mode: var(--midpoint);
+  border-radius: 10px;
+  border: 1px solid #afafaf;
+  color: var(--textcolor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: medium;
+  font-weight: bold;
 }

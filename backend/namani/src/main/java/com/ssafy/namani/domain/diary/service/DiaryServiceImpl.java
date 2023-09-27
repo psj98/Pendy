@@ -83,7 +83,7 @@ public class DiaryServiceImpl implements DiaryService {
             diaryCalendarList.add(diaryCalendarResponseDto);
         }
 
-        /* todayDate 기준 월간 목표 조회 */
+        /* todayDate 기준 월간 목표 조회 - 현재 월(now)에 대한 목표 */
         TotalGoalDetailResponseDto ThisMonthGoalInfo = goalService.getTotalGoal(memberId, todayDate);
 
         /* todayDate 카테고리 별 목표 조회 */

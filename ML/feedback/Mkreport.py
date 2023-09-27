@@ -17,11 +17,11 @@ from langchain.vectorstores import FAISS
 
 from product import products
 #GPT
-from openaikey import apikey
+# from ML.openaikey import apikey
 
 #키 등록
-import os
-os.environ["OPENAI_API_KEY"] = apikey
+# import os
+# os.environ["OPENAI_API_KEY"] = apikey
 
 # 데이터프레임
 import pandas as pd
@@ -57,15 +57,14 @@ def mkreport(request_data):
         and Based on the {question} of the respective user, refer to the {docs} and recommend one appropriate card and the reason for it.
     """
 
-    amount_data = json.loads(request_data.json())["categoryData"]
-    amount_data_cols = amount_data.keys()  # 모든 key를 가져옴
+    # amount_data = json.loads(request_data.json())["categoryData"]
+    request_data_cols = request_data.keys()  # 모든 key를 가져옴
 
     # 중간 txt
     consume_list = []
-    for col_name in amount_data_cols:
-        print("컬럼명 : ", col_name)
+    for col_name in request_data_cols:
         consume_list += str(col_name) + ":"
-        for amount in amount_data[col_name]:
+        for amount in request_data[col_name]:
             consume_list += str(amount) + ","
         consume_list += "\n"
     query = ''.join(a for a in consume_list)
@@ -86,7 +85,7 @@ def mkreport(request_data):
     # llm = ChatOpenAI(model_name="gpt-4-0613", temperature=1)
     # llm = OpenAI(model_name="gpt-4-0613", temperature=1)
     # llm = OpenAI(model_name="gpt-3.5-turbo-0613", temperature=1)
-
+    # llm = OpenAI(model_name="gpt-3.5-turbo-16k", temperature=1)
 
 
     # faiss를 통해 빠르게 참조 문서를 검색하고 연관된 답변을 제공할 수 있습니다
@@ -114,6 +113,11 @@ def mkreport(request_data):
     return result_data
 
 if __name__=="__main__":
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
+
     req = {
         "food": [400, 10000],
         "traffic": [7000, 10000],
@@ -126,7 +130,7 @@ if __name__=="__main__":
     }
     ans = (mkreport(req))
 
-    print(ans.keys())
-    for i in ans.keys():
-        print(ans[i])
+    # print(ans.keys())
+    # for i in ans.keys():
+    #     print(ans[i])
     print(ans["message"])
