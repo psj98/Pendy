@@ -2,15 +2,15 @@
 import axiosCreate from '../axiosCreate';
 
 const handleBankSignup = (
-  accountNumber,
   bankCode,
+  accountNumber,
   accountPassword,
   balance,
 ) => {
   console.log('handleBankSignup');
   const data = {
-    accountNumber: accountNumber,
     bankCode: bankCode,
+    accountNumber: accountNumber,
     accountPassword: accountPassword,
     balance: balance,
   };
