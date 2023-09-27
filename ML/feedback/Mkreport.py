@@ -1,4 +1,3 @@
-
 #랭체인
 from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
@@ -15,7 +14,7 @@ from langchain.prompts.chat import (
 #FAISS ( vector db )
 from langchain.vectorstores import FAISS
 
-from product import products
+from feedback.product import products
 #GPT
 # from ML.openaikey import apikey
 
