@@ -23,7 +23,7 @@ app.add_middleware(
 
 # @app.get("/")
 # async def root():
-#     return {"message": "Hello World"}
+#     return {"message": "Hello FastAPI"}
 #
 #
 # @app.get("/hello/{name}")
