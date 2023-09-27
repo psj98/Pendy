@@ -17,7 +17,7 @@ const FirstGoalTemplate = () => {
   const [responseData, setResponseData] = useState({});
   const [totalInputAmount, setTotalInputAmount] = useState(0);
   const [goalInputAmount, setGoalInputAmount] = useState(0);
-  const [canComplete, setCanComplete] = useState(false);
+  const [tempGoalInputAmount, setTempGoalInputAmount] = useState(0);
 
   const categoryNameToKor = {
     food: '식비',
@@ -83,6 +83,9 @@ const FirstGoalTemplate = () => {
   }, []);
 
   const handleGoalSetToggle = () => {
+    if (!isGoalSet) {
+      setTempGoalInputAmount(totalInputAmount);
+    }
     setIsGoalSet(!isGoalSet);
   };
   const handleInputChange = (categoryName, e) => {
@@ -117,6 +120,7 @@ const FirstGoalTemplate = () => {
 
   const handleCancel = () => {
     setInputValues(originalValues);
+    setTotalInputAmount(tempGoalInputAmount);
     setIsGoalSet(false);
   };
 
