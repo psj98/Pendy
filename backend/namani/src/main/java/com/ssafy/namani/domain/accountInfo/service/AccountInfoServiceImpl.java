@@ -37,22 +37,29 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 	public void addAccount(AccountInfoRegistRequestDto accountInfoRegistRequestDto) throws BaseException {
 		// bankCode에 해당하는 Bank정보 있는지 확인
 		Optional<Bank> byId = bankRepository.findById(accountInfoRegistRequestDto.getBankCode());
-		if (byId.isPresent()) {
-			// Dto -> Entity 변환
-			AccountInfo accountInfo = AccountInfo.builder()
-				.accountNumber(accountInfoRegistRequestDto.getAccountNumber())
-				.bank(byId.get())
-				.accountPassword(accountInfoRegistRequestDto.getAccountPassword())
-				.balance(accountInfoRegistRequestDto.getBalance())
-				.build();
 
-			// 등록하려는 계좌번호가 이미 DB에 존재하는 경우 예외 처리
-			if (accountInfoRepository.findById(accountInfo.getAccountNumber()).isPresent()) {
-				throw new BaseException(BaseResponseStatus.CONFLICK_ACCOUNT_NUMBER);
-			}
-			// 계좌 정보 저장
-			accountInfoRepository.save(accountInfo);
+		// 은행 정보 존재하지 않음
+		if (byId.isEmpty()) {
+			throw new BaseException(BaseResponseStatus.BANK_CODE_NOT_FOUND);
 		}
+
+		// 등록하려는 계좌번호가 이미 DB에 존재하는 경우 예외 처리
+		Optional<AccountInfo> byId1 = accountInfoRepository.findById(accountInfoRegistRequestDto.getAccountNumber());
+
+		if (byId1.isPresent()) {
+			throw new BaseException(BaseResponseStatus.CONFLICK_ACCOUNT_NUMBER);
+		}
+
+		// Dto -> Entity 변환
+		AccountInfo accountInfo = AccountInfo.builder()
+			.accountNumber(accountInfoRegistRequestDto.getAccountNumber())
+			.bank(byId.get())
+			.accountPassword(accountInfoRegistRequestDto.getAccountPassword())
+			.balance(accountInfoRegistRequestDto.getBalance())
+			.build();
+
+		// 계좌 정보 저장
+		accountInfoRepository.save(accountInfo);
 	}
 
 	@Override
@@ -85,11 +92,13 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 	 * @return
 	 */
 	@Override
-	public AccountInfoLoginResponseDto loginAccount(AccountInfoLoginRequestDto accountInfoLoginRequestDto) throws BaseException{
+	public AccountInfoLoginResponseDto loginAccount(AccountInfoLoginRequestDto accountInfoLoginRequestDto) throws
+		BaseException {
 		String accountNumber = accountInfoLoginRequestDto.getAccountNumber();
 		Integer accountPassword = accountInfoLoginRequestDto.getAccountPassword();
 
-		Optional<AccountInfo> byIdAndAccountPassword = accountInfoRepository.findByAccountNumberAndAccountPassword(accountNumber,
+		Optional<AccountInfo> byIdAndAccountPassword = accountInfoRepository.findByAccountNumberAndAccountPassword(
+			accountNumber,
 			accountPassword);
 		// 로그인하려는 계좌가 등록되어있음
 		if (byIdAndAccountPassword.isPresent()) {
