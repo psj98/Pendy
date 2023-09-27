@@ -40,13 +40,13 @@ const DonutChart = ({
         donut: {
           labels: {
             show: labelShow,
-            total: {
-              showAlways: true,
-              show: true,
-              label: `${title}`,
-              fontSize: labelFont,
-              color: labelColor,
-            },
+            // total: {
+            //   showAlways: true,
+            //   show: true,
+            //   // label: `${title}`,
+            //   fontSize: labelFont,
+            //   color: labelColor,
+            // },
             value: {
               fontSize: valueFont,
               show: valueShow,
@@ -67,6 +67,7 @@ const DonutChart = ({
       '패션/미용',
       '문화/여가',
     ],
+
     colors: colors,
   };
 

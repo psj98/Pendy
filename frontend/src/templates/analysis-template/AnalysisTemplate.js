@@ -183,6 +183,24 @@ const AnalysisTemplate = () => {
               />
             )}
           </div>
+          {responseData.data && (
+            <div className="goal-and-month">
+              <div
+                className="goal-and-month-spend"
+                style={{
+                  color:
+                    responseData.data.monthlyStatistic.totalAmount >
+                    responseData.data.totalGoal.goalAmount
+                      ? 'red'
+                      : '#007bff',
+                }}
+              >
+                {responseData.data.monthlyStatistic.totalAmount} 원 /{' '}
+                {responseData.data.totalGoal.goalAmount} 원
+              </div>
+            </div>
+          )}
+          <div className="goal-and-month-title">소비액 / 목표액</div>
 
           <div className="category-bar-container">
             <div className="analysis-category-bar-left">
