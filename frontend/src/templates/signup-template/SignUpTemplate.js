@@ -157,7 +157,7 @@ const SignUpTemplate = () => {
 
   return (
     <div className="signup">
-      <h1 className="user-signup-title">회원가입</h1>
+      <h1 className="user-signup-title"></h1>
 
       <div className="signup-container-box">
         {/* 이메일 입력 */}

@@ -136,7 +136,7 @@ const FirstGoalTemplate = () => {
 
   return (
     <div className="goal-template">
-      <h1 style={{ margin: '30px 0' }}>목표 설정</h1>
+      <h1 style={{ margin: '30px 0' }}></h1>
       <div className="goal-main">
         <div className="goal-container">
           <div className="goal-chart">

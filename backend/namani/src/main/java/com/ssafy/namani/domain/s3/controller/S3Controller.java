@@ -72,8 +72,6 @@ public class S3Controller {
         
         // 영수증 텍스트 추출 데이터 정제해서 DB에 저장
         try {
-            // 내 로컬에서 한글 안들어가서
-            clovaResponseDto.setPlace("FUCKYOUCLOVA");
             transactionInfoService.addReceiptTransaction(token, clovaResponseDto);
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);

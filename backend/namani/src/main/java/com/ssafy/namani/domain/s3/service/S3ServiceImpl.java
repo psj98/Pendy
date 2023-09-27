@@ -59,6 +59,5 @@ public class S3ServiceImpl implements S3Service {
     public void deleteImage(S3ResponseDto responseDto) throws BaseException {
 
 
-
     }
 }

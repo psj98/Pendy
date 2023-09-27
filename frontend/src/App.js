@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import './font/font.css';
 
 import useLogin from './hooks/useLogin';
 
@@ -49,7 +50,7 @@ function App() {
         <Route path="setting" element={<SettingTemplate />} />
         <Route path="goal" element={<GoalTemplate />} />
         <Route path="analysis" element={<AnalysisTemplate />} />
-        <Route path="diary" element={<DiaryTemplate />} />
+        <Route path="diary/:id" element={<DiaryTemplate />} />
         <Route path="first-goal" element={<FirstGoalTemplate />} />
         <Route path="emotion" element={<EmotionTemplate />} />
       </Route>

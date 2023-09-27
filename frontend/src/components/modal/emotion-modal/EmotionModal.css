@@ -1,47 +1,59 @@
 /* EmotionModal.css */
 
-.emotion-modal-template {
+.emotion-modal {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 90vh;
-}
-
-.emotion-modal-title {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  width: 100%;
-  height: 10vh;
-  margin-bottom: 30px;
-}
-
-.emotion-modal-main-title {
-  margin-left: 20px;
-  font-size: 30px;
-  font-weight: 700;
-}
-.emotion-modal-sub-title {
-  margin-left: 10px;
-  font-size: 20px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
 .emotion-modal-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  width: 80%;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+}
+
+.emotion-modal-title {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.emotion-modal-sub-title {
+  margin-top: 0;
+  font-weight: bold;
+  color: #909090;
+}
+
+.emotion-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 80%;
+  overflow: auto;
 }
 
 .emotion-modal-option {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  width: 70%;
+  overflow: auto;
 }
 
 .emotion-modal-list {
@@ -50,6 +62,7 @@
   justify-content: center;
   align-items: center;
   width: 80%;
+  margin-bottom: 25px;
 }
 
 .emotion-modal-content-container {
@@ -62,8 +75,8 @@
 }
 
 .emotion-modal-text {
-  font-weight: 700;
-  font-size: 16px;
+  font-size: medium;
+  font-weight: bold;
 }
 
 .emotion-modal-option-button-container {
@@ -71,9 +84,10 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 95%;
   margin-bottom: 10px;
 }
+
 .emotion-modal-option-button {
   display: flex;
 }
@@ -84,13 +98,17 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 20px;
+}
+
+.face-emoji {
+  width: 35px;
 }
 
 .emotion-modal-button-container {
   display: flex;
-  justify-content: right;
-  width: 90%;
+  justify-content: center;
+  margin-top: 30px;
+  width: 100%;
 }
 
 .emotion-modal-button {
@@ -102,4 +120,8 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+}
+
+.emotion-modal-button:hover {
+  background-color: #0056b3;
 }

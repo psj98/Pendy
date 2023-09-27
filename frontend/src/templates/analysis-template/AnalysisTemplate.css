@@ -1,6 +1,7 @@
 /* AnalysisTemplate.css */
 /* 사각형 모양 */
 .goal-indicator {
+  font-family: 'The Jamsil 2';
   width: 16px;
   height: 16px;
   display: inline-block; /* 인라인 요소로 배치 */
@@ -37,6 +38,7 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  font-family: 'The Jamsil 3';
 }
 
 .change-month-div {
@@ -45,6 +47,7 @@
   align-items: center;
   justify-content: center;
   width: 70%;
+  font-family: 'The Jamsil 2';
 }
 
 .left-arrow,

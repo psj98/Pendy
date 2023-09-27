@@ -18,6 +18,8 @@ const UserTemplate = () => {
   const [responseData, setResponseData] = useState([]);
   const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
 
+  let diaries = [];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,7 +36,7 @@ const UserTemplate = () => {
         );
         const response = await handleCalender(todayDate, todayMonth);
         console.log('res', response.data);
-        console.log('complate load');
+        console.log('complete load');
         setResponseData(response.data); // response 데이터를 상태로 저장
       } catch (error) {
         console.log(error);
@@ -53,15 +55,6 @@ const UserTemplate = () => {
   //달력을 다음 달로 넘기는 기능
   const nextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
-  };
-
-  const navigate = useNavigate();
-
-  const handleButtonClick = () => {
-    const path = `/analysis?currentMonth=${encodeURIComponent(
-      currentMonth.toISOString(),
-    )}`;
-    navigate(path);
   };
 
   const currentDate = new Date(); // 현재 날짜 가져오기
@@ -116,6 +109,8 @@ const UserTemplate = () => {
     let monthlyGoalByToday = responseData.data.thisMonthGoalInfo.goalAmount;
     // 오늘 목표 소비 금액
     let dailyGoal = monthlyGoalByToday / totalDaysInCurrentMonth;
+    //일기 리스트
+    diaries = responseData.data.diaryList;
 
     // 월간
     // 이번달 목표
@@ -152,7 +147,7 @@ const UserTemplate = () => {
             nextMonth={nextMonth}
           />
           <CalenderDays />
-          <CalenderCells currentMonth={currentMonth} />
+          <CalenderCells currentMonth={currentMonth} diaries={diaries} />
         </div>
       </div>
       <div className="chart-container">
@@ -191,21 +186,9 @@ const UserTemplate = () => {
               goal={consumption_goal}
             />
           )}
-          <br />
-
-          {selectedOption === 'option1' && (
-            <div className="spend-text-black">오늘의 고정 지출</div>
-          )}
         </div>
       </div>
-      <div>
-        {/* 소비분석 페이지로 이동하면서 currentMonth 값을 전달 */}
-        <div className="elements">
-          <button className="custom-button" onClick={handleButtonClick}>
-            소비분석
-          </button>
-        </div>
-      </div>
+      <div></div>
     </div>
   );
 };

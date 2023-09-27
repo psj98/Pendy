@@ -170,7 +170,7 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 	}
 
 	/**
-	 * ClovaOCR로 추출한 데이터 거래내역에 추가
+	 * ClovaOCR로 추출한 데이터 거래내역에 추가, Return 타입은 일단 void로 함
 	 * 
 	 * @param token
 	 * @param clovaOCRResponseDto
@@ -179,8 +179,6 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 	public void addReceiptTransaction(String token, ClovaOCRResponseDto clovaOCRResponseDto) throws BaseException {
 		try{
 			if(token == null || token.equals("")) throw new BaseException(BaseResponseStatus.SESSION_EXPIRATION);
-
-			System.out.println(clovaOCRResponseDto.getTotal()+" "+clovaOCRResponseDto.getPlace()+ " "+clovaOCRResponseDto.getDateTime());
 
 			UUID memberId = jwtService.getMemberIdFromToken(token);
 			List<AccountInfo> byId = accountInfoRepository.findByMember_Id(memberId);
@@ -193,6 +191,7 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 			AvgConsumptionAmount newAvgConsumptionAmount = null;
 
 				// 영수증 데이터는 오프라인 매장으로 정함 (임시)
+				// tradeDate는 영수증에 등록된 날짜 ( 현재 날짜만 들어감 )
 				Optional<Category> category = categoryRepository.findById(4);
 				Optional<Emotion> emotion = emotionRepository.findById(3);
 				transactionInfo = TransactionInfo.builder()
@@ -203,6 +202,7 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 						.transactionAmount(clovaOCRResponseDto.getTotal())
 						.transactionType(2)
 						.afterBalance(accountInfo.getBalance() - clovaOCRResponseDto.getTotal())
+//						.tradeDate(clovaOCRResponseDto.getDateTime())
 						.build();
 
 				if (accountInfo.getMember() != null) {
@@ -268,6 +268,8 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 		} catch (BaseException e) {
 			throw new RuntimeException(e);
 		}
+		
+		// return은 일단 없음
 
 	}
 

@@ -64,7 +64,7 @@ const SettingTemplate = () => {
 
   return (
     <div className="signup">
-      <h1 className="user-setting-title">개인 정보 수정</h1>
+      <h1 className="user-setting-title"></h1>
 
       <div className="setting-container-box">
         {/* 이메일 입력 */}

@@ -24,23 +24,29 @@ const DiaryForm = ({ regDate, title, content, comment, stampType }) => {
 
   return (
     <div className="diary-form">
-      <div className="diary-form-date">
-        {regDate.substring(0, 4)}년&nbsp;{regDate.substring(5, 7)}월&nbsp;
-        {regDate.substring(8, 10)}일
-      </div>
-      <div className="diary-form-title">
-        <div className="diary-title">제목</div>
-        <div className="diary-title-content">{title}</div>
-      </div>
-      <div className="diary-form-content">
-        <div className="diary-content">{content}</div>
-      </div>
-      <div className="diary-form-comment">
-        <div className="diary-comment-text">추천</div>
-        <div className="diary-comment">{comment}</div>
+      <div className="diary-date-title-stamp-div">
+        <div className="diary-date-title-div">
+          <div className="diary-form-date">
+            <p className="diary-date diary-p">
+              {regDate.substring(0, 4)}년 {regDate.substring(5, 7)}월{' '}
+              {regDate.substring(8, 10)}일
+            </p>
+          </div>
+          <div className="diary-form-title-div">
+            <p className="diary-title diary-p">제목</p>
+            <p className="diary-title-content diary-p">{title}</p>
+          </div>
+        </div>
         <div className="diary-form-stamp">
           <img src={stampImageSrc} alt={`Stamp ${stampType}`} />
         </div>
+      </div>
+      <div className="diary-form-content-div">
+        <p className="diary-content diary-p">{content}</p>
+      </div>
+      <div className="diary-form-comment-div">
+        <p className="diary-comment-text diary-p">추천</p>
+        <p className="diary-comment diary-p">{comment}</p>
       </div>
     </div>
   );

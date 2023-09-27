@@ -8,6 +8,7 @@ import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
@@ -36,9 +37,6 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
     public static String CLOVA_SECRET = "SnBveHB4WFlMSmtUeHZNSmJablVtR1VpTFlRREFFdEE=";
     public static String CLOVA_API_URL = "https://v5cw7ku89t.apigw.ntruss.com/custom/v1/25124/1f41da20bfd452e64f995a675c04846e86ca91378e358cef9c819761f3cefc62/infer";
 
-    // document api ( 영수증 특화 )
-//    public static String CLOVA_SECRET = "U3BLT2FlS0JQTWZvVnZNZ3RySGhxUmNIUmZVRkVrSW4=";
-//    public static String CLOVA_API_URL = "https://t3ky57orz4.apigw.ntruss.com/custom/v1/25207/d94e1f9c46f6ca3d0bdb16db4e84f44457a8ae9e945ebc22624cdf246dda5f04/document/receipt";
 
     /**
      * CLOVA OCR에 요청 및 수신
