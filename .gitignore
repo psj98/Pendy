@@ -1,1 +1,10 @@
-*.idea
+/backend/.idea/.name
+/backend/.idea/compiler.xml
+/backend/.idea/gradle.xml
+/backend/.idea/jarRepositories.xml
+/backend/.idea/misc.xml
+/backend/.idea/modules.xml
+/backend/.idea/modules/namani.main.iml
+/backend/.idea/uiDesigner.xml
+/backend/.idea/vcs.xml
+/backend/.idea/workspace.xml

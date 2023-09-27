@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './CalenderCells.css';
 import { format } from 'date-fns';
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
@@ -41,7 +41,7 @@ const CalenderCells = ({ currentMonth, diaries }) => {
       isSameDay(new Date(diary.regDate), day),
     );
     if (hasDiary) {
-      navigate(`diary/${hasDiary.id}`);
+      navigate(`diary/${hasDiary.id}/${hasDiary.regDate}`);
     } else if (isSameDay(new Date(), day)) {
       navigate('/emotion');
     }

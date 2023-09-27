@@ -5,7 +5,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores.faiss import FAISS
 from langchain.docstore.document import Document
 
-from ML.openaikey import apikey
+# from ML.openaikey import apikey
 import os
 
 if __name__=="__main__":

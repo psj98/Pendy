@@ -5,14 +5,17 @@ import handleEmotionRegist from '../../utils/handleEmotionRegist';
 import { useNavigate } from 'react-router-dom';
 
 const EmotionTemplate = () => {
-  const regDate = '2023-09-25T00:00:00';
-  const emoji = [1, 2, 3, 4, 5];
-  const { todayList, loading } = useTodayList(regDate);
+  const regDate = new Date();
+  regDate.setHours(0, 0, 0, 0);
+  const { todayList, todayLoading } = useTodayList(regDate);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [emotionList, setEmotionList] = useState([]);
   const navigate = useNavigate();
+  const emoji = [1, 2, 3, 4, 5];
 
-  if (loading) {
+  console.log('todayList', todayList);
+
+  if (todayLoading) {
     return <div>Loading...</div>;
   }
 
@@ -20,9 +23,6 @@ const EmotionTemplate = () => {
     alert('금일 소비내역이 없습니다.');
     navigate('/');
   }
-
-  console.log(todayList.data);
-
   // emotionList에 데이터 추가
   const addEmotionData = (id, emotionId) => {
     const existingIndex = emotionList.findIndex(
@@ -64,7 +64,7 @@ const EmotionTemplate = () => {
         console.log(response);
         if (response.data.code === 1000) {
           console.log('emotion regist success');
-          navigate('/diary', { replace: true });
+          navigate('/');
         } else {
           console.error(response.data.code + ' ' + response.data.message);
           alert('등록에 실패하셨습니다');
@@ -102,11 +102,11 @@ const EmotionTemplate = () => {
                       </div>
                       <div className="emotion-option-button-container">
                         {emoji.map((num) => (
-                          <div className="emotion-option-button">
+                          <div key={num} className="emotion-option-button">
                             <input
                               type="radio"
                               name={`chart-option-${index}`}
-                              value={num.num}
+                              value={num}
                               checked={selectedOptions[index] === num}
                               onChange={() => handleRadioChange(index, num)}
                             />

@@ -7,6 +7,7 @@ const handleEmotionRegist = async (emotionList) => {
   const serverUrl = '/api/diaries/regist';
   try {
     const response = await authAxiosCreate.post(serverUrl, emotionList);
+    console.log('emotionList', emotionList);
     console.log(response);
     return response;
   } catch (error) {
