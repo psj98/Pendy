@@ -41,8 +41,7 @@ const CalenderCells = ({ currentMonth, diaries }) => {
       isSameDay(new Date(diary.regDate), day),
     );
     if (hasDiary) {
-      sessionStorage.setItem('regDate', hasDiary.regDate);
-      navigate(`diary/${hasDiary.id}`);
+      navigate(`diary/${hasDiary.id}/${hasDiary.regDate}`);
     } else if (isSameDay(new Date(), day)) {
       navigate('/emotion');
     }
