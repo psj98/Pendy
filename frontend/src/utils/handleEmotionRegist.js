@@ -10,7 +10,7 @@ const handleEmotionRegist = async (emotionList) => {
     console.log(response);
     return response;
   } catch (error) {
-    console.error('Goal Check failed', error);
+    console.error('regist emotion failed', error);
     throw error;
   }
 };
