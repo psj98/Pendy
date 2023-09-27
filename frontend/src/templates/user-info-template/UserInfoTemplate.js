@@ -79,7 +79,7 @@ const UserInfoTemplate = () => {
 
   return (
     <div className="signup">
-      <p className="signup-title">회원가입</p>
+      <p className="signup-title"></p>
 
       {/* 이메일 입력 */}
       <div className="signup-input">

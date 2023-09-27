@@ -36,7 +36,7 @@ public class AvgConsumptionAmount {
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp regDate; // 연월
 
-	@Builder
+	@Builder(toBuilder = true)
 	public AvgConsumptionAmount(Long id, AgeSalary ageSalary, Category category, Integer sumAmount, Timestamp regDate) {
 		this.id = id;
 		this.ageSalary = ageSalary;

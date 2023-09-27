@@ -1,11 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import './font/font.css';
 
 import useLogin from './hooks/useLogin';
 
+// 테스트 페이지
 import TestPage from './pages/test-page/TestPage';
 
-// 메인페이지
+// 메인 페이지
 import MainPage from './pages/main-page/MainPage';
 import UserTemplate from './templates/user-template/UserTemplate';
 import GuestTemplate from './templates/guest-template/GuestTemplate';
@@ -13,14 +15,16 @@ import SettingTemplate from './templates/setting-template/SettingTemplate';
 import GoalTemplate from './templates/goal-template/GoalTemplate';
 import AnalysisTemplate from './templates/analysis-template/AnalysisTemplate';
 import DiaryTemplate from './templates/diary-template/DiaryTemplate';
+import FirstGoalTemplate from './templates/first-goal-template/FirstGoalTemplate';
+import EmotionTemplate from './templates/emotion-template/EmotionTemplate';
 
-// 로그인 관련 페이지
+// 로그인 페이지
 import LoginPage from './pages/login-page/LoginPage';
 import LoginTemplate from './templates/login-template/LoginTemplate';
 import SignUpTemplate from './templates/signup-template/SignUpTemplate';
 import RepasswordTemplate from './templates/repassword-template/RepasswordTemplate';
 
-// 은행 계좌 관련 페이지
+// 은행 계좌 페이지
 import BankPage from './pages/bank-page/BankPage';
 import BankMainTemplate from './templates/bank-main-template/BankMainTemplate';
 import BankLoginTemplate from './templates/bank-login-template/BankLoginTemplate';
@@ -46,11 +50,13 @@ function App() {
         <Route path="setting" element={<SettingTemplate />} />
         <Route path="goal" element={<GoalTemplate />} />
         <Route path="analysis" element={<AnalysisTemplate />} />
-        <Route path="diary" element={<DiaryTemplate />} />
+        <Route path="diary/:id" element={<DiaryTemplate />} />
+        <Route path="first-goal" element={<FirstGoalTemplate />} />
+        <Route path="emotion" element={<EmotionTemplate />} />
       </Route>
 
       {/* 로그인 페이지 */}
-      <Route path="/login" element={<LoginPage />}>
+      <Route path="/login" element={<LoginPage isLoggedIn={isLoggedIn} />}>
         <Route path="" element={<LoginTemplate />} />
         <Route path="signup" element={<SignUpTemplate />} />
         <Route path="repassword" element={<RepasswordTemplate />} />
