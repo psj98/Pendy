@@ -8,12 +8,12 @@ import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseService;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,9 +34,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ClovaOCRServiceImpl implements ClovaOCRService {
     // custom api
-    public static String CLOVA_SECRET = "SnBveHB4WFlMSmtUeHZNSmJablVtR1VpTFlRREFFdEE=";
-    public static String CLOVA_API_URL = "https://v5cw7ku89t.apigw.ntruss.com/custom/v1/25124/1f41da20bfd452e64f995a675c04846e86ca91378e358cef9c819761f3cefc62/infer";
+    public static String CLOVA_SECRET;
+    public static String CLOVA_API_URL;
 
+    @Value("${clova.secret}")
+    public void setKey(String val){
+        CLOVA_SECRET = val;
+    }
+
+    @Value("${clova.api.url}")
+    public void setUrl(String val){
+        CLOVA_API_URL = val;
+    }
 
     /**
      * CLOVA OCR에 요청 및 수신
