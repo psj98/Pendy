@@ -24,7 +24,7 @@ const BarChart = ({ series, avgConsumptions }) => {
         data: series || [],
       },
       {
-        name: '나와 비슷한 조건의 소비 금액',
+        name: '비슷한 조건의 소비자의 평균 소비 금액',
         data: actualAvgConsumption || [],
       },
     ],
