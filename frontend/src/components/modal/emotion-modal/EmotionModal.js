@@ -2,24 +2,13 @@ import React, { useState } from 'react';
 import './EmotionModal.css';
 
 import { useNavigate } from 'react-router-dom';
-import useTodayList from '../../../hooks/useTodayList';
 import handleEmotionRegist from '../../../utils/handleEmotionRegist';
 
-const EmotionModal = ({ closeModal }) => {
-  const regDate = '2023-09-26T00:00:00';
+const EmotionModal = ({ closeModal, todayList }) => {
   const emoji = [1, 2, 3, 4, 5];
-  const { todayList, loading } = useTodayList(regDate);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [emotionList, setEmotionList] = useState([]);
   const navigate = useNavigate();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (todayList.data.length === 0) {
-    navigate('/diary', { replace: true });
-  }
 
   // emotionList에 데이터 추가
   const addEmotionData = (id, emotionId) => {
