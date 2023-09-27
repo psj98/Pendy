@@ -126,6 +126,11 @@ def mkdiary(req):
     # culture : 문화/여가
 
 if __name__=="__main__":
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
+
     my_req = {
         "ConsumptionLimit": 30000,
         "ConsumptionDetails": {
