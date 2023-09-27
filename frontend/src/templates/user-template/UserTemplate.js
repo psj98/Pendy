@@ -17,6 +17,8 @@ const UserTemplate = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [responseData, setResponseData] = useState([]);
   const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
+  const [goalAmountValue, setGoalAmountValue] = useState(1);
+  const [totalAmountValue, setTotalAmountValue] = useState(1);
 
   let diaries = [];
 
@@ -128,15 +130,17 @@ const UserTemplate = () => {
       consumption_goal = monthlyGoalByCalendar;
       consumption_amount = responseData.data.monthlyStatistic.totalAmount;
     }
+    // setGoalAmountValue(consumption_goal);
+    // setTotalAmountValue(consumption_amount);
+
+    console.log('goal' + consumption_amount);
+    console.log('total' + consumption_goal);
 
     chartLabel = statisticData.map((item) => item.categoryName);
     chartData = statisticData.map((item) => item.amount);
   }
-
-  // console.log('차트 데이터 : ', chartData);
-  // console.log('소비 금액 : ', consumption_amount);
-  // console.log('목표 금액 : ', consumption_goal);
   console.log('currentMonth in UserTemplate: ', currentMonth);
+
   return (
     <div className="user">
       <div className="calender-container">
@@ -173,6 +177,19 @@ const UserTemplate = () => {
           </div>
         </div>
         <div className="bar-content">
+          {responseData.data && (
+            <div className="goal-and-month">
+              <div
+                className="goal-and-month-spend"
+                style={{
+                  color:
+                    consumption_amount > consumption_goal ? 'red' : '#007bff',
+                }}
+              >
+                {consumption_amount} 원 / {consumption_goal} 원
+              </div>
+            </div>
+          )}
           {consumption_goal !== 0 && (
             <div className="spend">
               <div className="spend-text-blue">현재 소비 금액 /</div>&nbsp;
