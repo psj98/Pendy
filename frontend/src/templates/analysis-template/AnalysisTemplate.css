@@ -1,1 +1,212 @@
 /* AnalysisTemplate.css */
+/* 사각형 모양 */
+.goal-indicator {
+  font-family: 'The Jamsil 2';
+  width: 16px;
+  height: 16px;
+  display: inline-block; /* 인라인 요소로 배치 */
+  margin-right: 8px; /* 원하는 간격으로 조정 */
+  /* 추가적인 스타일을 원하는 대로 지정할 수 있습니다. */
+}
+
+.analysis-container,
+.analysis-left-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.analysis-left-container {
+  flex: 1.5;
+}
+
+.analysis-right-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.analysis-title {
+  margin: 30px 0;
+  width: 100%;
+  text-align: center;
+}
+
+.analysis-main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  font-family: 'The Jamsil 3';
+}
+
+.change-month-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  font-family: 'The Jamsil 2';
+}
+
+.left-arrow,
+.right-arrow,
+.left-arrow-active,
+.right-arrow-active {
+  flex: 1;
+  color: rgba(128, 128, 128, 0.2);
+  width: 30px;
+  height: 30px;
+}
+
+.left-arrow-active,
+.right-arrow-active {
+  cursor: pointer;
+}
+
+.left-arrow-active:hover,
+.right-arrow-active:hover {
+  color: #444;
+}
+
+.cur-month-text {
+  flex: 3;
+  text-align: center;
+}
+
+.analysis-goal-chart {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.category-bar-container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 80%;
+}
+
+@media (max-width: 660px) {
+  .category-bar-container {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 960px) {
+  .analysis-main-container {
+    flex-direction: column;
+  }
+
+  .analysis-left-container {
+    width: 100% !important;
+    flex: none !important;
+  }
+
+  .analysis-right-container {
+    margin-top: 20px;
+    align-items: center;
+  }
+
+  .analysis-monthly-ai-text {
+    width: 80% !important;
+  }
+}
+
+@media (max-width: 1140px) {
+  .category-bar-container {
+    flex-direction: column;
+    width: 50%;
+  }
+
+  .analysis-category-bar-left,
+  .analysis-category-bar-right {
+    width: 100%;
+  }
+
+  .analysis-category-bar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1320px) {
+  .analysis-left-container {
+    flex: 2.5;
+  }
+}
+
+.analysis-category-bar-left,
+.analysis-category-bar-right {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 100%;
+}
+
+.analysis-category-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 110%;
+  margin-bottom: 15px;
+}
+
+.analysis-category-name {
+  flex: 1;
+  margin-right: 5px;
+  text-align: right;
+  font-size: medium;
+  font-weight: bold;
+}
+
+.analysis-rectangle-label {
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.analysis-goal-bar {
+  flex: 2;
+}
+
+.analysis-monthly-ai-title {
+  text-align: center;
+  width: 90%;
+}
+
+.analysis-monthly-ai-text {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 90%;
+  height: 430px;
+  padding: 15px;
+  font-size: medium;
+  background-color: #fff;
+  overflow: auto;
+  word-break: break-all;
+}
+.goal-and-month {
+  font-family: 'The Jamsil 5';
+  font-size: 25px;
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  /* 다음 요소와의 간격을 조정하기 위한 마진 값 */
+  margin-bottom: 5px;
+  color: #007bff; /* 기본적으로 파란색으로 설정 */
+}
+
+.goal-and-month-title {
+  font-family: 'The Jamsil 4';
+  font-size: 15px;
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  margin-bottom: 5px; /* 다음 요소와의 간격을 조정하기 위한 마진 값 */
+}

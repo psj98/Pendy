@@ -30,7 +30,7 @@ public class AgeSalary {
     @NotNull
     private Integer peopleNum; // 인원수
 
-    @Builder
+    @Builder(toBuilder = true)
     public AgeSalary(Integer id, Integer age, Integer salary, Integer peopleNum) {
         this.id = id;
         this.age = age;

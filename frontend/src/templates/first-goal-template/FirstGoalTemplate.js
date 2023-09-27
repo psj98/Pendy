@@ -14,6 +14,10 @@ const FirstGoalTemplate = () => {
   const [inputValues, setInputValues] = useState({});
   const [originalValues, setOriginalValues] = useState({});
   const [avgConsumptions, setAvgConsumption] = useState({});
+  const [responseData, setResponseData] = useState({});
+  const [totalInputAmount, setTotalInputAmount] = useState(0);
+  const [goalInputAmount, setGoalInputAmount] = useState(0);
+  const [canComplete, setCanComplete] = useState(false);
 
   const categoryNameToKor = {
     food: '식비',
@@ -54,7 +58,11 @@ const FirstGoalTemplate = () => {
           (index) => index.amount,
         );
 
+        setResponseData(response.data);
+
         console.log('avgCom', avgCom);
+        setTotalInputAmount(response.data.data.monthlyStatistic.totalAmount);
+        setGoalInputAmount(response.data.data.monthlyStatistic.totalAmount);
 
         setMonthlyAvg(myMonthlyStatisticAvg);
 
@@ -94,6 +102,13 @@ const FirstGoalTemplate = () => {
         parseInt(updatedValues[category.categoryName] || 0),
       );
 
+      // inputValues를 기반으로 totalInputAmount 업데이트
+      const updatedTotal = Object.values(updatedValues).reduce(
+        (acc, val) => acc + parseInt(val, 10),
+        0,
+      );
+      setTotalInputAmount(updatedTotal);
+
       setSeries(updatedSeries);
 
       return updatedValues;
@@ -123,6 +138,8 @@ const FirstGoalTemplate = () => {
       const response = await handleRegistGoal(goalAmount, goal);
       if (response.data.code === 6001) {
         alert(response.data.message);
+      } else if (totalInputAmount > goalInputAmount) {
+        alert('목표 설정 금액을 다시 확인해주세요');
       } else {
         alert('목표 설정이 완료되었습니다.');
         navigate('/');
@@ -136,7 +153,7 @@ const FirstGoalTemplate = () => {
 
   return (
     <div className="goal-template">
-      <h1 style={{ margin: '30px 0' }}>목표 설정</h1>
+      <h1 style={{ margin: '30px 0' }}></h1>
       <div className="goal-main">
         <div className="goal-container">
           <div className="goal-chart">
@@ -156,7 +173,26 @@ const FirstGoalTemplate = () => {
               />
             )}
           </div>
-
+          {responseData.data && (
+            <div className="first-goal-and-month">
+              <div
+                className="first-goal-and-month-spend"
+                style={{
+                  color: totalInputAmount > goalInputAmount ? 'red' : '#007bff',
+                }}
+              >
+                {totalInputAmount} 원 /{' '}
+                <input
+                  className="input goal-inputs-amount"
+                  type="text"
+                  defaultValue={goalInputAmount}
+                  onChange={(e) => setGoalInputAmount(e.target.value)}
+                />{' '}
+                원
+              </div>
+            </div>
+          )}
+          <div className="first-goal-and-month-title">소비액 / 목표액</div>
           {monthlyAvg.length > 0 && (
             <div className="goal-input-button-container">
               <div className="goal-inputs-container">

@@ -31,4 +31,15 @@ public interface GoalByCategoryRepository extends JpaRepository<GoalByCategory, 
     @Query(value = "SELECT * FROM goal_by_category g " +
             "WHERE g.total_goal_id = ?1", nativeQuery = true)
     Optional<List<GoalByCategory>> findAllByTotalGoalId(Long totalGoalId);
+
+    void deleteByTotalGoalId(Long totalGoalId);
+
+    /**
+     *
+     *
+     */
+    @Query(value = "SELECT * FROM goal_by_category g " +
+            "WHERE g.total_goal_id = ?2 " +
+            "AND g.category_id = ?1", nativeQuery = true)
+    Optional<GoalByCategory> findByCategoryIdTotalGoalId(Integer categoryId, Long totalGoalId);
 }

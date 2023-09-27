@@ -26,6 +26,7 @@ const DonutChart = ({
 
   const options = {
     chart: {
+      fontFamily: 'The Jamsil 3',
       width: '100%',
     },
     chartOptions: {},
@@ -39,13 +40,13 @@ const DonutChart = ({
         donut: {
           labels: {
             show: labelShow,
-            total: {
-              showAlways: true,
-              show: true,
-              label: `${title}`,
-              fontSize: labelFont,
-              color: labelColor,
-            },
+            // total: {
+            //   showAlways: true,
+            //   show: true,
+            //   // label: `${title}`,
+            //   fontSize: labelFont,
+            //   color: labelColor,
+            // },
             value: {
               fontSize: valueFont,
               show: valueShow,
@@ -62,10 +63,11 @@ const DonutChart = ({
       '온라인 쇼핑',
       '오프라인 쇼핑',
       '카페/간식',
+      '고정지출',
       '패션/미용',
       '문화/여가',
-      '고정지출',
     ],
+
     colors: colors,
   };
 

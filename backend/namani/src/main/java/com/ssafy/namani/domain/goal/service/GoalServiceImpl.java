@@ -23,10 +23,12 @@ import com.ssafy.namani.domain.statistic.service.StatisticService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
@@ -83,29 +85,36 @@ public class GoalServiceImpl implements GoalService {
      */
     @Override
     public void registGoal(UUID memberId, GoalRegistRequestDto goalRegistRequestDto) throws BaseException {
-        log.info("member"+ memberId);
-        log.info("dto" + goalRegistRequestDto.getGoalByCategoryList().toString());
-        Optional<Member> memberOptional = memberRepository.findById(memberId);
-
-
+        log.info("call the method reigstGoal");
 
         // 사용자 정보 체크
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
         if (!memberOptional.isPresent()) {
             throw new BaseException(BaseResponseStatus.NOT_FOUND_MEMBER);
         }
 
-        Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, Timestamp.valueOf(LocalDateTime.now()));
+        // 월별 목표 가져오기
+        Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByMember_Id(memberOptional.get().getId());
+        TotalGoal newTotalGoal = totalGoalOptional.get();
+        Long totalGoalId = newTotalGoal.getId();
+
+//        Optional<List<GoalByCategory>> allByTotalGoalId = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId);
+//
+//        log.info("allBytotalgoalId" + allByTotalGoalId);
+
+//        if(allByTotalGoalId.isPresent()){
+//            goalByCategoryRepository.deleteByTotalGoalId(totalGoalId);
+//        }
 
         // 목표 정보 체크
+//        // 이미 존재하면 그냥 지워버리기.
 //        if (totalGoalOptional.isPresent()) {
-//            System.out.println("testtesttest");
-//            throw new BaseException(BaseResponseStatus.TOTAL_GOAL_IS_ALREADY_PRESENT);
+//            totalGoalRepository.deleteById(totalGoalId);
 //        }
 
         // 월별 목표 정보 저장
         Integer goalAmount = goalRegistRequestDto.getGoalAmount();
         List<GoalByCategoryRegistResponseDto> goalByCategoryList = goalRegistRequestDto.getGoalByCategoryList();
-        TotalGoal newTotalGoal = totalGoalOptional.get();
 
         TotalGoal totalGoal = newTotalGoal.toBuilder()
                 .member(memberOptional.get())
@@ -127,13 +136,12 @@ public class GoalServiceImpl implements GoalService {
                 throw new BaseException(BaseResponseStatus.CATEGORY_NOT_FOUND);
             }
 
-            GoalByCategory goalByCategory = GoalByCategory.builder()
-                    .totalGoal(totalGoal)
-                    .category(categoryOptional.get())
+            GoalByCategory goalByCategory = goalByCategoryRepository.findByCategoryIdTotalGoalId(goalByCategoryRegistResponseDto.getCategoryId(), totalGoalId).get();
+            GoalByCategory newGoalByCategory = goalByCategory.toBuilder()
                     .categoryGoalAmount(goalByCategoryRegistResponseDto.getCategoryGoalAmount())
                     .build();
 
-            goalByCategoryRepository.save(goalByCategory);
+            goalByCategoryRepository.save(newGoalByCategory);
         }
     }
 

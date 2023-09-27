@@ -2,13 +2,18 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-#Custom
+# Custom
 from diaries.DiaryDTO import DiaryRequest
 from feedback.ReportDTO import ReportRequest
 from chatbot.ChatBotDto import ChatBotRequest
 from diaries.Mkdiary import mkdiary
 from feedback.Mkreport import mkreport
 
+# Key
+import os
+from dotenv import load_dotenv
+load_dotenv()
+os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
 
 app = FastAPI()
 
@@ -23,7 +28,7 @@ app.add_middleware(
 
 # @app.get("/")
 # async def root():
-#     return {"message": "Hello World"}
+#     return {"message": "Hello FastAPI"}
 #
 #
 # @app.get("/hello/{name}")

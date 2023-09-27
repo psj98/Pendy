@@ -15,13 +15,6 @@ from langchain.prompts.chat import (
 #FAISS ( vector db )
 from langchain.vectorstores import FAISS
 
-#GPT
-from ML.openaikey import apikey
-
-#키 등록
-import os
-os.environ["OPENAI_API_KEY"] = apikey
-
 # 데이터프레임
 import pandas as pd
 
@@ -42,7 +35,7 @@ def namani(request_data):
         [Instructions]
         - Act as a best friend
         - All answers should be at least 10 characters long.
-        - if you do not know answer, Refer to the {docs} or prequestion
+        - if you do not know answer, Refer to the {docs}
         - Your answer targets elderly people over 60 years old.
 
     """
@@ -79,7 +72,7 @@ def namani(request_data):
     doc = " ".join([d.page_content for d in docs])
 
     # $$pay for OpenAI$$
-    chat = ChatOpenAI(model_name="gpt-4-0613", temperature=1)
+    chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=1)
     chain = LLMChain(llm=chat, prompt=chat_prompt)
     result = chain.run(question = usr_input, docs = doc)
 
@@ -88,9 +81,14 @@ def namani(request_data):
     return result_data
 
 if __name__=="__main__":
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
+
     req = {
         "preMessage": "",
-        "tempMessage": "최불암 시리즈 하나 이야기해줘"
+        "tempMessage": "재미있는 이야기"
     }
     ans = (namani(req))
 
