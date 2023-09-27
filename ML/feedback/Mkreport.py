@@ -113,6 +113,11 @@ def mkreport(request_data):
     return result_data
 
 if __name__=="__main__":
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
+
     req = {
         "food": [400, 10000],
         "traffic": [7000, 10000],

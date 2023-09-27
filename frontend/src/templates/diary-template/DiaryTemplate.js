@@ -4,11 +4,15 @@ import DiaryForm from '../../components/diary/DiaryForm';
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
 import useDiaryDetail from '../../hooks/useDiaryDetail';
+import useTodayList from '../../hooks/useTodayList';
+import EmotionModal from '../../components/modal/emotion-modal/EmotionModal';
 import { useParams } from 'react-router-dom';
+import { isSameDay, parseISO } from 'date-fns';
 
 const DiaryTemplate = () => {
-  const { id } = useParams();
-  const { diaryDetail, loading } = useDiaryDetail(id);
+  const { id, diaryDate } = useParams();
+  const { diaryDetail, diaryLoading } = useDiaryDetail(id, diaryDate);
+  const { todayList, todayLoading } = useTodayList(diaryDate);
 
   const categoryNameToKor = {
     food: '식비',
@@ -21,8 +25,26 @@ const DiaryTemplate = () => {
     culture: '문화/여가',
   };
 
-  if (loading) {
+  if (diaryLoading) {
     return <div>Loading...</div>;
+  }
+  if (todayLoading) {
+    return <div>Loading...</div>;
+  }
+
+  let isModalOpen = false;
+  const regDate = diaryDetail.data.diary.regDate;
+  const title = diaryDetail.data.diary.title;
+  const content = diaryDetail.data.diary.content;
+  const comment = diaryDetail.data.diary.comment;
+  const stampType = diaryDetail.data.diary.stampType;
+
+  const diaryDay = parseISO(diaryDate);
+  if (isSameDay(new Date(), diaryDay)) {
+    if (todayList.data.length !== 0) {
+      console.log('modal open');
+      isModalOpen = true;
+    }
   }
 
   const series = diaryDetail.data.dailyStatistic.amountByCategory.map(
@@ -46,16 +68,15 @@ const DiaryTemplate = () => {
     'rgba(189, 236, 235, 0.53)',
   ];
 
-  const regDate = diaryDetail.data.diary.regDate;
-  const title = diaryDetail.data.diary.title;
-  const content = diaryDetail.data.diary.content;
-  const comment = diaryDetail.data.diary.comment;
-  const stampType = diaryDetail.data.diary.stampType;
-
   // 해당 월의 마지막날 구하기
   const dateObject = new Date(regDate);
   dateObject.setMonth(dateObject.getMonth() + 1, 0);
   const lastDayOfMonth = dateObject.getDate();
+
+  // 모달 닫기
+  const closeModal = () => {
+    isModalOpen = false;
+  };
 
   return (
     <div className="diary-container">
@@ -151,6 +172,11 @@ const DiaryTemplate = () => {
           ))}
         </div>
       </div>
+
+      {/* 모달 창 */}
+      {isModalOpen && (
+        <EmotionModal closeModal={closeModal} todayList={todayList} />
+      )}
     </div>
   );
 };
