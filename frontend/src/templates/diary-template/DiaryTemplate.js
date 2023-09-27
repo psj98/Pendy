@@ -13,6 +13,17 @@ const DiaryTemplate = () => {
   const { diaryDetail, diaryLoading } = useDiaryDetail(id);
   const { todayList, todayLoading } = useTodayList();
 
+  const categoryNameToKor = {
+    food: '식비',
+    traffic: '교통',
+    online: '온라인 쇼핑',
+    offline: '오프라인 쇼핑',
+    cafe: '카페/간식',
+    housing: '고정지출',
+    fashion: '패션/미용',
+    culture: '문화/여가',
+  };
+
   if (diaryLoading) {
     return <div>Loading...</div>;
   }
@@ -38,6 +49,13 @@ const DiaryTemplate = () => {
   const series = diaryDetail.data.dailyStatistic.amountByCategory.map(
     (item) => item.amount,
   );
+
+  const categoryNames = diaryDetail.data.dailyStatistic.amountByCategory.map(
+    (item) => item.categoryName,
+  );
+
+  console.log(diaryDetail);
+
   const chartColors = [
     '#FAF2E8',
     '#BDECEA',
@@ -62,8 +80,9 @@ const DiaryTemplate = () => {
   return (
     <div className="diary-container">
       <div className="diary-template">
+        {/* 일기장 */}
         <div className="diary-form-container">
-          <div className="diary-name">일기장</div>
+          <h1 className="diary-title-name">일기장</h1>
           <DiaryForm
             regDate={regDate}
             title={title}
@@ -72,10 +91,10 @@ const DiaryTemplate = () => {
             stampType={stampType}
           />
         </div>
+
+        {/* 도넛 차트 */}
         <div className="diary-donutchart-container">
-          <div className="diary-donutchart-title">
-            <p>오늘 소비 분석</p>
-          </div>
+          <h1 className="diary-donutchart-title">오늘 소비 분석</h1>
           <DonutChart
             series={series}
             title={'오늘 총 소비액'}
@@ -89,22 +108,64 @@ const DiaryTemplate = () => {
             valueColor={'black'}
             colors={chartColors}
           />
-          <div className="chart-legend"></div>
-        </div>
-        <div className="diary-goal-container">
-          <div className="diary-goal-title">
-            <p>남은 목표 금액</p>
+
+          {/* 카테고리 */}
+          <div className="category-list-cotainer">
+            <div className="category-left">
+              {categoryNames.slice(0, 4).map((category, index) => (
+                <div key={index} className="goal-inputs-category">
+                  <div
+                    className="goal-inputs-rectangle-label"
+                    style={{
+                      backgroundColor: chartColors[index],
+                    }}
+                  ></div>
+                  <div className="goal-inputs-category-name donut-category-name">
+                    {categoryNameToKor[category]}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="category-right">
+              {categoryNames.slice(4, 8).map((category, index) => (
+                <div key={index} className="goal-inputs-category">
+                  <div
+                    className="goal-inputs-rectangle-label"
+                    style={{
+                      backgroundColor: chartColors[index + 4],
+                    }}
+                  ></div>
+                  <div className="goal-inputs-category-name donut-category-name">
+                    {categoryNameToKor[category]}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+        </div>
+
+        {/* 상태 바 */}
+        <div className="diary-goal-container">
+          <h1>남은 목표 금액</h1>
           {diaryDetail.data.goalByCategory.map((goalByCategory, index) => (
             <div key={index} className="diary-goal">
-              <div className="diary-goal-category">
-                {goalByCategory.categoryName}
-              </div>
+              <div
+                className="goal-inputs-rectangle-label"
+                style={{
+                  backgroundColor: chartColors[index],
+                }}
+              ></div>
               <GoalBar
                 color={chartColors[index]}
                 current={series[index]}
                 goal={goalByCategory.categoryGoalAmount / lastDayOfMonth}
-                type={'rectangle'}
+                type={'diary'}
+                textcolor={
+                  series[index] >=
+                  goalByCategory.categoryGoalAmount / lastDayOfMonth
+                    ? 'red'
+                    : 'black'
+                }
               />
             </div>
           ))}

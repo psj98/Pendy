@@ -137,7 +137,7 @@ const AnalysisTemplate = () => {
   console.log('응답데이터 : ', aiText);
   return (
     <div className="analysis-container">
-      <h1 className="analysis-title">소비분석 페이지</h1>
+      <h1 className="analysis-title"></h1>
       {/* currentMonth 값을 출력 */}
       {/* 여기에 소비 분석 컴포넌트 또는 내용을 추가합니다. */}
       <div className="analysis-main-container">

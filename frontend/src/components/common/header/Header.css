@@ -1,5 +1,3 @@
-/* Header.css */
-
 .header {
   position: fixed;
   top: 0;
@@ -12,16 +10,50 @@
   height: 10vh;
   background-color: #f8f8ff;
   z-index: 1;
+  text-decoration: none;
   font-family: 'The Jamsil 3';
+  outline: none;
+  font-size: 20px;
+}
+.header-menu-container {
+  display: flex !important;
+  justify-content: flex-end !important;
+  cursor: pointer !important;
+}
+
+.sub-menu {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  /* text-decoration: none; */
+}
+
+.sub-menu-container {
+  margin-left: 30px;
 }
 
 .header-link-content {
-  font-size: 35px;
-  font-weight: bold;
-  color: #007bff;
+  font-size: 35px !important;
+  font-weight: bold !important;
+  color: #007bff !important;
   text-decoration: none;
 }
 
-.header-menu-container {
-  cursor: pointer;
+.link-content {
+  color: black;
+  transition:
+    font-size 0.3s,
+    font-weight 0.3s;
+  text-decoration: none;
+}
+
+.link-content.active-link {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.link-content:visited {
+  color: black; /* 이전의 색상을 상속받도록 설정 */
+  text-decoration: none; /* 밑줄 제거 */
 }

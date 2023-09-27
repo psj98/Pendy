@@ -3,9 +3,60 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  position: relative; /* 부모 컨테이너를 relative로 설정하여 자식 요소의 위치를 조정할 수 있도록 합니다. */
 }
 
 .guest-template img {
   max-width: 100%;
   height: auto;
+}
+
+.background-image {
+  width: 100%; /* 이미지를 부모 컨테이너에 맞게 확장합니다. */
+  height: auto; /* 이미지 높이를 자동으로 조정합니다. */
+  position: relative; /* 이미지를 상위 컨테이너에 상대적으로 배치합니다. */
+  z-index: 1; /* 이미지를 다른 요소 위로 배치합니다. */
+}
+
+.startnow {
+  position: absolute; /* 버튼을 위치시키기 위해 절대 위치 지정 */
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 65px; /* 높이를 조절하여 위아래 여백을 줄입니다. */
+  padding: 1px 18px;
+  gap: 8px;
+  background-color: #0b5fff;
+  cursor: pointer; /* 버튼 모양을 가진 요소에 포인터 커서를 추가합니다. */
+  z-index: 2; /* 버튼을 이미지 위로 배치합니다. */
+  top: 75vh;
+  right: 14vw;
+}
+
+.elements {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.text-1 {
+  text-align: center;
+  font-size: 24px; /* 폰트 크기를 줄입니다. */
+  font-family: 'Source Sans Pro', sans-serif; /* 폰트 패밀리 설정 */
+  color: #ffffff;
+}
+
+.header-logo-container {
+  position: absolute; /* 버튼을 위치시키기 위해 절대 위치 지정 */
+  z-index: 2; /* 버튼을 이미지 위로 배치합니다. */
+  bottom: 25vh;
+  right: 20vw;
+}
+
+.header-link-content {
+  font-size: 90px; /* 폰트 크기를 줄입니다. */
 }
