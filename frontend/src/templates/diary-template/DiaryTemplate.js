@@ -7,11 +7,12 @@ import useDiaryDetail from '../../hooks/useDiaryDetail';
 import useTodayList from '../../hooks/useTodayList';
 import EmotionModal from '../../components/modal/emotion-modal/EmotionModal';
 import { useParams } from 'react-router-dom';
+import { isSameDay, parseISO } from 'date-fns';
 
 const DiaryTemplate = () => {
-  const { id } = useParams();
-  const { diaryDetail, diaryLoading } = useDiaryDetail(id);
-  const { todayList, todayLoading } = useTodayList();
+  const { id, diaryDate } = useParams();
+  const { diaryDetail, diaryLoading } = useDiaryDetail(id, diaryDate);
+  const { todayList, todayLoading } = useTodayList(diaryDate);
 
   const categoryNameToKor = {
     food: '식비',
@@ -38,12 +39,12 @@ const DiaryTemplate = () => {
   const comment = diaryDetail.data.diary.comment;
   const stampType = diaryDetail.data.diary.stampType;
 
-  console.log('diaryDetail', diaryDetail.data);
-  console.log('todayList', todayList.data);
-
-  if (todayList.length !== 0) {
-    console.log('modal open');
-    isModalOpen = true;
+  const diaryDay = parseISO(diaryDate);
+  if (isSameDay(new Date(), diaryDay)) {
+    if (todayList.data.length !== 0) {
+      console.log('modal open');
+      isModalOpen = true;
+    }
   }
 
   const series = diaryDetail.data.dailyStatistic.amountByCategory.map(

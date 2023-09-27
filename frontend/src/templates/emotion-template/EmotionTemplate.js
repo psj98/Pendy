@@ -64,7 +64,7 @@ const EmotionTemplate = () => {
         console.log(response);
         if (response.data.code === 1000) {
           console.log('emotion regist success');
-          navigate('/diary', { replace: true });
+          navigate('/');
         } else {
           console.error(response.data.code + ' ' + response.data.message);
           alert('등록에 실패하셨습니다');
