@@ -28,6 +28,7 @@ public enum BaseResponseStatus {
     INVALID_AUTHORIZATION_NUMBER(false, 3002, "잘못된 인증 코드입니다."),
     ACCOUNT_NOT_FOUND(false, 3002, "존재하지 않는 계좌번호입니다."),
     ACCOUNT_LOGIN_FAIL(false, 3003, "계좌 로그인에 실패하였습니다."),
+    BANK_CODE_NOT_FOUND(false, 3004, "존재하지 않는 은행 코드입니다"),
 
     /**
      * TransactionInfo
