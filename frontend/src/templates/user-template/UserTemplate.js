@@ -136,6 +136,9 @@ const UserTemplate = () => {
     console.log('goal' + consumption_amount);
     console.log('total' + consumption_goal);
 
+    consumption_amount = Math.round(consumption_amount);
+    consumption_goal = Math.round(consumption_goal);
+
     chartLabel = statisticData.map((item) => item.categoryName);
     chartData = statisticData.map((item) => item.amount);
   }
