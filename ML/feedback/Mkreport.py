@@ -17,11 +17,11 @@ from langchain.vectorstores import FAISS
 
 from product import products
 #GPT
-from ML.openaikey import apikey
+# from ML.openaikey import apikey
 
 #키 등록
-import os
-os.environ["OPENAI_API_KEY"] = apikey
+# import os
+# os.environ["OPENAI_API_KEY"] = apikey
 
 # 데이터프레임
 import pandas as pd
