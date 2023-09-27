@@ -112,6 +112,12 @@ RuntimeError: Error loading ./product.txt
 ```
 - 해결 : 에러 메세지를 보고 경로 오류인가 착각하여 경로를 수정하여도 해결되지 않아 txt 로 읽어본 후 경로문제가 아님을 확인하고 loader 수정하여 해결
 
+## 일기 생성에서 길지 않은 response임에도 잘려서 나오는 문제
+- 요약 :웹에서 이용할때는 같은 쿼리에 대해 원하는 응답을 리턴하지만, API를 이용할 경우 중간부터 잘린 응답을 리턴
+- 해결 : 모델을 gpt-3.5-turbo-16k로 변경 
+
+
+
 
 # todo 
 - chatbot readme 확인하고 erp, autogpt 비슷한 기능 적용
