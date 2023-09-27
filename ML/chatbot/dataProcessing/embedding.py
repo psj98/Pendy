@@ -5,8 +5,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores.faiss import FAISS
 from langchain.docstore.document import Document
 
-from ML.openaikey import apikey
-import os
+# from ML.openaikey import apikey
+# import os
 import re
 
 def load_single_document(file_path):
