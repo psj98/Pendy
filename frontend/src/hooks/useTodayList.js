@@ -2,11 +2,10 @@
 import authAxiosCreate from '../authAxiosCreate';
 import { useState, useEffect } from 'react';
 
-function useTodayList() {
+function useTodayList(regDate) {
   console.log('useTodayList');
   const [todayList, setTodayList] = useState([]);
   const [todayLoading, setTodayLoading] = useState(true);
-  const regDate = sessionStorage.getItem('regDate');
 
   useEffect(() => {
     const getTodayList = async () => {
@@ -28,7 +27,7 @@ function useTodayList() {
       }
     };
     getTodayList();
-  }, [regDate]);
+  }, []);
 
   return { todayList, todayLoading };
 }
