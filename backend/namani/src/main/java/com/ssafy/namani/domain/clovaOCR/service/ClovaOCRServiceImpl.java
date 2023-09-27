@@ -1,11 +1,8 @@
 package com.ssafy.namani.domain.clovaOCR.service;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.ssafy.namani.domain.clovaOCR.dto.response.ClovaOCRResponseDto;
 import com.ssafy.namani.domain.s3.dto.response.S3ResponseDto;
 import com.ssafy.namani.global.response.BaseException;
-import com.ssafy.namani.global.response.BaseResponseService;
-import com.ssafy.namani.global.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.JSONParser;
@@ -15,7 +12,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

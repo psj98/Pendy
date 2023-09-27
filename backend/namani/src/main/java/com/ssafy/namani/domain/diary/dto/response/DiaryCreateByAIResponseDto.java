@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 public class DiaryCreateByAIResponseDto {
 
     @NotNull
+    private String title; // 일기 제목
+
+    @NotNull
     private String content; // 일기 내용
 
     @NotNull
@@ -22,7 +25,8 @@ public class DiaryCreateByAIResponseDto {
     private Integer stampType; // 도장 종류
 
     @Builder
-    public DiaryCreateByAIResponseDto(String content, String comment, Integer stampType) {
+    public DiaryCreateByAIResponseDto(String title, String content, String comment, Integer stampType) {
+        this.title = title;
         this.content = content;
         this.comment = comment;
         this.stampType = stampType;
