@@ -89,11 +89,14 @@ const FirstGoalTemplate = () => {
     setIsGoalSet(!isGoalSet);
   };
   const handleInputChange = (categoryName, e) => {
-    const newValue = e.target.value;
+    let newValue = e.target.value;
 
     // 숫자가 아닌 값이 입력되면 함수를 종료
     if (isNaN(newValue)) return;
 
+    if (newValue === '') {
+      newValue = 0;
+    }
     setInputValues((prevValues) => {
       const updatedValues = {
         ...prevValues,
@@ -217,7 +220,7 @@ const FirstGoalTemplate = () => {
                         className="input goal-inputs-amount"
                         placeholder="숫자로 입력"
                         variant="outlined"
-                        value={inputValues[category.categoryName] || 0}
+                        value={inputValues[category.categoryName]}
                         readOnly={!isGoalSet}
                         onChange={(e) =>
                           handleInputChange(category.categoryName, e)
@@ -244,7 +247,7 @@ const FirstGoalTemplate = () => {
                         className="input goal-inputs-amount"
                         placeholder="숫자로 입력"
                         variant="outlined"
-                        value={inputValues[category.categoryName] || 0}
+                        value={inputValues[category.categoryName]}
                         readOnly={!isGoalSet}
                         onChange={(e) =>
                           handleInputChange(category.categoryName, e)
