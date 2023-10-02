@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'The Jamsil 3';
+  font-family: 'The Jamsil 3', 'sans-serif';
 }
 
 .goal-main {
@@ -13,6 +13,7 @@
   align-items: center;
   justify-content: space-evenly;
   width: 92%;
+  margin-top: 50px;
 }
 
 .goal-container {
@@ -113,10 +114,9 @@
 }
 
 .goal-inputs-amount {
-  padding-right: 5px !important;
   width: 125px;
+  padding: 0 5px 0 0;
   font-size: inherit;
-  padding: 0;
   text-align: right;
   background: transparent;
 }

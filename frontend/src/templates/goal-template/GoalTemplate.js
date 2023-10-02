@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import './GoalTemplate.css';
+
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import BarChart from '../../components/common/bar-chart/BarChart';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
+import ChatBot from '../../components/common/chat-bot/ChatBot';
+
 import handleGoalDetail from '../../utils/handleGoalDetail';
-import format from 'date-fns/format';
 import handleGoalUpdate from '../../utils/handleGoalUpdate';
+
+import format from 'date-fns/format';
 
 const GoalTemplate = () => {
   const [goalByCategory, setGoalByCategory] = useState([]);
@@ -139,7 +143,6 @@ const GoalTemplate = () => {
   };
   return (
     <div className="goal-template">
-      <h1 style={{ margin: '30px 0' }}></h1>
       <div className="goal-main">
         <div className="goal-container">
           <div className="goal-chart">
@@ -160,14 +163,13 @@ const GoalTemplate = () => {
             )}
           </div>
 
-          {/* <div className="goal-bar"> */}
+          {/* 목표 막대 바 */}
           <GoalBar
             color={'#2A4FFA'}
             current={monthlyTotalAmount}
             goal={totalGoals.goalAmount}
             type={'update'}
           />
-          {/* </div> */}
 
           <div className="goal-input-button-container">
             <div className="goal-inputs-container">
@@ -255,6 +257,9 @@ const GoalTemplate = () => {
             <BarChart series={series} avgConsumptions={avgConsumptions} />
           </div>
         )}
+      </div>
+      <div className="chat-bot-div">
+        <ChatBot />
       </div>
     </div>
   );
