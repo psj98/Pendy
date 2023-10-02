@@ -37,6 +37,12 @@ public class StatisticServiceImpl implements StatisticService {
     private final CategoryRepository categoryRepository;
     private final TransactionInfoRepository transactionInfoRepository;
 
+    /**
+     * 일간 통계 존재 여부 체크 (사용 X)
+     * 
+     * @param memberId
+     * @param curDate
+     */
     @Override
     public void checkDailyStatistic(UUID memberId, Timestamp curDate) {
         List<Category> categoryList = categoryRepository.findAll();
@@ -74,7 +80,7 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     /**
-     * 월간 통계 존재 여부 체크
+     * 월간 통계 존재 여부 체크 (사용 X)
      *
      * @param memberId
      * @param curDate
@@ -131,7 +137,7 @@ public class StatisticServiceImpl implements StatisticService {
             throw new BaseException(BaseResponseStatus.INVALID_MEMBER);
         }
 
-        checkDailyStatistic(memberId, curDate);
+//        checkDailyStatistic(memberId, curDate);
 
         // 카테고리 정보로 List 초기화
         List<Category> categoryList = categoryRepository.findAll();
@@ -180,7 +186,7 @@ public class StatisticServiceImpl implements StatisticService {
             throw new BaseException(BaseResponseStatus.INVALID_MEMBER);
         }
 
-        checkMonthlyStatistic(memberId, curDate);
+//        checkMonthlyStatistic(memberId, curDate);
 
         // 카테고리 정보로 List 초기화
         Integer totalAmount = 0;
