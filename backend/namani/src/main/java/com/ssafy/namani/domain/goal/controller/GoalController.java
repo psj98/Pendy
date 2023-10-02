@@ -61,18 +61,14 @@ public class GoalController {
     @PostMapping("/regist")
     public BaseResponse<Object> registGoal(@RequestHeader(value = "accessToken", required = false) String token,
                                            @RequestBody GoalRegistRequestDto goalRegistRequestDto) {
-        log.info("regist");
         try {
             // 토큰 정보 체크
             if (token == null || token.equals("")) {
                 throw new BaseException(BaseResponseStatus.SESSION_EXPIRATION);
             }
 
-            System.out.println("test");
             UUID memberId = jwtService.getMemberIdFromToken(token); // token으로 memberId 조회
-            System.out.println("testets");
             goalService.registGoal(memberId, goalRegistRequestDto);
-            log.info("call comp");
             return baseResponseService.getSuccessNoDataResponse();
         } catch (BaseException e) {
             return baseResponseService.getFailureResponse(e.status);
