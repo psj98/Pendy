@@ -49,6 +49,18 @@ const GoalTemplate = () => {
         return { ...item, categoryGoalAmount: value };
       }),
     );
+
+    const updatedSeries = goalByCategory.map((item) => item.categoryGoalAmount);
+    setSeries(updatedSeries);
+
+    const updateTotalGoalAmount = updatedSeries.reduce(
+      (acc, curr) => acc + curr,
+      0,
+    );
+    setTotalGoals((prevState) => ({
+      ...prevState,
+      goalAmount: updateTotalGoalAmount,
+    }));
   };
 
   useEffect(() => {
@@ -101,7 +113,22 @@ const GoalTemplate = () => {
   };
 
   const handleCancel = () => {
-    setGoalByCategory(JSON.parse(JSON.stringify(originalGoalByCategory))); // Reset to original state
+    // Reset to original state
+    setGoalByCategory(JSON.parse(JSON.stringify(originalGoalByCategory)));
+    const originalSeries = originalGoalByCategory.map(
+      (item) => item.categoryGoalAmount,
+    );
+    setSeries(originalSeries);
+
+    const originalTotalGoalAmount = originalSeries.reduce(
+      (acc, curr) => acc + curr,
+      0,
+    );
+    setTotalGoals((prevState) => ({
+      ...prevState,
+      goalAmount: originalTotalGoalAmount,
+    }));
+
     setEditable(false);
     setButtonLabel('수정');
   };
@@ -163,10 +190,10 @@ const GoalTemplate = () => {
               />
             )}
           </div>
-          <div className="total-goal-amount">
-            총 목표 금액 : {totalGoals.goalAmount}원
+          <div className="total-goal-container">
+            <div className="total-goal">총 목표 금액 : </div>
+            <div className="total-goal-amount">{totalGoals.goalAmount}원</div>
           </div>
-
           {/* 목표 막대 바 */}
           <GoalBar
             color={'#2A4FFA'}

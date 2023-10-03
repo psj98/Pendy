@@ -125,7 +125,18 @@
   font-size: 14px;
 }
 
+.total-goal-container {
+  display: flex;
+}
+.total-goal {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-family: 'The Jamsil 4';
+}
+
 .total-goal-amount {
   font-size: 20px;
   margin-bottom: 20px;
+  font-family: 'The Jamsil 6';
+  color: #007bff;
 }
