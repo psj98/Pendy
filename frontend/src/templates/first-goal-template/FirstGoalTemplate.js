@@ -18,6 +18,7 @@ const FirstGoalTemplate = () => {
   const [totalInputAmount, setTotalInputAmount] = useState(0);
   const [goalInputAmount, setGoalInputAmount] = useState(0);
   const [tempGoalInputAmount, setTempGoalInputAmount] = useState(0);
+  const [sumOfTotalAmount, setSumOftotalAmount] = useState(0);
 
   const categoryNameToKor = {
     food: '식비',
@@ -50,19 +51,23 @@ const FirstGoalTemplate = () => {
     const fetchData = async () => {
       try {
         const response = await handleGoalDetail(age, salary, curDate);
-        const myMonthlyStatisticAvg =
-          response.data.data.monthlyStatistic.amountByCategory;
+        const myMonthlyStatisticAvg = response.data.data.monthlyStatisticAvg;
         const seriesList = myMonthlyStatisticAvg.map((index) => index.amount);
         console.log('resonse', response.data);
         const avgCom = response.data.data.avgConsumptionAmountAvg.map(
           (index) => index.amount,
         );
 
+        const sum = myMonthlyStatisticAvg.reduce(
+          (acc, item) => acc + item.amount,
+          0,
+        );
+
         setResponseData(response.data);
 
         console.log('avgCom', avgCom);
-        setTotalInputAmount(response.data.data.monthlyStatistic.totalAmount);
-        setGoalInputAmount(response.data.data.monthlyStatistic.totalAmount);
+        setTotalInputAmount(sum);
+        setGoalInputAmount(sum);
 
         setMonthlyAvg(myMonthlyStatisticAvg);
 
