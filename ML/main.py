@@ -31,22 +31,22 @@ app.add_middleware(
 #     return {"message": "Hello FastAPI"}
 #
 #
-# @app.get("/hello/{name}")
-# async def say_hello(name: str):
-#     return {"message": f"Hello {name}"}
+@app.get("/test")
+def say_hello(name: str):
+    return {"message": f"Hello {name}"}
 
 @app.post("/ml/create-diary")
-def create_diary(request: DiaryRequest):
+async def create_diary(request: DiaryRequest):
     ret = mkdiary(request)
     return ret
 
 @app.post("/ml/create-report")
-def create_report(request: ReportRequest):
+async def create_report(request: ReportRequest):
     ret = mkreport(request)
     return ret
 
 @app.post("/ml/chatbot")
-def chatbot_communication(request: ChatBotRequest):
+async def chatbot_communication(request: ChatBotRequest):
     # 챗봇 반환 메시지 구현
     print(request)
 

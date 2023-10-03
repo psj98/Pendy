@@ -21,6 +21,8 @@ import pandas as pd
 # JSON으로 변환
 import json
 
+
+
 def namani(request_data):
     result_data = {"message": "좋은 하루 보내세요"}
     # tempurature : 0 ~ 1 로 높아질수록 랜덤한 답변 생성 / 창의력
@@ -87,8 +89,8 @@ if __name__=="__main__":
     os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
 
     req = {
-        "preMessage": "",
-        "tempMessage": "재미있는 이야기"
+        "preMessage": "당신은 최근에 어떤 재미있는 이야기를 들었나요?",
+        "tempMessage": "재미있는 이야기를 해주세요"
     }
     ans = (namani(req))
 
