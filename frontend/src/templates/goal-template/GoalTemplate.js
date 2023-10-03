@@ -76,6 +76,7 @@ const GoalTemplate = () => {
         setOriginalGoalByCategory(goalByCategoryList); // Set original state
         setSeries(seriesList);
         setTotalGoals(totalGoal);
+        console.log(totalGoal.goalAmount);
       } catch (error) {
         console.log(error);
       }
@@ -161,6 +162,9 @@ const GoalTemplate = () => {
                 colors={colors}
               />
             )}
+          </div>
+          <div className="total-goal-amount">
+            총 목표 금액 : {totalGoals.goalAmount}원
           </div>
 
           {/* 목표 막대 바 */}
