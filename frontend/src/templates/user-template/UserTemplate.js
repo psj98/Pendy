@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './UserTemplate.css';
 import { addMonths, subMonths } from 'date-fns';
+
 import CalenderHeader from '../../components/main/calender-header/CalenderHeader';
 import CalenderDays from '../../components/main/calender-days/CalenderDays';
 import CalenderCells from '../../components/main/calender-cells/CalenderCells';
@@ -8,6 +9,8 @@ import DonutChart from '../../components/common/donut-chart/DonutChart';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
 import DayMonthButton from '../../components/main/day-month-button/DayMonthButton';
 import handleCalender from '../../utils/handleCalender';
+import ChatBot from '../../components/common/chat-bot/ChatBot';
+
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -208,7 +211,9 @@ const UserTemplate = () => {
           )}
         </div>
       </div>
-      <div></div>
+      <div className="chat-bot-div">
+        <ChatBot />
+      </div>
     </div>
   );
 };

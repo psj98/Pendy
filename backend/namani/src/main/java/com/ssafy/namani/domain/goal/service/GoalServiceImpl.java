@@ -33,10 +33,10 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @EnableScheduling
-@Slf4j
 public class GoalServiceImpl implements GoalService {
 
     private final TotalGoalRepository totalGoalRepository;
@@ -83,8 +83,6 @@ public class GoalServiceImpl implements GoalService {
      */
     @Override
     public void registGoal(UUID memberId, GoalRegistRequestDto goalRegistRequestDto) throws BaseException {
-        log.info("call the method reigstGoal");
-
         // 사용자 정보 체크
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         if (!memberOptional.isPresent()) {
@@ -96,20 +94,6 @@ public class GoalServiceImpl implements GoalService {
         TotalGoal newTotalGoal = totalGoalOptional.get();
         Long totalGoalId = newTotalGoal.getId();
 
-//        Optional<List<GoalByCategory>> allByTotalGoalId = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId);
-//
-//        log.info("allBytotalgoalId" + allByTotalGoalId);
-
-//        if(allByTotalGoalId.isPresent()){
-//            goalByCategoryRepository.deleteByTotalGoalId(totalGoalId);
-//        }
-
-        // 목표 정보 체크
-//        // 이미 존재하면 그냥 지워버리기.
-//        if (totalGoalOptional.isPresent()) {
-//            totalGoalRepository.deleteById(totalGoalId);
-//        }
-
         // 월별 목표 정보 저장
         Integer goalAmount = goalRegistRequestDto.getGoalAmount();
         List<GoalByCategoryRegistResponseDto> goalByCategoryList = goalRegistRequestDto.getGoalByCategoryList();
@@ -120,10 +104,7 @@ public class GoalServiceImpl implements GoalService {
                 .goalDate(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
 
-        log.info(totalGoal.toString());
         totalGoalRepository.save(totalGoal);
-
-        log.info("success");
 
         // 카테고리 별로 목표 저장
         for (GoalByCategoryRegistResponseDto goalByCategoryRegistResponseDto : goalByCategoryList) {
@@ -191,9 +172,11 @@ public class GoalServiceImpl implements GoalService {
         TotalGoal totalGoal = totalGoalRepository.findById(totalGoalId).get();
 
         // 카테고리 별 목표가 없는 경우, 초기값을 0으로 생성
-        Optional<List<GoalByCategory>> goalByCategoryListOptional = goalByCategoryRepository.findAllByTotalGoalId(totalGoalId);
-        if (goalByCategoryListOptional.isEmpty()) { // 없으면 생성
-            for (Category category : categoryList) {
+        for (Category category : categoryList) {
+            Optional<GoalByCategory> categoryOptional = goalByCategoryRepository.findByTotalGoalIdCategoryId(totalGoalId, category.getId());
+
+            // 존재하지 않으면 생성
+            if (!categoryOptional.isPresent()) {
                 GoalByCategory goalByCategory = GoalByCategory.builder()
                         .category(category)
                         .totalGoal(totalGoal)
@@ -234,12 +217,8 @@ public class GoalServiceImpl implements GoalService {
         Integer salary = goalDetailRequestDto.getSalary();
         Timestamp curDate = goalDetailRequestDto.getCurDate();
 
-        System.out.printf("gimoti %d, %d", age, salary);
-        System.out.println(curDate);
-
         /* 월별 목표 조회 */
         TotalGoalDetailResponseDto totalGoal = getTotalGoal(memberId, curDate);
-        System.out.println(totalGoal.getId());
 
         /* 카테고리 별 목표 조회 */
         List<GoalByCategoryDetailResponseDto> goalByCategoryList = getGoalByCategoryList(totalGoal.getId());
@@ -253,7 +232,6 @@ public class GoalServiceImpl implements GoalService {
         /* 이전 3달간 연령대 + 연봉대에 맞는 평균 소비 조회 */
         List<AvgConsumptionAmountForThreeMonthResponseDto> avgConsumptionAmountAvg = avgConsumptionAmountService.getAvgConsumptionAmountForThreeMonth(age, salary, curDate);
 
-        log.info("1234"+ avgConsumptionAmountAvg.toString());
         /* 목표 조회 데이터 정보 저장 및 반환 */
         GoalDetailResponseDto goalDetailResponseDto = GoalDetailResponseDto.builder()
                 .totalGoal(totalGoal)
@@ -263,7 +241,6 @@ public class GoalServiceImpl implements GoalService {
                 .avgConsumptionAmountAvg(avgConsumptionAmountAvg)
                 .build();
 
-        log.info("hid" +  goalDetailResponseDto.toString());
         return goalDetailResponseDto;
     }
 
