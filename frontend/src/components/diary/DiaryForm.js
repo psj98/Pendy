@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './DiaryForm.css';
 import handleModifyDiary from '../../utils/handleModifyDiary';
 
@@ -22,14 +22,22 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
       break;
     default:
   }
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(title);
+  const [editedContent, setEditedContent] = useState(content);
 
   const onModifyButtonClick = async (event) => {
     event.preventDefault();
+    if (editedContent.length >= 255) {
+      alert('내용은 255자 이하여야 합니다.');
+      return;
+    }
     try {
-      const response = await handleModifyDiary(id, content);
+      const response = await handleModifyDiary(id, editedTitle, editedContent);
       console.log(response);
       if (response.data.code === 1000) {
         console.log('modify diary success');
+        window.location.reload();
       } else {
         console.error(response.data.code + ' ' + response.data.message);
       }
@@ -51,7 +59,18 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
             </div>
             <div className="diary-form-title-div">
               <p className="diary-title diary-p">제목</p>
-              <p className="diary-title-content diary-p">{title}</p>
+              {isEditing ? (
+                <textarea
+                  type="text"
+                  className="editable-textarea-title"
+                  value={editedTitle}
+                  onChange={(e) => {
+                    setEditedTitle(e.target.value);
+                  }}
+                />
+              ) : (
+                <p className="diary-title-content diary-p">{title}</p>
+              )}
             </div>
           </div>
           <div className="diary-form-stamp">
@@ -59,7 +78,18 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
           </div>
         </div>
         <div className="diary-form-content-div">
-          <p className="diary-content diary-p">{content}</p>
+          {isEditing ? (
+            <textarea
+              type="text"
+              className="editable-textarea-content"
+              value={editedContent}
+              onChange={(e) => {
+                setEditedContent(e.target.value);
+              }}
+            />
+          ) : (
+            <p className="diary-content diary-p">{content}</p>
+          )}
         </div>
         <div className="diary-form-comment-div">
           <p className="diary-comment-text diary-p">추천</p>
@@ -67,9 +97,15 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
         </div>
       </div>
       <div className="diary-button-div">
-        <button className="diary-button" onClick={onModifyButtonClick}>
-          수정하기
-        </button>
+        {isEditing ? (
+          <button className="diary-button" onClick={onModifyButtonClick}>
+            수정 완료
+          </button>
+        ) : (
+          <button className="diary-button" onClick={() => setIsEditing(true)}>
+            수정하기
+          </button>
+        )}
       </div>
     </div>
   );
