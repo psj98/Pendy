@@ -203,7 +203,7 @@ public class DiaryServiceImpl implements DiaryService {
         transactionInfoRepository.saveAll(transactionInfoList); // 오류가 없으면 거래 내역 전체 저장
 
         /* -------------- AI에게 일기 생성 요청 -------------- */
-        String url = "http://localhost:8000/ml/create-diary"; // 파이썬 요청 url
+        String url = "https://j9a410.p.ssafy.io/ml/create-diary"; // 파이썬 요청 url
         RestTemplate restTemplate = new RestTemplate();
 
         // 월간 목표로 일간 소비 금액 구하기
