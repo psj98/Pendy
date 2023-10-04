@@ -14,6 +14,17 @@ const ChatBot = () => {
     event.preventDefault();
 
     const response = await handleChatBot(preMessage, message);
+
+    // text to speech
+    const synth = window.speechSynthesis;
+    const msg = new SpeechSynthesisUtterance();
+    msg.lang = "ko-KR";
+    msg.pitch = 1;
+    msg.rate = 1;
+    msg.text = response.data.message;
+    msg.volume = 1;
+    synth.speak(msg);
+
     console.log(response);
 
     setPreMessage(message); // 이전 message
