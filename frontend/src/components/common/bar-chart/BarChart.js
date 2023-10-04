@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import './BarChart.css';
 import ReactApexChart from 'react-apexcharts';
 const BarChart = ({ series, avgConsumptions }) => {
-  //eslint-disable-next-line
-
   const actualAvgConsumption = Array.isArray(avgConsumptions)
     ? avgConsumptions
     : [];
+  //eslint-disable-next-line
   const [chartData, setChartData] = useState({
     categories: [
       '식비',
