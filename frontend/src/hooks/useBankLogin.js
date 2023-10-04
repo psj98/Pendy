@@ -1,3 +1,4 @@
+//계좌 로그인여부 판단
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 

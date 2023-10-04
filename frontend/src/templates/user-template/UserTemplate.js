@@ -10,18 +10,14 @@ import GoalBar from '../../components/common/goal-bar/GoalBar';
 import DayMonthButton from '../../components/main/day-month-button/DayMonthButton';
 import handleCalender from '../../utils/handleCalender';
 import ChatBot from '../../components/common/chat-bot/ChatBot';
-
 import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 //유저 전용 메인 페이지
 const UserTemplate = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [responseData, setResponseData] = useState([]);
   const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
-  const [goalAmountValue, setGoalAmountValue] = useState(1);
-  const [totalAmountValue, setTotalAmountValue] = useState(1);
+  const [isNewSpend, setIsNewSpend] = useState('false');
 
   let diaries = [];
 
@@ -42,6 +38,8 @@ const UserTemplate = () => {
         const response = await handleCalender(todayDate, todayMonth);
         console.log('res', response.data);
         console.log('complete load');
+        console.log('isnew?', response.data.data.newDailyTransaction);
+        setIsNewSpend(response.data.data.newDailyTransaction);
         setResponseData(response.data); // response 데이터를 상태로 저장
       } catch (error) {
         console.log(error);
@@ -157,7 +155,11 @@ const UserTemplate = () => {
             nextMonth={nextMonth}
           />
           <CalenderDays />
-          <CalenderCells currentMonth={currentMonth} diaries={diaries} />
+          <CalenderCells
+            currentMonth={currentMonth}
+            diaries={diaries}
+            isNewSpend={isNewSpend}
+          />
         </div>
       </div>
       <div className="chart-container">

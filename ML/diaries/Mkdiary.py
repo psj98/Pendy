@@ -74,7 +74,7 @@ def mkdiary(req):
        [ResponseFormat]
        {
            "title": "write a title over 10 characters",
-           "content": "like an 75-years-old, write a fun diary content over 50 characters",
+           "content": "Like a 75-year-old, write a fun diary content between 50 and 250 characters.",
            "comment": "As an elementary school teacher, give comment",
            "stampType": "assign a score judging the spending details from a range of 1 to 5, int"
        }

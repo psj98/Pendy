@@ -40,7 +40,7 @@ def namani(request_data):
     
         [Instructions]
         - Act as a best friend
-        - All answers should be at least 10 characters long.
+        - All answers should be between 10 and 35 characters long.
         - if you do not know answer, Refer to the {docs}
         - Your answer targets elderly people over 60 years old.
 
@@ -81,7 +81,7 @@ def namani(request_data):
     chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=1)
     chain = LLMChain(llm=chat, prompt=chat_prompt)
     result = chain.run(question = usr_input, docs = doc)
-
+    print(result)
     # 문서 기반으로 질문
     result_data["message"] = result
     return result_data

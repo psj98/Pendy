@@ -18,7 +18,6 @@ const FirstGoalTemplate = () => {
   const [totalInputAmount, setTotalInputAmount] = useState(0);
   const [goalInputAmount, setGoalInputAmount] = useState(0);
   const [tempGoalInputAmount, setTempGoalInputAmount] = useState(0);
-  const [sumOfTotalAmount, setSumOftotalAmount] = useState(0);
 
   const categoryNameToKor = {
     food: '식비',
@@ -85,6 +84,7 @@ const FirstGoalTemplate = () => {
       }
     };
     fetchData();
+    //eslint-disable-next-line
   }, []);
 
   const handleGoalSetToggle = () => {
@@ -130,9 +130,15 @@ const FirstGoalTemplate = () => {
     setInputValues(originalValues);
     setTotalInputAmount(tempGoalInputAmount);
     setIsGoalSet(false);
+
+    // originalValues를 기반으로 series를 원래의 상태로 되돌린다.
+    const originalSeries = monthlyAvg.map(
+      (category) => originalValues[category.categoryName],
+    );
+    setSeries(originalSeries);
   };
 
-  const handleComplate = async () => {
+  const handleComplete = async () => {
     try {
       var goalAmount = 0;
       const goal = Object.keys(inputValues).map((categoryName) => {
@@ -165,7 +171,6 @@ const FirstGoalTemplate = () => {
 
   return (
     <div className="goal-template">
-      <h1 style={{ margin: '30px 0' }}></h1>
       <div className="goal-main">
         <div className="goal-container">
           <div className="goal-chart">
@@ -279,7 +284,7 @@ const FirstGoalTemplate = () => {
                     fontSize: 'smaller',
                     padding: '5px 10px',
                   }}
-                  onClick={isGoalSet ? handleComplate : handleGoalSetToggle}
+                  onClick={isGoalSet ? handleComplete : handleGoalSetToggle}
                 >
                   {isGoalSet ? '완료' : '목표 설정'}
                 </button>
