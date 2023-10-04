@@ -70,8 +70,6 @@ const LoginTemplate = () => {
 
   return (
     <div className="login">
-      <h1 className="login-title"></h1>
-
       <div className="login-container-box">
         {/* 이메일 입력 */}
         <div className="login-input email-input">

@@ -18,7 +18,6 @@ const FirstGoalTemplate = () => {
   const [totalInputAmount, setTotalInputAmount] = useState(0);
   const [goalInputAmount, setGoalInputAmount] = useState(0);
   const [tempGoalInputAmount, setTempGoalInputAmount] = useState(0);
-  const [sumOfTotalAmount, setSumOftotalAmount] = useState(0);
 
   const categoryNameToKor = {
     food: '식비',
@@ -85,6 +84,7 @@ const FirstGoalTemplate = () => {
       }
     };
     fetchData();
+    //eslint-disable-next-line
   }, []);
 
   const handleGoalSetToggle = () => {
@@ -165,7 +165,6 @@ const FirstGoalTemplate = () => {
 
   return (
     <div className="goal-template">
-      <h1 style={{ margin: '30px 0' }}></h1>
       <div className="goal-main">
         <div className="goal-container">
           <div className="goal-chart">
