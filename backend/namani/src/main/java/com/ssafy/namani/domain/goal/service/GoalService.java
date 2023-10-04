@@ -77,5 +77,5 @@ public interface GoalService {
      * @throws BaseException
      * @throws JsonProcessingException
      */
-    void registMonthlyFeedback() throws BaseException, JsonProcessingException;
+    void registMonthlyFeedback(UUID memberId) throws BaseException, JsonProcessingException;
 }

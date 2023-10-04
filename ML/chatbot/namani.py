@@ -31,6 +31,8 @@ def namani(request_data):
     usr_input = request_data.chatBotMessage["tempMessage"]
     pre_input = request_data.chatBotMessage["preMessage"]
 
+    print(usr_input + " " + pre_input)
+
     # template
     template = "[prequestion]"+pre_input+"""
     
@@ -40,7 +42,7 @@ def namani(request_data):
         - if you do not know answer, Refer to the {docs}
         - Your answer targets elderly people over 60 years old.
 
-    """
+    """ 
 
     # amount_data = json.loads(request_data.json())["categoryData"]
     # amount_data_cols = amount_data.keys()  # 모든 key를 가져옴
