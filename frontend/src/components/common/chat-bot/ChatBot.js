@@ -1,3 +1,4 @@
+//챗봇
 import React, { useState } from 'react';
 import './ChatBot.css';
 
@@ -15,7 +16,7 @@ const ChatBot = () => {
     const response = await handleChatBot(preMessage, message);
     console.log(response);
 
-    setPreMessage(message); // 이전 메시
+    setPreMessage(message); // 이전 message
     setMessage(''); // message 초기화
   };
 
@@ -23,7 +24,6 @@ const ChatBot = () => {
   const onPressEnterKey = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-
       onSendMessageClick(event);
     }
   };

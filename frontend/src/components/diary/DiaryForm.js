@@ -1,5 +1,7 @@
+//일기 페이지
 import React, { useState } from 'react';
 import './DiaryForm.css';
+
 import handleModifyDiary from '../../utils/handleModifyDiary';
 
 const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
@@ -26,15 +28,16 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
   const [editedTitle, setEditedTitle] = useState(title);
   const [editedContent, setEditedContent] = useState(content);
 
+  //수정 버튼 동작
   const onModifyButtonClick = async (event) => {
     event.preventDefault();
+    //글자수 제한
     if (editedContent.length >= 255) {
       alert('내용은 255자 이하여야 합니다.');
       return;
     }
     try {
       const response = await handleModifyDiary(id, editedTitle, editedContent);
-      console.log(response);
       if (response.data.code === 1000) {
         console.log('modify diary success');
         window.location.reload();
@@ -52,11 +55,14 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
         <div className="diary-date-title-stamp-div">
           <div className="diary-date-title-div">
             <div className="diary-form-date">
+              {/* 일기 작성 날짜 */}
               <p className="diary-date diary-p">
-                {regDate.substring(0, 4)}년 {regDate.substring(5, 7)}월{' '}
+                {regDate.substring(0, 4)}년 {regDate.substring(5, 7)}월
                 {regDate.substring(8, 10)}일
               </p>
             </div>
+
+            {/* 일기 제목 */}
             <div className="diary-form-title-div">
               <p className="diary-title diary-p">제목</p>
               {isEditing ? (
@@ -73,10 +79,14 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
               )}
             </div>
           </div>
+
+          {/* 소비 평가 도장 */}
           <div className="diary-form-stamp">
             <img src={stampImageSrc} alt={`Stamp ${stampType}`} />
           </div>
         </div>
+
+        {/* 일기 내용 */}
         <div className="diary-form-content-div">
           {isEditing ? (
             <textarea
@@ -96,6 +106,8 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
           <p className="diary-comment diary-p">{comment}</p>
         </div>
       </div>
+
+      {/* 일기 수정 버튼 */}
       <div className="diary-button-div">
         {isEditing ? (
           <button className="diary-button" onClick={onModifyButtonClick}>
@@ -103,7 +115,7 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
           </button>
         ) : (
           <button className="diary-button" onClick={() => setIsEditing(true)}>
-            수정하기
+            수정 하기
           </button>
         )}
       </div>
