@@ -241,6 +241,7 @@ public class DiaryServiceImpl implements DiaryService {
                     .content(diaryCreateByAIResponseDto.getContent())
                     .comment(diaryCreateByAIResponseDto.getComment())
                     .stampType(diaryCreateByAIResponseDto.getStampType())
+                    .regDate(Timestamp.valueOf(LocalDateTime.now()))
                     .build();
         }
 
