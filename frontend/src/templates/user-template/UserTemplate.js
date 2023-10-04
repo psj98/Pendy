@@ -10,14 +10,13 @@ import GoalBar from '../../components/common/goal-bar/GoalBar';
 import DayMonthButton from '../../components/main/day-month-button/DayMonthButton';
 import handleCalender from '../../utils/handleCalender';
 import ChatBot from '../../components/common/chat-bot/ChatBot';
-
 import { format } from 'date-fns';
 
 //유저 전용 메인 페이지
 const UserTemplate = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [responseData, setResponseData] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
+  const [selectedOption, setSelectedOption] = useState('option1');
 
   let diaries = [];
 
