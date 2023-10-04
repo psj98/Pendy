@@ -6,14 +6,16 @@ import handleChatBot from '../../../utils/handleChatBot';
 const ChatBot = () => {
   const [message, setMessage] = useState('');
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
+  const [preMessage, setPreMessage] = useState('');
 
   // Python으로 message 전달
   const onSendMessageClick = async (event) => {
     event.preventDefault();
 
-    const response = await handleChatBot(message);
+    const response = await handleChatBot(preMessage, message);
     console.log(response);
 
+    setPreMessage(message); // 이전 메시
     setMessage(''); // message 초기화
   };
 

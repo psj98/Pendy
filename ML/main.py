@@ -8,6 +8,7 @@ from feedback.ReportDTO import ReportRequest
 from chatbot.ChatBotDto import ChatBotRequest
 from diaries.Mkdiary import mkdiary
 from feedback.Mkreport import mkreport
+from chatbot.namani import namani
 
 # Key
 import os
@@ -48,7 +49,8 @@ async def create_report(request: ReportRequest):
 @app.post("/ml/chatbot")
 async def chatbot_communication(request: ChatBotRequest):
     # 챗봇 반환 메시지 구현
-    print(request)
+    ret = namani(request)
+    return ret
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
