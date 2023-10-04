@@ -173,10 +173,6 @@ const GoalTemplate = () => {
         setTotalGoals(newTotalGoals);
         setOriginalGoalByCategory(newGoalByCategory);
 
-        // const age = sessionStorage.getItem('age');
-        // const salary = sessionStorage.getItem('salary');
-        // const curDate = format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss.SSS'+09:00'");
-
         const updatedSeries = goalByCategory.map(
           (item) => item.categoryGoalAmount,
         );

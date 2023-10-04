@@ -130,6 +130,12 @@ const FirstGoalTemplate = () => {
     setInputValues(originalValues);
     setTotalInputAmount(tempGoalInputAmount);
     setIsGoalSet(false);
+
+    // originalValues를 기반으로 series를 원래의 상태로 되돌린다.
+    const originalSeries = monthlyAvg.map(
+      (category) => originalValues[category.categoryName],
+    );
+    setSeries(originalSeries);
   };
 
   const handleComplate = async () => {
