@@ -1,16 +1,15 @@
-// 1원 인증 요청
 import chatBotAxiosCreate from '../chatBotAxiosCreate';
 
 const handleChatBot = (preMessage, message) => {
   console.log('handleChatBot');
+
+  // Python에 전달할 챗봇 메시지 형식
   const ChatBotRequest = {
     chatBotMessage: {
       preMessage: preMessage,
       tempMessage: message,
     },
   };
-
-  console.log(ChatBotRequest);
 
   const serverUrl = '/ml/chatbot';
 

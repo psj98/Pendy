@@ -1,19 +1,28 @@
-//챗봇
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ChatBot.css';
 
 import handleChatBot from '../../../utils/handleChatBot';
 
 const ChatBot = () => {
-  const [message, setMessage] = useState('');
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
-  const [preMessage, setPreMessage] = useState('');
+  const [sendMessage, setSendMessage] = useState(''); // 보낼 메시지
+  const [preMessage, setPreMessage] = useState(''); // 이전 메시지
+  const [messageList, setMessageList] = useState([{}]); // 채팅 내역
+
+  useEffect(() => {
+    setMessageList(JSON.parse(localStorage.getItem('messageList')) || []);
+  }, []);
 
   // Python으로 message 전달
   const onSendMessageClick = async (event) => {
     event.preventDefault();
 
-    const response = await handleChatBot(preMessage, message);
+    const localMessageList =
+      JSON.parse(localStorage.getItem('messageList')) || []; // 메시지 배열 localStorage에서 가져오기
+
+    setPreMessage(sendMessage); // 이전 메시지
+
+    const response = await handleChatBot(preMessage, sendMessage);
 
     // text to speech
     const synth = window.speechSynthesis;
@@ -25,16 +34,29 @@ const ChatBot = () => {
     msg.volume = 1;
     synth.speak(msg);
 
-    console.log(response);
-
     setPreMessage(message); // 이전 message
     setMessage(''); // message 초기화
+
+    const newMessage = {
+      sendMessage: sendMessage,
+      responseMessage: response.data.message,
+    };
+
+    localMessageList.push(newMessage);
+
+    localStorage.setItem('messageList', JSON.stringify(localMessageList)); // 전송 메시지 localStorage에 저장
+    setMessageList(localMessageList);
+
+    console.log(messageList);
+
+    setSendMessage(''); // message 초기화
   };
 
   // Enter 키를 누른 경우 onSendMessageClick 함수 실행
   const onPressEnterKey = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
+
       onSendMessageClick(event);
     }
   };
@@ -63,7 +85,22 @@ const ChatBot = () => {
 
           {/* 챗봇 채팅 텍스트 */}
           <div className="chatbot-main-text-div">
-            <div className="chatbot-main-text"></div>
+            <div className="chatbot-message-div">
+              {messageList.map((message) => (
+                <>
+                  <div className="send-message-container">
+                    <div className="send-message-div">
+                      {message.sendMessage}
+                    </div>
+                  </div>
+                  <div className="response-message-container">
+                    <div className="response-message-div">
+                      {message.responseMessage}
+                    </div>
+                  </div>
+                </>
+              ))}
+            </div>
           </div>
 
           <div className="chatbot-text-container">
@@ -74,8 +111,8 @@ const ChatBot = () => {
                 name="message"
                 placeholder="무엇이든 물어보세요"
                 className="chatbot-question-text-input"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                value={sendMessage}
+                onChange={(e) => setSendMessage(e.target.value)}
                 onKeyDown={onPressEnterKey}
               />
             </div>
