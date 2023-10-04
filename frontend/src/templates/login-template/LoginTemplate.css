@@ -12,16 +12,10 @@
   padding: 20px;
   font-family: 'The Jamsil 3';
   border-radius: 5px;
+  margin-bottom: 50px;
 }
 
 /* 제목 스타일 */
-.login-title {
-  margin-bottom: 50px;
-  color: #007bff;
-  width: 80%;
-  text-align: center;
-}
-
 .login-container-box {
   width: 80%;
   border: 2px solid rgb(213, 213, 213);

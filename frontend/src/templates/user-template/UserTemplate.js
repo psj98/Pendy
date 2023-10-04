@@ -12,16 +12,12 @@ import handleCalender from '../../utils/handleCalender';
 import ChatBot from '../../components/common/chat-bot/ChatBot';
 
 import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 //유저 전용 메인 페이지
 const UserTemplate = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [responseData, setResponseData] = useState([]);
   const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
-  const [goalAmountValue, setGoalAmountValue] = useState(1);
-  const [totalAmountValue, setTotalAmountValue] = useState(1);
 
   let diaries = [];
 
