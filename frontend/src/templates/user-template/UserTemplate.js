@@ -16,7 +16,8 @@ import { format } from 'date-fns';
 const UserTemplate = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [responseData, setResponseData] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('option1');
+  const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
+  const [isNewSpend, setIsNewSpend] = useState('false');
 
   let diaries = [];
 
@@ -37,6 +38,8 @@ const UserTemplate = () => {
         const response = await handleCalender(todayDate, todayMonth);
         console.log('res', response.data);
         console.log('complete load');
+        console.log('isnew?', response.data.data.newDailyTransaction);
+        setIsNewSpend(response.data.data.newDailyTransaction);
         setResponseData(response.data); // response 데이터를 상태로 저장
       } catch (error) {
         console.log(error);
@@ -152,7 +155,11 @@ const UserTemplate = () => {
             nextMonth={nextMonth}
           />
           <CalenderDays />
-          <CalenderCells currentMonth={currentMonth} diaries={diaries} />
+          <CalenderCells
+            currentMonth={currentMonth}
+            diaries={diaries}
+            isNewSpend={isNewSpend}
+          />
         </div>
       </div>
       <div className="chart-container">
