@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ChatBot.css';
 
 import handleChatBot from '../../../utils/handleChatBot';
@@ -11,7 +11,8 @@ const ChatBot = () => {
 
   useEffect(() => {
     setMessageList(JSON.parse(localStorage.getItem('messageList')) || []);
-  }, []);
+    scrollToBottom();
+  }, [preMessage, isChatBotOpen]);
 
   // Python으로 message 전달
   const onSendMessageClick = async (event) => {
@@ -34,9 +35,6 @@ const ChatBot = () => {
     msg.volume = 1;
     synth.speak(msg);
 
-    setPreMessage(sendMessage); // 이전 message
-    setSendMessage(''); // message 초기화
-
     const newMessage = {
       sendMessage: sendMessage,
       responseMessage: response.data.message,
@@ -50,6 +48,9 @@ const ChatBot = () => {
     console.log(messageList);
 
     setSendMessage(''); // message 초기화
+    setPreMessage(sendMessage); // 이전 message
+
+    scrollToBottom();
   };
 
   // Enter 키를 누른 경우 onSendMessageClick 함수 실행
@@ -71,6 +72,13 @@ const ChatBot = () => {
     setIsChatBotOpen(false);
   };
 
+  const scrollRef = useRef();
+  const scrollToBottom = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  };
+
   return (
     <div className="chatbot-container">
       {/* 챗봇 채팅 화면 */}
@@ -85,7 +93,7 @@ const ChatBot = () => {
 
           {/* 챗봇 채팅 텍스트 */}
           <div className="chatbot-main-text-div">
-            <div className="chatbot-message-div">
+            <div className="chatbot-message-div" ref={scrollRef}>
               {messageList.map((message) => (
                 <>
                   <div className="send-message-container">
