@@ -1,6 +1,8 @@
+//Bar형태 chart
 import React, { useState } from 'react';
 import './BarChart.css';
 import ReactApexChart from 'react-apexcharts';
+
 const BarChart = ({ series, avgConsumptions }) => {
   const actualAvgConsumption = Array.isArray(avgConsumptions)
     ? avgConsumptions
@@ -46,7 +48,7 @@ const BarChart = ({ series, avgConsumptions }) => {
           },
         },
         legend: {
-          position: 'top', // Move the legend to the right side
+          position: 'top',
           fontSize: '15 px',
         },
         dataLabels: {
