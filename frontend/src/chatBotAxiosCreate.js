@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const chatBotAxiosCreate = axios.create({
   //baseURL 설정
-  baseURL: 'http://localhost:8000',
+  baseURL: 'https://j9a410.p.ssafy.io',
   withCredentials: true,
 });
 
