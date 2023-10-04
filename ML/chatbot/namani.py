@@ -28,6 +28,8 @@ def namani(request_data):
     # tempurature : 0 ~ 1 로 높아질수록 랜덤한 답변 생성 / 창의력
     # llm = OpenAI(temperature=1)
 
+    # usr_input = request_data["tempMessage"]
+    # pre_input = request_data["preMessage"]
     usr_input = request_data.chatBotMessage["tempMessage"]
     pre_input = request_data.chatBotMessage["preMessage"]
 
@@ -70,7 +72,7 @@ def namani(request_data):
     # 1. 페이지가 많을 때 사용 (상품이 많다면, 백터를 통한 빠른 검색이 가능하지만 비용이 발생합니다)
     # query to llm(OpenAI)
     embeddings = OpenAIEmbeddings()
-    new_db = FAISS.load_local("vector_faissdb", embeddings)
+    new_db = FAISS.load_local("chatbot/vector_faissdb", embeddings)
 
     docs = new_db.similarity_search(usr_input, k = 1)
     doc = " ".join([d.page_content for d in docs])
@@ -88,7 +90,7 @@ if __name__=="__main__":
     import os
     from dotenv import load_dotenv
     load_dotenv()
-    os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
+    os.environ["OPENAI_API_KEY"] = "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"
 
     req = {
         "preMessage": "당신은 최근에 어떤 재미있는 이야기를 들었나요?",
