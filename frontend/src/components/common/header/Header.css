@@ -33,11 +33,14 @@
 }
 
 .header-link-content {
-  font-family: 'The Jamsil 6';
-  font-size: 35px !important;
-  font-weight: bold !important;
-  color: #007bff !important;
-  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-logo {
+  width: 130px;
+  height: 40px;
 }
 
 .link-content {

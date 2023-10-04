@@ -25,7 +25,7 @@ const Header = ({ isLoggedIn }) => {
   return (
     <div className="header">
       <Link to={'/'} className="header-link-content">
-        PENDY
+        <img src="/logo.png" alt="로고" className="header-logo" />
       </Link>
       <div className="header-menu-container">
         <div className="menu-list">
