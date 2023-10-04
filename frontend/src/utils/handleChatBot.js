@@ -1,14 +1,14 @@
 // 1원 인증 요청
 import chatBotAxiosCreate from '../chatBotAxiosCreate';
 
-const handleChatBot = (message) => {
+const handleChatBot = (preMessage, message) => {
   console.log('handleChatBot');
   const chatBotMessage = {
-    tempMessage: "",
-    preMessage: message,
+    preMessage: preMessage,
+    tempMessage: message,
   };
 
-  console.log(chatBotMessage)
+  console.log(chatBotMessage);
 
   const serverUrl = '/ml/chatbot';
 
