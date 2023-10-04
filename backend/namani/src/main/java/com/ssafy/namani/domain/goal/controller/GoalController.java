@@ -131,9 +131,15 @@ public class GoalController {
      * @return BaseResponse<Object>
      */
     @GetMapping("/monthly-feedback")
-    public BaseResponse<Object> registMonthlyFeedback() {
+    public BaseResponse<Object> registMonthlyFeedback(@RequestHeader(value = "accessToken", required = false) String token) {
         try {
-            goalService.registMonthlyFeedback();
+            // 토큰 정보 체크
+            if (token == null || token.equals("")) {
+                throw new BaseException(BaseResponseStatus.SESSION_EXPIRATION);
+            }
+
+            UUID memberId = jwtService.getMemberIdFromToken(token); // token으로 memberId 조회
+            goalService.registMonthlyFeedback(memberId);
 
             return baseResponseService.getSuccessNoDataResponse();
         } catch (BaseException e) {

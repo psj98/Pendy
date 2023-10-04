@@ -3,16 +3,18 @@ import chatBotAxiosCreate from '../chatBotAxiosCreate';
 
 const handleChatBot = (preMessage, message) => {
   console.log('handleChatBot');
-  const chatBotMessage = {
-    preMessage: preMessage,
-    tempMessage: message,
+  const ChatBotRequest = {
+    chatBotMessage: {
+      preMessage: preMessage,
+      tempMessage: message,
+    },
   };
 
-  console.log(chatBotMessage);
+  console.log(ChatBotRequest);
 
   const serverUrl = '/ml/chatbot';
 
-  return chatBotAxiosCreate.post(serverUrl, chatBotMessage);
+  return chatBotAxiosCreate.post(serverUrl, ChatBotRequest);
 };
 
 export default handleChatBot;
