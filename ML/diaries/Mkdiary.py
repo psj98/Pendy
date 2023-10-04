@@ -37,7 +37,7 @@ def mkdiary(req):
     # 받아온 req로 res_plain_txt 수정
     # 접근하기 쉽게 데이터프레임화
     # BaseModel로 col을 명시해서 col_name와도 문제가 없습니다
-    # req = req.json()
+    req = json.loads(req.json())
 
     req_cols = list(req.keys())
     req_limit_amount = pd.DataFrame([req[req_cols[0]]])  # []로 감싼 이유_error: scalar values사용시 인덱스를 써주거나 list로 래핑

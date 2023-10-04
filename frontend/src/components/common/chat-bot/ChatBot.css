@@ -98,19 +98,20 @@
 .response-message-div {
   word-break: break-all;
   /* border: 1px solid #eaeaea; */
-  border-radius: 5px;
   padding: 5px;
   max-width: 250px;
 }
 
 .send-message-div {
-  background-color: beige;
+  background-color: rgb(255, 250, 207);
+  border-radius: 10px 10px 0px 10px;
   text-align: right;
   float: right;
 }
 
 .response-message-div {
   background-color: rgb(220, 240, 245);
+  border-radius: 10px 10px 10px 0px;
   text-align: left;
   float: left;
 }

@@ -21,6 +21,7 @@ const GoalTemplate = () => {
   const [buttonLabel, setButtonLabel] = useState('수정');
   const [avgConsumptions, setAvgConsumption] = useState([]);
   const [inputValues, setInputValues] = useState({});
+
   const categoryNameToKor = {
     food: '식비',
     traffic: '교통',
@@ -101,6 +102,7 @@ const GoalTemplate = () => {
           initialInputValues[item.categoryName] = item.categoryGoalAmount;
         });
         setInputValues(initialInputValues);
+        console.log(response.data);
 
         console.log(totalGoal.goalAmount);
       } catch (error) {
@@ -156,34 +158,35 @@ const GoalTemplate = () => {
     if (editable) {
       try {
         const id = totalGoals.id;
-        var goalAmount = 0;
-        const newGoalByCategory = goalByCategory.map((item) => {
-          goalAmount += item.categoryGoalAmount;
-          return {
-            categoryName: item.categoryName,
-            categoryId: item.categoryId,
-            categoryGoalAmount: item.categoryGoalAmount,
-          };
-        });
+        // inputValues를 사용하여 각 카테고리의 갱신된 categoryGoalAmount를 결정합니다
+        const newGoalByCategory = goalByCategory.map((item) => ({
+          ...item,
+          categoryGoalAmount:
+            inputValues[item.categoryName] || item.categoryGoalAmount,
+        }));
 
-        const newTotalGoals = totalGoals;
-        newTotalGoals.goalAmount = goalAmount;
-
-        await handleGoalUpdate(id, goalAmount, newGoalByCategory);
-        setTotalGoals(newTotalGoals);
-        setOriginalGoalByCategory(newGoalByCategory);
-
-        const updatedSeries = goalByCategory.map(
-          (item) => item.categoryGoalAmount,
+        // inputValues를 사용하여 새로운 총 goalAmount를 계산합니다
+        const updatedGoalAmount = Object.values(inputValues).reduce(
+          (acc, curr) => acc + curr,
+          0,
         );
-        setSeries(updatedSeries);
+
+        setTotalGoals((prevState) => ({
+          ...prevState,
+          goalAmount: updatedGoalAmount,
+        }));
+
+        await handleGoalUpdate(id, updatedGoalAmount, newGoalByCategory);
+        setGoalByCategory(newGoalByCategory); // 갱신된 goalByCategory를 설정합니다
+        setOriginalGoalByCategory([...newGoalByCategory]); // original 상태도 업데이트 합니다
 
         handleEditToggle();
       } catch (error) {
-        console.error('Failed to update:', error);
+        console.error('업데이트 실패:', error);
       }
     }
   };
+
   return (
     <div className="goal-template">
       <div className="goal-main">

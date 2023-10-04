@@ -14,7 +14,7 @@ from chatbot.namani import namani
 import os
 from dotenv import load_dotenv
 load_dotenv()
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
 
 app = FastAPI()
 
@@ -50,7 +50,6 @@ async def create_report(request: ReportRequest):
 async def chatbot_communication(request: ChatBotRequest):
     # 챗봇 반환 메시지 구현
     ret = namani(request)
-    print(ret)
     return ret
 
 if __name__ == "__main__":

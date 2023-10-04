@@ -15,10 +15,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
 }
 
 .analysis-left-container {
+  margin-top: 10px;
   flex: 1.5;
 }
 
