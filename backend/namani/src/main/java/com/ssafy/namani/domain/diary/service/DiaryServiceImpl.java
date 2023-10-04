@@ -105,15 +105,19 @@ public class DiaryServiceImpl implements DiaryService {
         // 일기 있는지 체크
         boolean newDailyTransaction = false;
         Optional<Diary> diaryOptional = diaryRepository.findByMemberIdTodayDate(memberId, todayDate);
+        log.info("todayDate" + todayDate);
         if (diaryOptional.isPresent()) { // 일기가 생성되어 있는 경우
             Diary diary = diaryOptional.get();
             Timestamp regDate = diary.getRegDate();
+            log.info("todayDate" + regDate);
 
             // 계좌 내에서 시각 사이에 거래 내역 존재 체크
             List<AccountInfo> accountInfoList = accountInfoRepository.findByMember_Id(memberId);
             for (AccountInfo accountInfo : accountInfoList) {
                 Optional<List<TransactionInfo>> transactionInfoListOptional = transactionInfoRepository.findAllWithdrawalsByAccountNumber(accountInfo.getAccountNumber(), 2, regDate, todayDate);
-                if (transactionInfoListOptional.isPresent()) {
+                if (transactionInfoListOptional.isPresent() && transactionInfoListOptional.get().size() != 0) {
+                    log.info(transactionInfoListOptional.get().toString());
+                    log.info("size"+ transactionInfoListOptional.get().size());
                     newDailyTransaction = true;
                     break;
                 }
