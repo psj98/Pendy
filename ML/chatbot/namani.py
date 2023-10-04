@@ -28,6 +28,8 @@ def namani(request_data):
     # tempurature : 0 ~ 1 로 높아질수록 랜덤한 답변 생성 / 창의력
     # llm = OpenAI(temperature=1)
 
+    # usr_input = request_data["tempMessage"]
+    # pre_input = request_data["preMessage"]
     usr_input = request_data.chatBotMessage["tempMessage"]
     pre_input = request_data.chatBotMessage["preMessage"]
 
@@ -88,7 +90,7 @@ if __name__=="__main__":
     import os
     from dotenv import load_dotenv
     load_dotenv()
-    os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
+    os.environ["OPENAI_API_KEY"] = "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"
 
     req = {
         "preMessage": "당신은 최근에 어떤 재미있는 이야기를 들었나요?",
