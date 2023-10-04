@@ -27,6 +27,7 @@ function useTodayList(regDate) {
       }
     };
     getTodayList();
+    //eslint-disable-next-line
   }, []);
 
   return { todayList, todayLoading };
