@@ -1,7 +1,7 @@
 /* AnalysisTemplate.css */
 /* 사각형 모양 */
 .goal-indicator {
-  font-family: 'The Jamsil 2';
+  font-family: 'The Jamsil 2', 'sans-serif';
   width: 16px;
   height: 16px;
   display: inline-block; /* 인라인 요소로 배치 */
@@ -15,6 +15,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 10px;
 }
 
 .analysis-left-container {
@@ -28,7 +29,7 @@
 }
 
 .analysis-title {
-  margin: 30px 0;
+  margin: 10px 0;
   width: 100%;
   text-align: center;
 }
@@ -38,7 +39,7 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  font-family: 'The Jamsil 3';
+  font-family: 'The Jamsil 3', 'sans-serif';
 }
 
 .change-month-div {
@@ -46,15 +47,14 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 70%;
-  font-family: 'The Jamsil 2';
+  width: 50%;
+  font-family: 'The Jamsil 2', 'sans-serif';
 }
 
 .left-arrow,
 .right-arrow,
 .left-arrow-active,
 .right-arrow-active {
-  flex: 1;
   color: rgba(128, 128, 128, 0.2);
   width: 30px;
   height: 30px;
@@ -81,6 +81,7 @@
 }
 
 .category-bar-container {
+  margin-top: 30px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -189,4 +190,23 @@
   background-color: #fff;
   overflow: auto;
   word-break: break-all;
+}
+.goal-and-month {
+  font-family: 'The Jamsil 5', 'sans-serif';
+  font-size: 25px;
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  /* 다음 요소와의 간격을 조정하기 위한 마진 값 */
+  margin-bottom: 5px;
+  color: #007bff; /* 기본적으로 파란색으로 설정 */
+}
+
+.goal-and-month-title {
+  font-family: 'The Jamsil 4', 'sans-serif';
+  font-size: 15px;
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  margin-bottom: 5px; /* 다음 요소와의 간격을 조정하기 위한 마진 값 */
 }

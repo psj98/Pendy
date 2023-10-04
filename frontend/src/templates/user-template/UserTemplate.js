@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './UserTemplate.css';
 import { addMonths, subMonths } from 'date-fns';
+
 import CalenderHeader from '../../components/main/calender-header/CalenderHeader';
 import CalenderDays from '../../components/main/calender-days/CalenderDays';
 import CalenderCells from '../../components/main/calender-cells/CalenderCells';
@@ -8,15 +9,15 @@ import DonutChart from '../../components/common/donut-chart/DonutChart';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
 import DayMonthButton from '../../components/main/day-month-button/DayMonthButton';
 import handleCalender from '../../utils/handleCalender';
+import ChatBot from '../../components/common/chat-bot/ChatBot';
 import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 //유저 전용 메인 페이지
 const UserTemplate = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [responseData, setResponseData] = useState([]);
   const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
+  const [isNewSpend, setIsNewSpend] = useState('false');
 
   let diaries = [];
 
@@ -37,6 +38,8 @@ const UserTemplate = () => {
         const response = await handleCalender(todayDate, todayMonth);
         console.log('res', response.data);
         console.log('complete load');
+        console.log('isnew?', response.data.data.newDailyTransaction);
+        setIsNewSpend(response.data.data.newDailyTransaction);
         setResponseData(response.data); // response 데이터를 상태로 저장
       } catch (error) {
         console.log(error);
@@ -128,15 +131,20 @@ const UserTemplate = () => {
       consumption_goal = monthlyGoalByCalendar;
       consumption_amount = responseData.data.monthlyStatistic.totalAmount;
     }
+    // setGoalAmountValue(consumption_goal);
+    // setTotalAmountValue(consumption_amount);
+
+    console.log('goal' + consumption_amount);
+    console.log('total' + consumption_goal);
+
+    consumption_amount = Math.round(consumption_amount);
+    consumption_goal = Math.round(consumption_goal);
 
     chartLabel = statisticData.map((item) => item.categoryName);
     chartData = statisticData.map((item) => item.amount);
   }
-
-  // console.log('차트 데이터 : ', chartData);
-  // console.log('소비 금액 : ', consumption_amount);
-  // console.log('목표 금액 : ', consumption_goal);
   console.log('currentMonth in UserTemplate: ', currentMonth);
+
   return (
     <div className="user">
       <div className="calender-container">
@@ -147,7 +155,11 @@ const UserTemplate = () => {
             nextMonth={nextMonth}
           />
           <CalenderDays />
-          <CalenderCells currentMonth={currentMonth} diaries={diaries} />
+          <CalenderCells
+            currentMonth={currentMonth}
+            diaries={diaries}
+            isNewSpend={isNewSpend}
+          />
         </div>
       </div>
       <div className="chart-container">
@@ -173,6 +185,19 @@ const UserTemplate = () => {
           </div>
         </div>
         <div className="bar-content">
+          {responseData.data && (
+            <div className="goal-and-month">
+              <div
+                className="goal-and-month-spend"
+                style={{
+                  color:
+                    consumption_amount > consumption_goal ? 'red' : '#007bff',
+                }}
+              >
+                {consumption_amount} 원 / {consumption_goal} 원
+              </div>
+            </div>
+          )}
           {consumption_goal !== 0 && (
             <div className="spend">
               <div className="spend-text-blue">현재 소비 금액 /</div>&nbsp;
@@ -188,7 +213,9 @@ const UserTemplate = () => {
           )}
         </div>
       </div>
-      <div></div>
+      <div className="chat-bot-div">
+        <ChatBot />
+      </div>
     </div>
   );
 };

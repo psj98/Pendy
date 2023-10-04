@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import './AnalysisTemplate.css';
 import { useLocation } from 'react-router-dom';
+
+import './AnalysisTemplate.css';
 import handleMonthlyAnalysis from '../../utils/handleMonthlyAnalysis';
 import DonutChart from '../../components/common/donut-chart/DonutChart';
 import GoalBar from '../../components/common/goal-bar/GoalBar';
+import ChatBot from '../../components/common/chat-bot/ChatBot';
+
 import { Icon } from '@iconify/react';
 
 const AnalysisTemplate = () => {
@@ -15,6 +18,8 @@ const AnalysisTemplate = () => {
   const [responseData, setResponseData] = useState([]);
   const [goalByCategory, setGoalByCategory] = useState([]);
   const [monthlyStatistic, setMonthlyStatistic] = useState([]);
+  const [hasBeforeMonthlyGoal, setHasBeforeMonthlyGoal] = useState(false);
+  const [hasAfterMonthlyGoal, setHasAfterMonthlyGoal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +32,8 @@ const AnalysisTemplate = () => {
         setMonthlyStatistic(
           response.data.data.monthlyStatistic.amountByCategory,
         );
+        setHasBeforeMonthlyGoal(response.data.data.hasBeforeMonthlyGoal);
+        setHasAfterMonthlyGoal(response.data.data.hasAfterMonthlyGoal);
       } catch (error) {
         console.log(error);
       }
@@ -41,18 +48,8 @@ const AnalysisTemplate = () => {
   let chartData = []; // Donut 차트에 표시할 데이터 배열
   let chartLabel = []; // Donut 차트에 표시할 데이터 제목
 
-  let monthlyGoalsByCategory = [];
-
   let aiText = '';
   if (responseData.data) {
-    // 월간 목표 금액
-    let goalByCategory = responseData.data.goalByCategory;
-    monthlyGoalsByCategory = goalByCategory.map(
-      (item) => item.categoryGoalAmount,
-    );
-    // // 월간 소비 금액
-    // let consumption_amount = responseData.data.monthlyStatistic.totalAmount;
-
     let statisticData = responseData.data.monthlyStatistic.amountByCategory;
 
     chartLabel = statisticData.map((item) => item.categoryName);
@@ -137,15 +134,17 @@ const AnalysisTemplate = () => {
   console.log('응답데이터 : ', aiText);
   return (
     <div className="analysis-container">
-      <h1 className="analysis-title"></h1>
-      {/* currentMonth 값을 출력 */}
-      {/* 여기에 소비 분석 컴포넌트 또는 내용을 추가합니다. */}
+      {/* 분석 메인 컨테이너 */}
       <div className="analysis-main-container">
+
+        {/* 월별 소비, 목표 금액 */}
         <div className="analysis-left-container">
+
+          {/* 월 변경 화살표 */}
           <div className="change-month-div">
             <Icon
               className={
-                !responseData.hasBeforeMonthlyGoal
+                !hasBeforeMonthlyGoal
                   ? 'left-arrow'
                   : 'left-arrow-active'
               }
@@ -155,7 +154,7 @@ const AnalysisTemplate = () => {
             <h2 className="cur-month-text">{curMonth}</h2>
             <Icon
               className={
-                !responseData.hasBeforeMonthlyGoal
+                !hasAfterMonthlyGoal
                   ? 'right-arrow'
                   : 'right-arrow-active'
               }
@@ -184,6 +183,27 @@ const AnalysisTemplate = () => {
             )}
           </div>
 
+          {/* 소비액, 목표액 */}
+          {responseData.data && (
+            <div className="goal-and-month">
+              <div
+                className="goal-and-month-spend"
+                style={{
+                  color:
+                    responseData.data.monthlyStatistic.totalAmount >
+                      responseData.data.totalGoal.goalAmount
+                      ? 'red'
+                      : '#007bff',
+                }}
+              >
+                {responseData.data.monthlyStatistic.totalAmount} 원 /{' '}
+                {responseData.data.totalGoal.goalAmount} 원
+              </div>
+            </div>
+          )}
+          <div className="goal-and-month-title">소비액 / 목표액</div>
+
+          {/* 카테고리 별 소비금액 */}
           <div className="category-bar-container">
             <div className="analysis-category-bar-left">
               {goalByCategory.slice(0, 4).map((category, index) => (
@@ -233,10 +253,15 @@ const AnalysisTemplate = () => {
             </div>
           </div>
         </div>
+
+        {/* 월간 분석 */}
         <div className="analysis-right-container">
           <h2 className="analysis-monthly-ai-title">나마니 월간분석</h2>
           <div className="analysis-monthly-ai-text">{aiText}</div>
         </div>
+      </div>
+      <div className="chat-bot-div">
+        <ChatBot />
       </div>
     </div>
   );

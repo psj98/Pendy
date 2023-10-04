@@ -15,13 +15,12 @@ import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoRegistRequestD
 import com.ssafy.namani.domain.accountInfo.dto.request.AccountInfoSendCodeRequestDto;
 import com.ssafy.namani.domain.accountInfo.dto.response.AccountInfoLoginResponseDto;
 import com.ssafy.namani.domain.accountInfo.service.AccountInfoService;
-import com.ssafy.namani.domain.member.service.MemberService;
 import com.ssafy.namani.domain.jwt.service.JwtService;
+import com.ssafy.namani.domain.member.service.MemberService;
 import com.ssafy.namani.domain.transactionInfo.service.TransactionInfoService;
 import com.ssafy.namani.global.response.BaseException;
 import com.ssafy.namani.global.response.BaseResponse;
 import com.ssafy.namani.global.response.BaseResponseService;
-import com.ssafy.namani.global.response.BaseResponseStatus;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,9 +60,9 @@ public class AccountInfoController {
 			// 계좌 정보 추가
 			accountInfoService.addAccount(accountInfoRegistRequestDto);
 			return baseResponseService.getSuccessNoDataResponse();
-		} catch (Exception e) {
+		} catch (BaseException e) {
 			// 중복되는 계좌번호
-			return baseResponseService.getFailureResponse(BaseResponseStatus.CONFLICK_ACCOUNT_NUMBER);
+			return baseResponseService.getFailureResponse(e.status);
 		}
 	}
 
@@ -79,7 +78,7 @@ public class AccountInfoController {
 			transactionInfoService.addTransaction(accountInfoSendCodeRequestDto);
 			return baseResponseService.getSuccessNoDataResponse();
 		} catch (BaseException e) {
-			return baseResponseService.getFailureResponse(BaseResponseStatus.ACCOUNT_NOT_FOUND);
+			return baseResponseService.getFailureResponse(e.status);
 		}
 	}
 
@@ -104,7 +103,7 @@ public class AccountInfoController {
 			}
 			return baseResponseService.getSuccessNoDataResponse();
 		} catch (BaseException e) {
-			return baseResponseService.getFailureResponse(BaseResponseStatus.INVALID_AUTHORIZATION_NUMBER);
+			return baseResponseService.getFailureResponse(e.status);
 		}
 	}
 
@@ -121,7 +120,7 @@ public class AccountInfoController {
 			return baseResponseService.getSuccessResponse(accountInfoLoginResponseDto);
 		} catch (BaseException e) {
 			// 계좌 로그인 실패
-			return baseResponseService.getFailureResponse(BaseResponseStatus.ACCOUNT_LOGIN_FAIL);
+			return baseResponseService.getFailureResponse(e.status);
 		}
 	}
 }

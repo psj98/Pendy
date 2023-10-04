@@ -5,8 +5,7 @@ import { useState, useEffect } from 'react';
 function useTodayList(regDate) {
   console.log('useTodayList');
   const [todayList, setTodayList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  console.log('regDate', regDate);
+  const [todayLoading, setTodayLoading] = useState(true);
 
   useEffect(() => {
     const getTodayList = async () => {
@@ -18,24 +17,20 @@ function useTodayList(regDate) {
         if (response.data.code === 1000) {
           console.log('invoke todayList success');
           setTodayList(response.data);
-          setLoading(false);
-        } else if (response.data.code === 5001) {
-          console.log(response.data.code + ' ' + response.data.message);
-          setTodayList(response.data);
-          setLoading(false);
         } else {
           console.error(response.data.code + ' ' + response.data.message);
-          setLoading(false);
         }
+        setTodayLoading(false);
       } catch (error) {
         console.error('invoke todayList failed', error);
-        setLoading(false);
+        setTodayLoading(false);
       }
     };
     getTodayList();
-  }, [regDate]);
+    //eslint-disable-next-line
+  }, []);
 
-  return { todayList, loading };
+  return { todayList, todayLoading };
 }
 
 export default useTodayList;

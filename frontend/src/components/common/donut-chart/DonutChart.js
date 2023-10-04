@@ -1,9 +1,10 @@
+//도넛 차트
 import React, { useState } from 'react';
-// , useEffect
 import './DonutChart.css';
 
 import ReactApexChart from 'react-apexcharts';
 
+//donut chart 세팅 설정
 const DonutChart = ({
   series,
   title,
@@ -22,8 +23,6 @@ const DonutChart = ({
     series: series,
   });
 
-  // console.log(label[0]);
-
   const options = {
     chart: {
       fontFamily: 'The Jamsil 3',
@@ -40,13 +39,6 @@ const DonutChart = ({
         donut: {
           labels: {
             show: labelShow,
-            total: {
-              showAlways: true,
-              show: true,
-              label: `${title}`,
-              fontSize: labelFont,
-              color: labelColor,
-            },
             value: {
               fontSize: valueFont,
               show: valueShow,

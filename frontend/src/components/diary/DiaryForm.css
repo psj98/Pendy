@@ -81,7 +81,7 @@
 
 .diary-content {
   width: 95%;
-  height: 40vh;
+  height: 30vh;
   margin: 0;
 }
 
@@ -107,4 +107,41 @@
 .diary-comment {
   width: 80%;
   padding: 5px 10px;
+}
+
+/* 버튼 스타일 */
+
+.diary-button-div {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+.diary-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 25%;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'The Jamsil 3';
+  font-size: 16px;
+}
+
+.diary-button:hover {
+  background-color: #0056b3;
+}
+
+.editable-textarea-title {
+  border: none;
+  width: 100%;
+  min-height: 100%;
+}
+
+.editable-textarea-content {
+  border: none;
+  width: 100%;
+  min-height: 30vh;
 }

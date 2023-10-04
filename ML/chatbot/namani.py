@@ -15,37 +15,36 @@ from langchain.prompts.chat import (
 #FAISS ( vector db )
 from langchain.vectorstores import FAISS
 
-#GPT
-from ML.openaikey import apikey
-
-#키 등록
-import os
-os.environ["OPENAI_API_KEY"] = apikey
-
 # 데이터프레임
 import pandas as pd
 
 # JSON으로 변환
 import json
 
+
+
 def namani(request_data):
     result_data = {"message": "좋은 하루 보내세요"}
     # tempurature : 0 ~ 1 로 높아질수록 랜덤한 답변 생성 / 창의력
     # llm = OpenAI(temperature=1)
 
-    usr_input = request_data["tempMessage"]
-    pre_input = request_data["preMessage"]
+    # usr_input = request_data["tempMessage"]
+    # pre_input = request_data["preMessage"]
+    usr_input = request_data.chatBotMessage["tempMessage"]
+    pre_input = request_data.chatBotMessage["preMessage"]
+
+    print(usr_input + " " + pre_input)
 
     # template
     template = "[prequestion]"+pre_input+"""
     
         [Instructions]
         - Act as a best friend
-        - All answers should be at least 10 characters long.
+        - All answers should be between 10 and 35 characters long.
         - if you do not know answer, Refer to the {docs}
         - Your answer targets elderly people over 60 years old.
 
-    """
+    """ 
 
     # amount_data = json.loads(request_data.json())["categoryData"]
     # amount_data_cols = amount_data.keys()  # 모든 key를 가져옴
@@ -73,7 +72,7 @@ def namani(request_data):
     # 1. 페이지가 많을 때 사용 (상품이 많다면, 백터를 통한 빠른 검색이 가능하지만 비용이 발생합니다)
     # query to llm(OpenAI)
     embeddings = OpenAIEmbeddings()
-    new_db = FAISS.load_local("vector_faissdb", embeddings)
+    new_db = FAISS.load_local("chatbot/vector_faissdb", embeddings)
 
     docs = new_db.similarity_search(usr_input, k = 1)
     doc = " ".join([d.page_content for d in docs])
@@ -82,15 +81,20 @@ def namani(request_data):
     chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=1)
     chain = LLMChain(llm=chat, prompt=chat_prompt)
     result = chain.run(question = usr_input, docs = doc)
-
+    print(result)
     # 문서 기반으로 질문
     result_data["message"] = result
     return result_data
 
 if __name__=="__main__":
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    os.environ["OPENAI_API_KEY"] = "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"
+
     req = {
-        "preMessage": "",
-        "tempMessage": "재미있는 이야기"
+        "preMessage": "당신은 최근에 어떤 재미있는 이야기를 들었나요?",
+        "tempMessage": "재미있는 이야기를 해주세요"
     }
     ans = (namani(req))
 

@@ -223,29 +223,28 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
 		// Timestamp curDate = transactionInfoTodayListRequestDto.getCurDate();
 		LocalDateTime currentDateTime = LocalDateTime.now();
 		Timestamp curDate = Timestamp.valueOf(currentDateTime);
-		log.debug("마지막 시간: " + lastRegDate + "현재 시간: " + curDate);
 		List<TransactionInfoTodayDto> result = new ArrayList<>();
 		// memberId에 해당하는 accountList 조회
 		List<AccountInfo> byMemberId = accountInfoRepository.findByMember_Id(memberId);
 
 		// accountList를 for문으로 돌면서 해당 구간 내 거래내역 리스트
 		for (AccountInfo accountInfo : byMemberId) {
-			log.debug("계좌 아이디 : " + accountInfo.getAccountNumber());
 			Optional<List<TransactionInfo>> allByAccountNumber = transactionInfoRepository.findAllWithdrawalsByAccountNumber(
 				accountInfo.getAccountNumber(), 2,
 				lastRegDate, curDate);
+
 			if (allByAccountNumber.isPresent()) {
 				for (TransactionInfo transactionInfo : allByAccountNumber.get()) {
-					log.debug("트랜잭션: " + transactionInfo);
 					TransactionInfoTodayDto transactionInfoTodayDto = new TransactionInfoTodayDto(
 						transactionInfo.getId(), transactionInfo.getCategory().getId(),
 						transactionInfo.getEmotion().getEmotionScore(), transactionInfo.getTransactionName(),
 						transactionInfo.getTransactionAmount(), transactionInfo.getTradeDate());
-					log.debug("거래내역: " + transactionInfo);
+
 					result.add(transactionInfoTodayDto);
 				}
 			}
 		}
+
 		result.sort((o1, o2) -> o1
 				.getTradeDate().compareTo(o2.getTradeDate()));
 

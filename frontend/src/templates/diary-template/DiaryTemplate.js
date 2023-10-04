@@ -64,6 +64,7 @@ const DiaryTemplate = () => {
         <div className="diary-form-container">
           <h1 className="diary-title-name">일기장</h1>
           <DiaryForm
+            id={id}
             regDate={regDate}
             title={title}
             content={content}

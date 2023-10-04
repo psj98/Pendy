@@ -1,3 +1,4 @@
+// 차트 카테고리 구분
 import React from 'react';
 import './ChartCategory.css';
 
@@ -7,6 +8,7 @@ import CategoryName from '../category-name/CategoryName';
 const ChartCategory = () => {
   return (
     <div className="chart-category">
+      {/* 카테고리 종류(반복) */}
       <div className="category-bar">
         <div className="category-bar-left">
           <CategoryName color="#FAF2E8" name={'식비'} />

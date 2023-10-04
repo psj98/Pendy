@@ -1,16 +1,19 @@
+// 헤더
 import React from 'react';
 import './Header.css';
+
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Header = ({ isLoggedIn }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentMonth = new Date(); // 직접 현재 날짜 값을 설정합니다.
+  const currentMonth = new Date();
 
   const isActive = (path) => {
     return location.pathname === path;
   };
 
+  //로그아웃 버튼 동작
   const onClickLogout = () => {
     console.log('logout');
     localStorage.removeItem('accessToken');
@@ -24,13 +27,17 @@ const Header = ({ isLoggedIn }) => {
 
   return (
     <div className="header">
+      {/* pendy 로고 */}
       <Link to={'/'} className="header-link-content">
-        PENDY
+        <img src="/logo.png" alt="로고" className="header-logo" />
       </Link>
+
       <div className="header-menu-container">
+        {/* 로그인 여부에 따른 메뉴 */}
         <div className="menu-list">
           {isLoggedIn ? (
             <div className="sub-menu">
+              {/* 월간소비분석 페이지 링크 */}
               <div className="sub-menu-container">
                 <Link
                   to={{
@@ -46,6 +53,8 @@ const Header = ({ isLoggedIn }) => {
                   월간소비분석
                 </Link>
               </div>
+
+              {/* 마이페이지 링크 */}
               <div className="sub-menu-container">
                 <Link
                   to={'/setting'}
@@ -56,6 +65,8 @@ const Header = ({ isLoggedIn }) => {
                   마이페이지
                 </Link>
               </div>
+
+              {/* 목표 설정 페이지 */}
               <div className="sub-menu-container">
                 <Link
                   to={'/goal'}
@@ -63,15 +74,18 @@ const Header = ({ isLoggedIn }) => {
                     isActive('/goal') ? 'active-link' : ''
                   }`}
                 >
-                  목표설정
+                  내 목표
                 </Link>
               </div>
+
+              {/* 로그아웃 */}
               <div className="sub-menu-container" onClick={onClickLogout}>
                 로그아웃
               </div>
             </div>
           ) : (
             <div className="sub-menu">
+              {/* 로그인 */}
               <div className="sub-menu-container">
                 <Link
                   to={'/login'}
@@ -82,6 +96,8 @@ const Header = ({ isLoggedIn }) => {
                   로그인
                 </Link>
               </div>
+
+              {/* 회원가입 */}
               <div className="sub-menu-container">
                 <Link
                   to={'/login/signup'}

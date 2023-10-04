@@ -105,15 +105,19 @@ public class DiaryServiceImpl implements DiaryService {
         // 일기 있는지 체크
         boolean newDailyTransaction = false;
         Optional<Diary> diaryOptional = diaryRepository.findByMemberIdTodayDate(memberId, todayDate);
+        log.info("todayDate" + todayDate);
         if (diaryOptional.isPresent()) { // 일기가 생성되어 있는 경우
             Diary diary = diaryOptional.get();
             Timestamp regDate = diary.getRegDate();
+            log.info("todayDate" + regDate);
 
             // 계좌 내에서 시각 사이에 거래 내역 존재 체크
             List<AccountInfo> accountInfoList = accountInfoRepository.findByMember_Id(memberId);
             for (AccountInfo accountInfo : accountInfoList) {
                 Optional<List<TransactionInfo>> transactionInfoListOptional = transactionInfoRepository.findAllWithdrawalsByAccountNumber(accountInfo.getAccountNumber(), 2, regDate, todayDate);
-                if (transactionInfoListOptional.isPresent()) {
+                if (transactionInfoListOptional.isPresent() && transactionInfoListOptional.get().size() != 0) {
+                    log.info(transactionInfoListOptional.get().toString());
+                    log.info("size"+ transactionInfoListOptional.get().size());
                     newDailyTransaction = true;
                     break;
                 }
@@ -225,6 +229,7 @@ public class DiaryServiceImpl implements DiaryService {
         if (diaryOptional.isPresent()) { // 일기가 생성되어 있는 경우
             Diary diary = diaryOptional.get();
             newDiary = diary.toBuilder()
+                    .title(diaryCreateByAIResponseDto.getTitle())
                     .content(diaryCreateByAIResponseDto.getContent())
                     .comment(diaryCreateByAIResponseDto.getComment())
                     .stampType(diaryCreateByAIResponseDto.getStampType())
@@ -232,6 +237,7 @@ public class DiaryServiceImpl implements DiaryService {
         } else { // 일기가 생성되어 있지 않은 경우
             newDiary = Diary.builder()
                     .member(member)
+                    .title(diaryCreateByAIResponseDto.getTitle())
                     .content(diaryCreateByAIResponseDto.getContent())
                     .comment(diaryCreateByAIResponseDto.getComment())
                     .stampType(diaryCreateByAIResponseDto.getStampType())
@@ -290,6 +296,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public void updateDiary(Long id, DiaryUpdateContentRequestDto diaryUpdateContentRequestDto) throws BaseException {
         String content = diaryUpdateContentRequestDto.getContent();
+        String title = diaryUpdateContentRequestDto.getTitle();
 
         Optional<Diary> optionalDiary = diaryRepository.findById(id);
         if (!optionalDiary.isPresent()) {
@@ -297,9 +304,10 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         Diary diary = optionalDiary.get();
-        Diary newDiary = diary.toBuilder().
-                content(content).
-                build();
+        Diary newDiary = diary.toBuilder()
+                .title(title)
+                .content(content)
+                .build();
 
         diaryRepository.save(newDiary);
     }
@@ -316,10 +324,10 @@ public class DiaryServiceImpl implements DiaryService {
     public DiaryMonthlyAnalysisResponseDto getMonthlyAnalysis(UUID memberId, DiaryMonthlyAnalysisRequestDto diaryMonthlyAnalysisRequestDto) throws BaseException {
         // accessToken decode => UUID
         Timestamp curMonth = diaryMonthlyAnalysisRequestDto.getCurMonth();
-        log.debug("현재 연월 : " + curMonth);
 
         // TotalGoal 조회 => UUID와 curMonth로 조회
         Optional<TotalGoal> totalGoal = totalGoalRepository.findByCurDate(memberId, curMonth);
+
         // 목표 없음 ERROR
         if (totalGoal.isEmpty()) {
             throw new BaseException(BaseResponseStatus.TOTAL_GOAL_NOT_FOUND);
@@ -341,12 +349,11 @@ public class DiaryServiceImpl implements DiaryService {
         // 이전 달 목표 체크
         // totalGoalRepository로 이전 달 목표 있는지 체크
         String beforeMonth = totalGoalRepository.findBeforeMonth(memberId, curMonth) + "-01 00:00:00.0";
-        log.debug("이전 달 정보:" + beforeMonth);
         Timestamp beforeMonthTimestamp = Timestamp.valueOf(beforeMonth);
-        log.debug("이전 달 정보:" + beforeMonthTimestamp);
 
         Boolean hasBeforeMonthlyGoal = true;
         Optional<TotalGoal> beforeMonthGoal = totalGoalRepository.findByCurDate(memberId, beforeMonthTimestamp);
+
         // 목표 없음 ERROR
         if (beforeMonthGoal.isEmpty() || beforeMonthGoal.get().getGoalAmount() == 0) {
             hasBeforeMonthlyGoal = false;
@@ -357,8 +364,6 @@ public class DiaryServiceImpl implements DiaryService {
         // totalGoalRepository로 다음 달 목표 있는지 체크
         String afterMonth = totalGoalRepository.findAfterMonth(memberId, curMonth) + "-01 00:00:00.0";
         Timestamp afterMonthTimestamp = Timestamp.valueOf(afterMonth);
-        log.debug("다음 달 정보:" + afterMonth);
-        log.debug("다음 달 정보:" + afterMonthTimestamp);
 
         Boolean hasAfterMonthlyGoal = true;
         Optional<TotalGoal> afterMonthGoal = totalGoalRepository.findByCurDate(memberId, afterMonthTimestamp);

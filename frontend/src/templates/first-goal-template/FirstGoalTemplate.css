@@ -12,6 +12,7 @@
   align-items: center;
   justify-content: space-evenly;
   width: 92%;
+  margin-top: 30px;
 }
 
 .goal-container {
@@ -112,14 +113,34 @@
 }
 
 .goal-inputs-amount {
-  padding-right: 5px !important;
+  padding: 0 5px 0 0;
   width: 125px;
   font-size: inherit;
-  padding: 0;
   text-align: right;
   background: transparent;
+  font-family: 'The Jamsil 4', 'sans-serif';
 }
 
 .goal-inputs-amount::placeholder {
   font-size: 14px;
+}
+
+.first-goal-and-month {
+  font-family: 'The Jamsil 5', 'sans-serif';
+  font-size: 25px;
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  /* 다음 요소와의 간격을 조정하기 위한 마진 값 */
+  margin-bottom: 5px;
+  color: #007bff; /* 기본적으로 파란색으로 설정 */
+}
+
+.first-goal-and-month-title {
+  font-family: 'The Jamsil 4', 'sans-serif';
+  font-size: 15px;
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  margin-bottom: 20px; /* 다음 요소와의 간격을 조정하기 위한 마진 값 */
 }

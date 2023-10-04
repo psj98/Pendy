@@ -1,7 +1,6 @@
 package com.ssafy.namani.domain.avgConsumptionAmount.controller;
 
 import com.ssafy.namani.domain.avgConsumptionAmount.dto.request.AvgConsumptionAmountForThreeMonthRequestDto;
-import com.ssafy.namani.domain.avgConsumptionAmount.dto.response.AvgConsumptionAmountDetailResponseDto;
 import com.ssafy.namani.domain.avgConsumptionAmount.dto.response.AvgConsumptionAmountForThreeMonthResponseDto;
 import com.ssafy.namani.domain.avgConsumptionAmount.service.AvgConsumptionAmountService;
 import com.ssafy.namani.global.response.BaseException;
