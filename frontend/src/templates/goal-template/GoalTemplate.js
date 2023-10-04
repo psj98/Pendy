@@ -161,7 +161,7 @@ const GoalTemplate = () => {
           goalAmount += item.categoryGoalAmount;
           return {
             categoryName: item.categoryName,
-            categoryId: item.categoryId, // 예를 들어, categoryName을 categoryId로 변환하는 함수
+            categoryId: item.categoryId,
             categoryGoalAmount: item.categoryGoalAmount,
           };
         });
