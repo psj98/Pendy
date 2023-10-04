@@ -33,7 +33,6 @@ def mkreport(request_data):
     # tempurature : 0 ~ 1 로 높아질수록 랜덤한 답변 생성 / 창의력
     # llm = OpenAI(temperature=1)
 
-
     # template
     template = """
         Act as a Financial Analyst
@@ -56,7 +55,7 @@ def mkreport(request_data):
         and Based on the {question} of the respective user, refer to the {docs} and recommend one appropriate card and the reason for it.
     """
 
-    # amount_data = json.loads(request_data.json())["categoryData"]
+    request_data = json.loads(request_data.json())["categoryData"]
     request_data_cols = request_data.keys()  # 모든 key를 가져옴
 
     # 중간 txt
