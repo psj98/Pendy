@@ -132,7 +132,7 @@ const FirstGoalTemplate = () => {
     setIsGoalSet(false);
   };
 
-  const handleComplate = async () => {
+  const handleComplete = async () => {
     try {
       var goalAmount = 0;
       const goal = Object.keys(inputValues).map((categoryName) => {
@@ -278,7 +278,7 @@ const FirstGoalTemplate = () => {
                     fontSize: 'smaller',
                     padding: '5px 10px',
                   }}
-                  onClick={isGoalSet ? handleComplate : handleGoalSetToggle}
+                  onClick={isGoalSet ? handleComplete : handleGoalSetToggle}
                 >
                   {isGoalSet ? '완료' : '목표 설정'}
                 </button>

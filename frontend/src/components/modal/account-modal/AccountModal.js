@@ -117,11 +117,14 @@ const AccountModal = ({ index, closeModal, handleAccountChange, accounts }) => {
   return (
     <div className="modal">
       <div className="account-modal-content">
+        {/* 모달 종료 버튼 */}
         <button className="account-close-button" onClick={closeModal}>
           X
         </button>
+        {/* 모달창 제목 */}
         <h2 className="account-modal-title">계좌 인증</h2>
         <div className="account-input-container">
+          {/* 은행 선택 */}
           <div className="account-bank-select-form">
             <FormControl fullWidth size="small">
               <InputLabel id="select-label">은행 선택</InputLabel>

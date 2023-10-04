@@ -6,16 +6,12 @@ const useDiaryDetail = (id, regDate) => {
   console.log('useDiaryDetail');
   const [diaryDetail, setDiaryDetail] = useState([]);
   const [diaryLoading, setDiaryLoading] = useState(true);
-  const data = {
-    id: id,
-    regDate: regDate,
-  };
 
   useEffect(() => {
     const getDiaryDetail = async () => {
       try {
         const serverUrl = '/api/diaries/after';
-        const response = await authAxiosCreate.post(serverUrl, data);
+        const response = await authAxiosCreate.post(serverUrl, { id, regDate });
         if (response.data.code === 1000) {
           console.log('load diary detail success');
           setDiaryDetail(response.data);
