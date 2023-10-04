@@ -90,7 +90,7 @@ if __name__=="__main__":
     import os
     from dotenv import load_dotenv
     load_dotenv()
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = os.getenv("apikey")
 
     req = {
         "preMessage": "당신은 최근에 어떤 재미있는 이야기를 들었나요?",
