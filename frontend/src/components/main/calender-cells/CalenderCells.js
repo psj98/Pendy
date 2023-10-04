@@ -44,6 +44,8 @@ const CalenderCells = ({ currentMonth, diaries, isNewSpend }) => {
       navigate(`diary/${hasDiary.id}/${hasDiary.regDate}`);
     } else if (isSameDay(new Date(), day)) {
       navigate('/emotion');
+    } else {
+      alert('해당 일에 일기가 존재하지 않습니다.');
     }
   };
 
