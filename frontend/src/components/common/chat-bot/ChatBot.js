@@ -27,15 +27,15 @@ const ChatBot = () => {
     // text to speech
     const synth = window.speechSynthesis;
     const msg = new SpeechSynthesisUtterance();
-    msg.lang = "ko-KR";
+    msg.lang = 'ko-KR';
     msg.pitch = 1;
     msg.rate = 1;
     msg.text = response.data.message;
     msg.volume = 1;
     synth.speak(msg);
 
-    setPreMessage(message); // 이전 message
-    setMessage(''); // message 초기화
+    setPreMessage(sendMessage); // 이전 message
+    setSendMessage(''); // message 초기화
 
     const newMessage = {
       sendMessage: sendMessage,
@@ -134,7 +134,7 @@ const ChatBot = () => {
       >
         <img
           className="chatbot-img"
-          src="/chatbot-img/namani-chatbot.png"
+          src="/chatbot-img/namani-chatbot-gif.gif"
           alt="보통"
         />
       </div>
