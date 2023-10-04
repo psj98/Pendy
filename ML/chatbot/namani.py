@@ -38,7 +38,7 @@ def namani(request_data):
     
         [Instructions]
         - Act as a best friend
-        - All answers should be at least 10 characters long.
+        - All answers should be between 10 and 35 characters long.
         - if you do not know answer, Refer to the {docs}
         - Your answer targets elderly people over 60 years old.
 
@@ -70,7 +70,7 @@ def namani(request_data):
     # 1. 페이지가 많을 때 사용 (상품이 많다면, 백터를 통한 빠른 검색이 가능하지만 비용이 발생합니다)
     # query to llm(OpenAI)
     embeddings = OpenAIEmbeddings()
-    new_db = FAISS.load_local("vector_faissdb", embeddings)
+    new_db = FAISS.load_local("chatbot/vector_faissdb", embeddings)
 
     docs = new_db.similarity_search(usr_input, k = 1)
     doc = " ".join([d.page_content for d in docs])
@@ -79,7 +79,7 @@ def namani(request_data):
     chat = ChatOpenAI(model_name="gpt-3.5-turbo-0613", temperature=1)
     chain = LLMChain(llm=chat, prompt=chat_prompt)
     result = chain.run(question = usr_input, docs = doc)
-
+    print(result)
     # 문서 기반으로 질문
     result_data["message"] = result
     return result_data
