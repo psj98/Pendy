@@ -28,8 +28,8 @@ def namani(request_data):
     # tempurature : 0 ~ 1 로 높아질수록 랜덤한 답변 생성 / 창의력
     # llm = OpenAI(temperature=1)
 
-    usr_input = request_data["tempMessage"]
-    pre_input = request_data["preMessage"]
+    usr_input = request_data.chatBotMessage["tempMessage"]
+    pre_input = request_data.chatBotMessage["preMessage"]
 
     # template
     template = "[prequestion]"+pre_input+"""
