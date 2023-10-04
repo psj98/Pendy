@@ -13,7 +13,8 @@ const ChatBot = () => {
     event.preventDefault();
 
     const response = await handleChatBot(preMessage, message);
-    // message test
+
+    // text to speech
     const synth = window.speechSynthesis;
     const msg = new SpeechSynthesisUtterance();
     msg.lang = "ko-KR";
