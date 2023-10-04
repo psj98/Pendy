@@ -81,7 +81,7 @@
 
 .diary-content {
   width: 95%;
-  height: 40vh;
+  height: 30vh;
   margin: 0;
 }
 
@@ -132,4 +132,16 @@
 
 .diary-button:hover {
   background-color: #0056b3;
+}
+
+.editable-textarea-title {
+  border: none;
+  width: 100%;
+  min-height: 100%;
+}
+
+.editable-textarea-content {
+  border: none;
+  width: 100%;
+  min-height: 30vh;
 }

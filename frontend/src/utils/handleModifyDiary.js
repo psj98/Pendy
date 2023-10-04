@@ -1,10 +1,11 @@
 // 일기 내용 수정
 import authAxiosCreate from '../authAxiosCreate';
 
-const handleModifyDiary = (id, content) => {
+const handleModifyDiary = (id, editedTitle, editedContent) => {
   console.log('handleModifyDiary');
   const data = {
-    content: content,
+    title: editedTitle,
+    content: editedContent,
   };
 
   const serverUrl = `/api/diaries/${id}`;
