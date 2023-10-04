@@ -17,10 +17,10 @@ const DiaryForm = ({ id, regDate, title, content, comment, stampType }) => {
       stampImageSrc = '/stamp3.png';
       break;
     case 4:
-      stampImageSrc = '/stamp4.png';
+      stampImageSrc = '/stamp4.PNG';
       break;
     case 5:
-      stampImageSrc = '/stamp5.png';
+      stampImageSrc = '/stamp5.PNG';
       break;
     default:
   }
