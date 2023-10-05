@@ -18,6 +18,7 @@ const UserTemplate = () => {
   const [responseData, setResponseData] = useState([]);
   const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
   const [isNewSpend, setIsNewSpend] = useState('false');
+  //eslint-disable-next-line
   const [hasTotalGoalAmount, setHasTotalGoalAmount] = useState('false');
 
   let diaries = [];
