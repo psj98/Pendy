@@ -108,6 +108,7 @@ public interface TransactionInfoRepository extends JpaRepository<TransactionInfo
     @Query(value = "SELECT * FROM transaction_info t " +
             "WHERE t.account_number IN (SELECT account_number FROM account_info " +
             "                         WHERE member_id = ?1) " +
-            "AND DATE_FORMAT(t.trade_date, '%Y-%m-%d') = DATE_FORMAT(?2, '%Y-%m-%d')", nativeQuery = true)
+            "AND DATE_FORMAT(t.trade_date, '%Y-%m-%d') = DATE_FORMAT(?2, '%Y-%m-%d') " +
+            "AND t.transaction_type = 2", nativeQuery = true)
     Optional<List<TransactionInfo>> findTransactionInfoByMemberIdCurDate(UUID memberId, Timestamp curDate);
 }
