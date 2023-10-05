@@ -72,10 +72,18 @@ public interface GoalService {
     void updateGoal(UUID memberId, GoalUpdateRequestDto goalUpdateRequestDto) throws BaseException;
 
     /**
-     * 월간 분석 피드백 생성 메서드
+     * 월간 분석 피드백 생성 메서드 - 사용자 + 현재 달로 생성
      *
      * @throws BaseException
      * @throws JsonProcessingException
      */
-    void registMonthlyFeedback(UUID memberId) throws BaseException, JsonProcessingException;
+    void registMonthlyFeedback(UUID memberId, Timestamp curDate) throws BaseException, JsonProcessingException;
+
+    /**
+     * 월간 분석 피드백 생성 메서드 - 매달 마지막 날에 자동 생성
+     * 
+     * @throws BaseException
+     * @throws JsonProcessingException
+     */
+    void registMonthlyFeedback() throws BaseException, JsonProcessingException;
 }
