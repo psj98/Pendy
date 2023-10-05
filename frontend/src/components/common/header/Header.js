@@ -37,6 +37,15 @@ const Header = ({ isLoggedIn }) => {
         <div className="menu-list">
           {isLoggedIn ? (
             <div className="sub-menu">
+              {/* 영수증 등록을 위한 버튼 */}
+              <Link
+                to={'/receipt'}
+                className={`link-content ${
+                  isActive('/receipt') ? 'active-link' : ''
+                }`}
+              >
+                영수증 등록
+              </Link>
               {/* 월간소비분석 페이지 링크 */}
               <div className="sub-menu-container">
                 <Link
