@@ -2,6 +2,7 @@ package com.ssafy.namani.domain.goal.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.namani.domain.goal.dto.request.GoalDetailRequestDto;
+import com.ssafy.namani.domain.goal.dto.request.GoalMonthlyFeedbackRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalRegistRequestDto;
 import com.ssafy.namani.domain.goal.dto.request.GoalUpdateRequestDto;
 import com.ssafy.namani.domain.goal.dto.response.GoalCheckResponseDto;
@@ -131,7 +132,8 @@ public class GoalController {
      * @return BaseResponse<Object>
      */
     @GetMapping("/monthly-feedback")
-    public BaseResponse<Object> registMonthlyFeedback(@RequestHeader(value = "accessToken", required = false) String token) {
+    public BaseResponse<Object> registMonthlyFeedback(@RequestHeader(value = "accessToken", required = false) String token,
+                                                      @RequestBody GoalMonthlyFeedbackRequestDto goalMonthlyFeedbackRequestDto) {
         try {
             // 토큰 정보 체크
             if (token == null || token.equals("")) {
@@ -139,7 +141,7 @@ public class GoalController {
             }
 
             UUID memberId = jwtService.getMemberIdFromToken(token); // token으로 memberId 조회
-            goalService.registMonthlyFeedback(memberId);
+            goalService.registMonthlyFeedback(memberId, goalMonthlyFeedbackRequestDto.getCurDate());
 
             return baseResponseService.getSuccessNoDataResponse();
         } catch (BaseException e) {
