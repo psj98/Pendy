@@ -31,7 +31,6 @@ import BankLoginTemplate from './templates/bank-login-template/BankLoginTemplate
 import BankSignupTemplate from './templates/bank-signup-template/BankSignupTemplate';
 import AccountTemplate from './templates/account-template/AccountTemplate';
 import RegistrationTemplate from './templates/registration-template/RegistrationTemplate';
-import ReceiptSendTemplate from './templates/receipt-send-template/ReceiptSendTemplate';
 
 function App() {
   const isLoggedIn = useLogin();
@@ -54,7 +53,6 @@ function App() {
         <Route path="diary/:id/:diaryDate" element={<DiaryTemplate />} />
         <Route path="first-goal" element={<FirstGoalTemplate />} />
         <Route path="emotion" element={<EmotionTemplate />} />
-        <Route path="receipt" element={<ReceiptSendTemplate />} />
       </Route>
 
       {/* 로그인 페이지 */}
