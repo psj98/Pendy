@@ -1,8 +1,9 @@
 // 헤더
-import React from 'react';
+import React, { useState } from 'react';
 import './Header.css';
 
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import ReceiptModal from '../../modal/receipt-modal/ReceiptModal';
 
 const Header = ({ isLoggedIn }) => {
   const navigate = useNavigate();
@@ -25,6 +26,18 @@ const Header = ({ isLoggedIn }) => {
     navigate('/', { replace: true });
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  //모달창 열기
+  const openModal = (index) => {
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="header">
       {/* pendy 로고 */}
@@ -38,14 +51,9 @@ const Header = ({ isLoggedIn }) => {
           {isLoggedIn ? (
             <div className="sub-menu">
               {/* 영수증 등록을 위한 버튼 */}
-              <Link
-                to={'/receipt'}
-                className={`link-content ${
-                  isActive('/receipt') ? 'active-link' : ''
-                }`}
-              >
-                영수증 등록
-              </Link>
+              <div className="sub-menu-container">
+                <div onClick={() => openModal()}>영수증 등록</div>
+              </div>
               {/* 월간소비분석 페이지 링크 */}
               <div className="sub-menu-container">
                 <Link
@@ -120,6 +128,9 @@ const Header = ({ isLoggedIn }) => {
             </div>
           )}
         </div>
+
+        {/* 모달 창 */}
+        {isModalOpen && <ReceiptModal closeModal={closeModal} />}
       </div>
     </div>
   );
