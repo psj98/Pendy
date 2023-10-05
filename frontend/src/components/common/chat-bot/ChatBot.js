@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import * as ChatHumorList from './ChatHumorList';
 import './ChatBot.css';
 
 import handleChatBot from '../../../utils/handleChatBot';
@@ -54,12 +55,34 @@ const ChatBot = () => {
   };
 
   //tutorial message
-  const preSavedTutorialMessage = '앙테스트띠 앙 테스트띠~';
-  //튜토리얼 버튼 클릭
+  const preSavedTutorialMessage = `Pendy 사용 방법
+
+  1. 소비 목표를 설정하세요
+  2. 소비 내역에 감정을 표시해보세요
+  3. 작성된 일기와 소비 리포트를 확인하세요`;
+
+  //사용법 버튼 클릭
   const handleTutorialButtonClick = () => {
     const newMessageList = [
       ...messageList,
       { responseMessage: preSavedTutorialMessage },
+    ];
+    console.log('ChatHumorList', ChatHumorList.humor1);
+    setMessageList(newMessageList);
+    localStorage.setItem('messageList', JSON.stringify(newMessageList));
+  };
+
+  // 1부터 30까지의 랜덤 숫자 생성
+  const getRandomNumber = () => {
+    return Math.floor(Math.random() * 30) + 1;
+  };
+  const randomValue = getRandomNumber();
+
+  //유머 버튼 클릭
+  const handleHumorButtonClick = () => {
+    const newMessageList = [
+      ...messageList,
+      { responseMessage: ChatHumorList[`humor${randomValue}`] },
     ];
     setMessageList(newMessageList);
     localStorage.setItem('messageList', JSON.stringify(newMessageList));
@@ -107,9 +130,11 @@ const ChatBot = () => {
               className="tutorial-button"
               onClick={handleTutorialButtonClick}
             >
-              튜토리얼
+              사용법
             </button>
-            <button className="humor-button">유우머</button>
+            <button className="humor-button" onClick={handleHumorButtonClick}>
+              유우머
+            </button>
           </div>
           {/* 챗봇 채팅 텍스트 */}
           <div className="chatbot-main-text-div">
