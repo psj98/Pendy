@@ -14,7 +14,7 @@ public class ClovaOCRResponseDto {
     private String place;
     private int total;
     private String date;
-    private String isAfternoon;
+//    private String isAfternoon;
     private String time;
     private Timestamp dateTime;
 
