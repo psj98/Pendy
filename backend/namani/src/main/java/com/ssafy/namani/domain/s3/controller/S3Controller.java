@@ -36,7 +36,7 @@ public class S3Controller {
      */
     @PostMapping("/send")
     public BaseResponse<Object> saveAndInferenceImage(@RequestHeader(value="accessToken",required=false) String token,
-                                                      @RequestBody MultipartFile file) {
+                                                      @RequestParam("file") MultipartFile file) {
 
         S3ResponseDto s3ResponseDto;
         ClovaOCRResponseDto clovaResponseDto;
