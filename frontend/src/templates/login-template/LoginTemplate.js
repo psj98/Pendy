@@ -19,7 +19,7 @@ const LoginTemplate = () => {
         const accountList = JSON.stringify(
           response.data.data.accountListResponseDtoList,
         );
-        localStorage.setItem('accessToken', response.data.data.accessToken);
+        sessionStorage.setItem('accessToken', response.data.data.accessToken);
         sessionStorage.setItem('email', response.data.data.email);
         sessionStorage.setItem('name', response.data.data.name);
         sessionStorage.setItem('age', response.data.data.age);
