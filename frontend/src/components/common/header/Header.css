@@ -15,6 +15,7 @@
   outline: none;
   font-size: 20px;
 }
+
 .header-menu-container {
   display: flex !important;
   justify-content: flex-end !important;
@@ -57,6 +58,7 @@
   font-weight: bold;
   font-size: 1.1em;
 }
+
 .link-content:visited {
   color: black; /* 이전의 색상을 상속받도록 설정 */
   text-decoration: none; /* 밑줄 제거 */

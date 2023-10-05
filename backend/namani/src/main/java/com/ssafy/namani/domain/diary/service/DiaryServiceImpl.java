@@ -31,7 +31,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -105,18 +107,19 @@ public class DiaryServiceImpl implements DiaryService {
         // 일기 있는지 체크
         boolean newDailyTransaction = false;
         Optional<Diary> diaryOptional = diaryRepository.findByMemberIdTodayDate(memberId, todayDate);
+        Timestamp regDate = Timestamp.valueOf(LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
         if (diaryOptional.isPresent()) { // 일기가 생성되어 있는 경우
             Diary diary = diaryOptional.get();
-            Timestamp regDate = diary.getRegDate();
+            regDate = diary.getRegDate();
+        }
 
-            // 계좌 내에서 시각 사이에 거래 내역 존재 체크
-            List<AccountInfo> accountInfoList = accountInfoRepository.findByMember_Id(memberId);
-            for (AccountInfo accountInfo : accountInfoList) {
-                Optional<List<TransactionInfo>> transactionInfoListOptional = transactionInfoRepository.findAllWithdrawalsByAccountNumber(accountInfo.getAccountNumber(), 2, regDate, todayDate);
-                if (transactionInfoListOptional.isPresent() && transactionInfoListOptional.get().size() != 0) {
-                    newDailyTransaction = true;
-                    break;
-                }
+        // 계좌 내에서 시각 사이에 거래 내역 존재 체크
+        List<AccountInfo> accountInfoList = accountInfoRepository.findByMember_Id(memberId);
+        for (AccountInfo accountInfo : accountInfoList) {
+            Optional<List<TransactionInfo>> transactionInfoListOptional = transactionInfoRepository.findAllWithdrawalsByAccountNumber(accountInfo.getAccountNumber(), 2, regDate, todayDate);
+            if (transactionInfoListOptional.isPresent() && transactionInfoListOptional.get().size() != 0) {
+                newDailyTransaction = true;
+                break;
             }
         }
 
@@ -209,7 +212,7 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         /* -------------- AI에게 일기 생성 요청 -------------- */
-        String url = "https://j9a410.p.ssafy.io/ml/create-diary"; // 파이썬 요청 url
+        String url = "http://localhost:8000/ml/create-diary"; // 파이썬 요청 url
         RestTemplate restTemplate = new RestTemplate();
 
         // 월간 목표로 일간 소비 금액 구하기
