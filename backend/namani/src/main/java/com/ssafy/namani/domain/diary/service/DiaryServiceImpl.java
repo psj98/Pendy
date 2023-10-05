@@ -105,19 +105,15 @@ public class DiaryServiceImpl implements DiaryService {
         // 일기 있는지 체크
         boolean newDailyTransaction = false;
         Optional<Diary> diaryOptional = diaryRepository.findByMemberIdTodayDate(memberId, todayDate);
-        log.info("todayDate" + todayDate);
         if (diaryOptional.isPresent()) { // 일기가 생성되어 있는 경우
             Diary diary = diaryOptional.get();
             Timestamp regDate = diary.getRegDate();
-            log.info("todayDate" + regDate);
 
             // 계좌 내에서 시각 사이에 거래 내역 존재 체크
             List<AccountInfo> accountInfoList = accountInfoRepository.findByMember_Id(memberId);
             for (AccountInfo accountInfo : accountInfoList) {
                 Optional<List<TransactionInfo>> transactionInfoListOptional = transactionInfoRepository.findAllWithdrawalsByAccountNumber(accountInfo.getAccountNumber(), 2, regDate, todayDate);
                 if (transactionInfoListOptional.isPresent() && transactionInfoListOptional.get().size() != 0) {
-                    log.info(transactionInfoListOptional.get().toString());
-                    log.info("size"+ transactionInfoListOptional.get().size());
                     newDailyTransaction = true;
                     break;
                 }
@@ -189,18 +185,28 @@ public class DiaryServiceImpl implements DiaryService {
                     .build();
 
             transactionInfoList.add(newTransactionInfo);
+        }
 
+        transactionInfoRepository.saveAll(transactionInfoList); // 오류가 없으면 거래 내역 전체
+
+        // 금일 거래내역 조회
+        Optional<List<TransactionInfo>> transactionInfoListOptional = transactionInfoRepository.findTransactionInfoByMemberIdCurDate(memberId, curDate);
+        if (!transactionInfoListOptional.isPresent()) {
+            throw new BaseException(BaseResponseStatus.TRANSACTION_INFO_NOT_FOUND);
+        }
+
+        // 금일 거래내역을 HashMap에 저장
+        List<TransactionInfo> newTransactionInfoList = transactionInfoListOptional.get();
+        for (TransactionInfo transactionInfo : newTransactionInfoList) {
             // 지출 내역에 따른 [지출 금액, 감정 번호] 저장
             String transactionName = transactionInfo.getTransactionName(); // 지출 내역
 
             Integer[] transactionDetail = new Integer[2];
             transactionDetail[0] = transactionInfo.getTransactionAmount(); // 지출 금액
-            transactionDetail[1] = emotionId; // 감정 번호
+            transactionDetail[1] = transactionInfo.getEmotion().getEmotionScore(); // 감정 번호
 
             consumptionDetails.put(transactionName, transactionDetail);
         }
-
-        transactionInfoRepository.saveAll(transactionInfoList); // 오류가 없으면 거래 내역 전체 저장
 
         /* -------------- AI에게 일기 생성 요청 -------------- */
         String url = "https://j9a410.p.ssafy.io/ml/create-diary"; // 파이썬 요청 url

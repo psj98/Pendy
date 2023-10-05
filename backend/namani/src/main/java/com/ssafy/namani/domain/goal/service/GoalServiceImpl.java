@@ -302,19 +302,14 @@ public class GoalServiceImpl implements GoalService {
     }
 
     /**
-     * 월간 분석 피드백 생성 메서드
+     * 월간 분석 피드백 생성 메서드 - 사용자 + 현재 달에 해당하는 월간 소비 분석 생성
      *
      * @throws BaseException
      * @throws JsonProcessingException
      */
     @Override
-//    @Scheduled(cron = "0 59 23 L * *")
-    public void registMonthlyFeedback(UUID memberId) throws BaseException, JsonProcessingException {
-        Timestamp curDate = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
+    public void registMonthlyFeedback(UUID memberId, Timestamp curDate) throws BaseException, JsonProcessingException {
         LinkedHashMap<String, Integer[]> categoryData = new LinkedHashMap<>();
-        List<Member> memberList = memberRepository.findAll();
-
-        System.out.println(curDate);
 
         // 사용자 + 현재 월에 해당하는 카테고리 별 목표 가져오기
         Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, curDate);
@@ -357,5 +352,68 @@ public class GoalServiceImpl implements GoalService {
                 .build();
 
         totalGoalRepository.save(newTotalGoal);
+    }
+
+    /**
+     * 월간 분석 피드백 생성 메서드 - 매달 마지막 날에 월간 소비 분석이 자동으로 생성되는 메서드
+     *
+     * @throws BaseException
+     * @throws JsonProcessingException
+     */
+    @Override
+    @Scheduled(cron = "0 59 23 L * *")
+    public void registMonthlyFeedback() throws BaseException, JsonProcessingException {
+        Timestamp curDate = Timestamp.valueOf(LocalDateTime.now());
+        LinkedHashMap<String, Integer[]> categoryData = new LinkedHashMap<>();
+        List<Member> memberList = memberRepository.findAll();
+
+        for (Member member : memberList) {
+            // 사용자 + 현재 월에 해당하는 카테고리 별 목표 가져오기
+            UUID memberId = member.getId();
+            Optional<TotalGoal> totalGoalOptional = totalGoalRepository.findByCurDate(memberId, curDate);
+            if (!totalGoalOptional.isPresent()) {
+                continue;
+            }
+
+            // 월간 분석이 생성되어 있는 경우, 스킵 (테스트용)
+            TotalGoal totalGoal = totalGoalOptional.get();
+            if (totalGoal.getAiAnalysis() != null) {
+                continue;
+            }
+
+            List<GoalByCategoryDetailResponseDto> goalByCategoryList = getGoalByCategoryList(totalGoal.getId());
+
+            // 사용자 + 현재 월에 해당하는 카테고리 별 소비 금액 가져오기
+            statisticService.checkDailyStatistic(memberId, curDate);
+            MonthlyStatisticDetailByRegDateResponseDto monthlyStatistic = statisticService.getMonthlyStatisticByRegDate(memberId, curDate);
+            List<MonthlyStatisticAmountByCategoryResponseDto> amountByCategory = monthlyStatistic.getAmountByCategory();
+
+            for (int i = 0; i < 8; i++) {
+                Integer[] amount = {amountByCategory.get(i).getAmount(), goalByCategoryList.get(i).getCategoryGoalAmount()};
+                categoryData.put(amountByCategory.get(i).getCategoryName(), amount);
+            }
+
+            /* -------------- AI에게 월간 분석 요청 -------------- */
+            String url = "http://localhost:8000/ml/create-report"; // 파이썬 요청 url
+            RestTemplate restTemplate = new RestTemplate();
+
+            /* -------------- 데이터 전달 및 생성된 월간 분석 데이터 반환 -------------- */
+            GoalRegistMonthlyFeedbackRequestDto goalRegistMonthlyFeedbackRequestDto =
+                    GoalRegistMonthlyFeedbackRequestDto.builder()
+                            .categoryData(categoryData)
+                            .build();
+            String response = restTemplate.postForObject(url, goalRegistMonthlyFeedbackRequestDto, String.class);
+
+            // GoalRegistMonthlyFeedbackResponseDto로 매핑
+            ObjectMapper mapper = new ObjectMapper();
+            GoalRegistMonthlyFeedbackResponseDto goalRegistMonthlyFeedbackResponseDto = mapper.readValue(response, GoalRegistMonthlyFeedbackResponseDto.class);
+
+            // AI 분석 피드백 저장
+            TotalGoal newTotalGoal = totalGoal.toBuilder()
+                    .aiAnalysis(goalRegistMonthlyFeedbackResponseDto.getMessage())
+                    .build();
+
+            totalGoalRepository.save(newTotalGoal);
+        }
     }
 }
