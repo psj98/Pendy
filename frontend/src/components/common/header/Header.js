@@ -16,7 +16,7 @@ const Header = ({ isLoggedIn }) => {
   //로그아웃 버튼 동작
   const onClickLogout = () => {
     console.log('logout');
-    localStorage.removeItem('accessToken');
+    sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('email');
     sessionStorage.removeItem('name');
     sessionStorage.removeItem('age');
