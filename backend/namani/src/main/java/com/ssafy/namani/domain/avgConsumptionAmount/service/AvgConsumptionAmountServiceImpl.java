@@ -147,19 +147,25 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
             // AvgConsumptionAmount 정보 가져오기
             Optional<AvgConsumptionAmount> avgConsumptionAmountOptional = avgConsumptionAmountRepository.findByAgeSalaryIdCategoryId(ageSalary.getId(), category.getId(), transactionInfo.getTradeDate());
 
-            // 평균 소비 정보가 없는 경우
+            // 평균 소비 정보가 없는 경우, 합계를 0으로 생성
             if (!avgConsumptionAmountOptional.isPresent()) {
-                throw new BaseException(BaseResponseStatus.NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_CATEGORY_ID_AND_REG_DATE);
+//                throw new BaseException(BaseResponseStatus.NO_AVG_CONSUMPTION_AMOUNT_BY_AGE_SALARY_ID_AND_CATEGORY_ID_AND_REG_DATE);
+                AvgConsumptionAmount avgConsumptionAmount = AvgConsumptionAmount.builder()
+                        .ageSalary(ageSalary)
+                        .category(category)
+                        .regDate(Timestamp.valueOf(LocalDateTime.now()))
+                        .sumAmount(0)
+                        .build();
+
+                avgConsumptionAmountRepository.save(avgConsumptionAmount);
+
+                avgConsumptionAmountOptional = avgConsumptionAmountRepository.findByAgeSalaryIdCategoryId(ageSalary.getId(), category.getId(), transactionInfo.getTradeDate());
             }
 
             // 카테고리와 AgeSalary에 맞게 sumAmount 업데이트
             AvgConsumptionAmount avgConsumptionAmount = avgConsumptionAmountOptional.get();
-            AvgConsumptionAmount newAvgConsumptionAmount = AvgConsumptionAmount.builder()
-                    .id(avgConsumptionAmount.getId())
-                    .ageSalary(ageSalary)
-                    .category(category)
+            AvgConsumptionAmount newAvgConsumptionAmount = avgConsumptionAmount.toBuilder()
                     .sumAmount(avgConsumptionAmount.getSumAmount() + transactionInfo.getTransactionAmount())
-                    .regDate(avgConsumptionAmount.getRegDate())
                     .build();
 
             avgConsumptionAmountRepository.save(newAvgConsumptionAmount);
@@ -167,7 +173,7 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
     }
 
     /**
-     * 회원 연령대 + 연봉대에 해당ㅎ하는 3달간 평균 소비 통계 가져오기
+     * 회원 연령대 + 연봉대에 해당하는 3달간 평균 소비 통계 가져오기
      *
      * @param age
      * @param salary
@@ -177,6 +183,7 @@ public class AvgConsumptionAmountServiceImpl implements AvgConsumptionAmountServ
      */
     @Override
     public List<AvgConsumptionAmountForThreeMonthResponseDto> getAvgConsumptionAmountForThreeMonth(Integer age, Integer salary, Timestamp curDate) throws BaseException {
+        // 소비 통계 초기화 => 모든 카테고리에 대해 기본값 0으로 저장 (DB에 없을 경우 대비)
         List<AvgConsumptionAmountForThreeMonthResponseDto> avgConsumptionAmountAvgList = new ArrayList<>();
         List<Category> categoryList = categoryRepository.findAll();
         for(Category category : categoryList){
