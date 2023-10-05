@@ -60,24 +60,24 @@ def mkdiary(req):
     # 고정적인 입력값
     # 영어 지시문 혹은 한국어 지시문 둘 다 작성해두었습니다
     instructions = """
-       [Instructions]
-       - Write a diary entry in Korean following the instructions below, referring to the 'Response Format' and 'ConsumeList'
-       - Be sure to follow the 'ResponseFormat' with "title", "content", "comment", and "stampType" as keys and do not respond otherwise.
+        - Compose a diary entry in Korean by referring to the 'Response Format' and 'ConsumeFormat' provided below.
+        - Ensure that you strictly adhere to the 'Response Format' which includes keys such as "title", "content", "comment", and "stampType". Do not provide responses that deviate from this format.
 
-       [ConsumeList]
-       {
-           today consumption limit : amount,
-           today consumption details : {
-               consumer item : [amount,satisfaction(1~5)]
-           }
-       }
-       [ResponseFormat]
-       {
-           "title": "write a title over 10 characters",
-           "content": "Like a 75-year-old, write a fun diary content between 50 and 250 characters.",
-           "comment": "As an elementary school teacher, give comment",
-           "stampType": "assign a score judging the spending details from a range of 1 to 5, int"
-       }
+        [ConsumeFormat]
+        {
+            "today consumption limit": amount,
+            "today consumption details": {
+                "consumer item": [amount, satisfaction(1~5)]
+            }
+        }
+
+        [ResponseFormat]
+        {
+            "title": "Provide a title with more than 10 characters",
+            "content": "Write a delightful diary content as if you were 75 years old, ranging between 50 and 250 characters.",
+            "comment": "Offer feedback as if you were an elementary school teacher",
+            "stampType": "Rate the spending details on a scale of 1 to 5 (integer)"
+        }
     """
 
     limit_amount_txt = "\nSpendingLimit: " + str(limit_amount) + "Won\n"
@@ -95,18 +95,20 @@ def mkdiary(req):
     print(res_plain_txt)
     print("res_plain_txt 끝")
 
-    try:
-        ret = json.loads(res_plain_txt)
+    # try:
+    #     ret = json.loads(res_plain_txt)
 
-    except:
-        ret = {
-            "title": "오늘의 먹방 대모험",
-            "content": "오늘은 여러 군데에서 맛있는 것들을 먹어봤어! 먼저 서브웨이에서 5900원을 쓰고 먹었는데, 맛이 별로였어. 그 다음엔 매머드커피에서 2000원을 주고 뭔가를 먹었어, 그건 괜찮았단다! 그리고 바나프레소에서 2600원을 주고 먹었는데, 그것도 별로였어. 마지막으로 BBQ치킨에서 완전 대박이었어! 29000원을 주고 치킨을 먹었는데, 그건 정말 대만족!",
-            "comment ": "우와, 너 정말 많이 먹었네! 근데, 예산이 10000원이라고 했잖아? 너무 많이 초과했어. 다음에는 예산 안에서 먹을 수 있는 맛있는 걸 찾아보자!",
-            "stampType": 1
-        }
+    # except:
+    #     ret = {
+    #         "title": "오늘의 먹방 대모험",
+    #         "content": "오늘은 여러 군데에서 맛있는 것들을 먹어봤어! 먼저 서브웨이에서 5900원을 쓰고 먹었는데, 맛이 별로였어. 그 다음엔 매머드커피에서 2000원을 주고 뭔가를 먹었어, 그건 괜찮았단다! 그리고 바나프레소에서 2600원을 주고 먹었는데, 그것도 별로였어. 마지막으로 BBQ치킨에서 완전 대박이었어! 29000원을 주고 치킨을 먹었는데, 그건 정말 대만족!",
+    #         "comment ": "우와, 너 정말 많이 먹었네! 근데, 예산이 10000원이라고 했잖아? 너무 많이 초과했어. 다음에는 예산 안에서 먹을 수 있는 맛있는 걸 찾아보자!",
+    #         "stampType": 1
+    #     }
 
-    return ret
+    res_plain_txt = json.loads(res_plain_txt)
+
+    return res_plain_txt
 
     # food : 식비
     # traffic : 교통
