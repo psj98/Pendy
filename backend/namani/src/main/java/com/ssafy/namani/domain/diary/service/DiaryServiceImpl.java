@@ -233,6 +233,7 @@ public class DiaryServiceImpl implements DiaryService {
                     .content(diaryCreateByAIResponseDto.getContent())
                     .comment(diaryCreateByAIResponseDto.getComment())
                     .stampType(diaryCreateByAIResponseDto.getStampType())
+                    .regDate(Timestamp.valueOf(LocalDateTime.now()))
                     .build();
         } else { // 일기가 생성되어 있지 않은 경우
             newDiary = Diary.builder()
