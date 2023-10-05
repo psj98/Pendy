@@ -13,7 +13,7 @@ const GuestTemplate = () => {
 
   return (
     <div className="guest-template">
-      <img src="/main.png" alt="Guest Main" className="background-image" />
+      <img src="/GuestMain.png" alt="Guest Main" className="background-image" />
 
       <div className="startnow" onClick={handleButtonClick}>
         <div className="elements">
