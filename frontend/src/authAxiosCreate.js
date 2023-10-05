@@ -9,7 +9,7 @@ const authAxiosCreate = axios.create({
 
 authAxiosCreate.interceptors.request.use(
   async (request) => {
-    const accesshToken = localStorage
+    const accesshToken = sessionStorage
       .getItem('accessToken')
       .replaceAll('"', '')
       .trim();
