@@ -53,6 +53,18 @@ const ChatBot = () => {
     scrollToBottom();
   };
 
+  //tutorial message
+  const preSavedTutorialMessage = '앙테스트띠 앙 테스트띠~';
+  //튜토리얼 버튼 클릭
+  const handleTutorialButtonClick = () => {
+    const newMessageList = [
+      ...messageList,
+      { responseMessage: preSavedTutorialMessage },
+    ];
+    setMessageList(newMessageList);
+    localStorage.setItem('messageList', JSON.stringify(newMessageList));
+  };
+
   // Enter 키를 누른 경우 onSendMessageClick 함수 실행
   const onPressEnterKey = (event) => {
     if (event.key === 'Enter') {
@@ -90,7 +102,15 @@ const ChatBot = () => {
               X
             </button>
           </div>
-
+          <div className="tutorial">
+            <button
+              className="tutorial-button"
+              onClick={handleTutorialButtonClick}
+            >
+              튜토리얼
+            </button>
+            <button className="humor-button">유우머</button>
+          </div>
           {/* 챗봇 채팅 텍스트 */}
           <div className="chatbot-main-text-div">
             <div className="chatbot-message-div" ref={scrollRef}>
