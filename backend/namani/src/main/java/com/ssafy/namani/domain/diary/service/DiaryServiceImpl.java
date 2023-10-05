@@ -201,6 +201,10 @@ public class DiaryServiceImpl implements DiaryService {
         // 금일 거래내역을 HashMap에 저장
         List<TransactionInfo> newTransactionInfoList = transactionInfoListOptional.get();
         for (TransactionInfo transactionInfo : newTransactionInfoList) {
+//            if (transactionInfo.getTransactionType() == 1) {
+//                continue;
+//            }
+
             // 지출 내역에 따른 [지출 금액, 감정 번호] 저장
             String transactionName = transactionInfo.getTransactionName(); // 지출 내역
 
