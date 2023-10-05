@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import * as ChatHumorList from './ChatHumorList';
 import './ChatBot.css';
 
 import handleChatBot from '../../../utils/handleChatBot';
@@ -61,6 +62,23 @@ const ChatBot = () => {
       ...messageList,
       { responseMessage: preSavedTutorialMessage },
     ];
+    console.log('ChatHumorList', ChatHumorList.humor1);
+    setMessageList(newMessageList);
+    localStorage.setItem('messageList', JSON.stringify(newMessageList));
+  };
+
+  // 1부터 30까지의 랜덤 숫자 생성
+  const getRandomNumber = () => {
+    return Math.floor(Math.random() * 30) + 1;
+  };
+  const randomValue = getRandomNumber();
+
+  //유머 버튼 클릭
+  const handleHumorButtonClick = () => {
+    const newMessageList = [
+      ...messageList,
+      { responseMessage: ChatHumorList[`humor${randomValue}`] },
+    ];
     setMessageList(newMessageList);
     localStorage.setItem('messageList', JSON.stringify(newMessageList));
   };
@@ -109,7 +127,9 @@ const ChatBot = () => {
             >
               튜토리얼
             </button>
-            <button className="humor-button">유우머</button>
+            <button className="humor-button" onClick={handleHumorButtonClick}>
+              유우머
+            </button>
           </div>
           {/* 챗봇 채팅 텍스트 */}
           <div className="chatbot-main-text-div">
