@@ -123,7 +123,7 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
         image.put("name",request.getOriginalName());
         // images.url 혹은 images.data 중 하나가 존재해야 함, URL은 이미지를 가져 올 수 있는 공개 URL이어야 함
         image.put("url",request.getAccessUrl());
-            // Template OCR API에서는 이 필드를 설정하지 않으면 도메인에 배포된 모든 서비스 템플릿으로 자동 분류됨
+        // Template OCR API에서는 이 필드를 설정하지 않으면 도메인에 배포된 모든 서비스 템플릿으로 자동 분류됨
 //        JSONArray templateIds = new JSONArray();
 
         JSONArray images = new JSONArray();
@@ -207,32 +207,44 @@ public class ClovaOCRServiceImpl implements ClovaOCRService {
                 JSONObject current = (JSONObject) parsedTexts.get(i);
                 String text = ((String) current.get("inferText")).replaceAll(System.getProperty("line.separator"), "");
                 text = text.replaceAll(" ","");
+                text = text.replaceAll(",","");
 
                 // 장소와 시간은 공백 제거
                 if(current.get("name").equals("place")){
                     responseDto.setPlace(text);
+                    System.out.println("place :" + responseDto.getPlace());
                 }else if(current.get("name").equals("total")){
                     responseDto.setTotal(Integer.parseInt(text));
+                    System.out.println("total :" + responseDto.getTotal());
                 }else if(current.get("name").equals("date")){
+                    text = text.replaceAll("/","-");
+                    if(text.length() <= 8){
+                        String tmpText = "20";
+                        tmpText += text;
+                        text = tmpText;
+                    }
                     responseDto.setDate(text);
-                }else if(current.get("name").equals("isafternoon")){
-                    responseDto.setIsAfternoon(text);
-                }else if(current.get("name").equals("time")){
-                    responseDto.setTime(text);
+                    System.out.println("date :" + responseDto.getDate());
                 }
-//                result.append((String) current.get("inferText")).append(" ");
+//                else if(current.get("name").equals("isafternoon")){
+//                    responseDto.setIsAfternoon(text);
+//                }
+                else if(current.get("name").equals("time")){
+                    responseDto.setTime(text);
+                    System.out.println("time :"+ responseDto.getTime());
+                }
+                System.out.println(text);
             }
 
             Timestamp tempTimestamp = Timestamp.valueOf((responseDto.getDate()+" "+responseDto.getTime()));
-            long addMillis = 43_200_200; // 12 시간 (ms)
-            if(responseDto.getIsAfternoon().equals("오후")){
-                tempTimestamp = new Timestamp(tempTimestamp.getTime()+addMillis);
-            }
+//            long addMillis = 43_200_200; // 12 시간 (ms)
+//            if(responseDto.getIsAfternoon().equals("오후")){
+//                tempTimestamp = new Timestamp(tempTimestamp.getTime()+addMillis);
+//            }
             responseDto.setDateTime(tempTimestamp);
         }
 
         return responseDto;
-//        throw new BaseException(BaseResponseStatus.CLOVA_PARSING_ERROR);
 
     }
 
