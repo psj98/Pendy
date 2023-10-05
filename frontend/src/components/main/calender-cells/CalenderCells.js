@@ -21,7 +21,7 @@ const CalenderCells = ({ currentMonth, diaries, isNewSpend }) => {
   let day = startDate;
   let formattedDate = '';
 
-  //일기가 있을 경우 점 표시
+  //추가 소비 내역이 있을 경우 점 표시
   const getDotStyle = (day) => {
     return isNew && isSameDay(day, todayDate);
   };
@@ -33,8 +33,6 @@ const CalenderCells = ({ currentMonth, diaries, isNewSpend }) => {
     );
     return hasDiary ? hasDiary.stampType : null;
   };
-
-  console.log('day', day);
 
   // 해당 날짜 일기로 이동
   const onDiaryClick = (day) => {
