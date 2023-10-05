@@ -18,6 +18,7 @@ const UserTemplate = () => {
   const [responseData, setResponseData] = useState([]);
   const [selectedOption, setSelectedOption] = useState('option1'); // 초기값 설정
   const [isNewSpend, setIsNewSpend] = useState('false');
+  const [hasTotalGoalAmount, setHasTotalGoalAmount] = useState('false');
 
   let diaries = [];
 
@@ -41,6 +42,9 @@ const UserTemplate = () => {
         console.log('isnew?', response.data.data.newDailyTransaction);
         setIsNewSpend(response.data.data.newDailyTransaction);
         setResponseData(response.data); // response 데이터를 상태로 저장
+        if (response.data.data.dailyStatistic.totalAmount === 0) {
+          setHasTotalGoalAmount(true);
+        }
       } catch (error) {
         console.log(error);
       }
