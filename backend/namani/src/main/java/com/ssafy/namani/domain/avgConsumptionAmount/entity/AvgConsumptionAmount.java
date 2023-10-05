@@ -33,7 +33,7 @@ public class AvgConsumptionAmount {
 	@NotNull
 	private Integer sumAmount; // 총합
 
-	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+//	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp regDate; // 연월
 
 	@Builder(toBuilder = true)
