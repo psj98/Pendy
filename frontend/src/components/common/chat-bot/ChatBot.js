@@ -55,8 +55,13 @@ const ChatBot = () => {
   };
 
   //tutorial message
-  const preSavedTutorialMessage = '앙테스트띠 앙 테스트띠~';
-  //튜토리얼 버튼 클릭
+  const preSavedTutorialMessage = `Pendy 사용 방법
+
+  1. 소비 목표를 설정하세요
+  2. 소비 내역에 감정을 표시해보세요
+  3. 작성된 일기와 소비 리포트를 확인하세요`;
+
+  //사용법 버튼 클릭
   const handleTutorialButtonClick = () => {
     const newMessageList = [
       ...messageList,
@@ -125,7 +130,7 @@ const ChatBot = () => {
               className="tutorial-button"
               onClick={handleTutorialButtonClick}
             >
-              튜토리얼
+              사용법
             </button>
             <button className="humor-button" onClick={handleHumorButtonClick}>
               유우머
