@@ -82,9 +82,13 @@ public interface TransactionInfoRepository extends JpaRepository<TransactionInfo
     Optional<List<ITransactionInfoList>> findMonthlyStatisticByMemberIdAccountNumberRegDate(UUID memberId, Timestamp curDate);
 
     /**
+     * 3달간 소비내역 통계 조회하기
      *
+     * @param memberId
+     * @param curDate
+     * @return Optional<List<ITransactionInfoList>>
      */
-    @Query(value = "select c.id AS categoryId, c.name AS categoryName, SUM(t.transaction_amount) AS amount " +
+    @Query(value = "SELECT c.id AS categoryId, c.name AS categoryName, SUM(t.transaction_amount) AS amount " +
             "FROM transaction_info t, category c " +
             "WHERE c.id = t.category_id " +
             "AND t.account_number IN (SELECT account_number FROM account_info " +
@@ -93,4 +97,17 @@ public interface TransactionInfoRepository extends JpaRepository<TransactionInfo
             "AND DATE_FORMAT(DATE_SUB(?2, INTERVAL 1 MONTH), '%Y-%m') " +
             "GROUP BY t.category_id;", nativeQuery = true)
     Optional<List<ITransactionInfoList>> findMonthlyStatisticByMemberIdAccountNumberRegDateForThreeMonth(UUID memberId, Timestamp curDate);
+
+    /**
+     * 사용자 아이디 + 현재 일자로 모든 거래 내역 가져오기
+     *
+     * @param memberId
+     * @param curDate
+     * @return Optional<List<TransactionInfo>>
+     */
+    @Query(value = "SELECT * FROM transaction_info t " +
+            "WHERE t.account_number IN (SELECT account_number FROM account_info " +
+            "                         WHERE member_id = ?1) " +
+            "AND DATE_FORMAT(t.trade_date, '%Y-%m-%d') = DATE_FORMAT(?2, '%Y-%m-%d')", nativeQuery = true)
+    Optional<List<TransactionInfo>> findTransactionInfoByMemberIdCurDate(UUID memberId, Timestamp curDate);
 }
