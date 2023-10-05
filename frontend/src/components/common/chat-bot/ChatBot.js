@@ -114,8 +114,8 @@ const ChatBot = () => {
           {/* 챗봇 채팅 텍스트 */}
           <div className="chatbot-main-text-div">
             <div className="chatbot-message-div" ref={scrollRef}>
-              {messageList.map((message) => (
-                <>
+              {messageList.map((message, index) => (
+                <div key={index}>
                   <div className="send-message-container">
                     <div className="send-message-div">
                       {message.sendMessage}
@@ -126,7 +126,7 @@ const ChatBot = () => {
                       {message.responseMessage}
                     </div>
                   </div>
-                </>
+                </div>
               ))}
             </div>
           </div>

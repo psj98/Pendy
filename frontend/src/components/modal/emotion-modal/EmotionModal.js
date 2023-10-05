@@ -88,7 +88,7 @@ const EmotionModal = ({ closeModal, todayList }) => {
               </div>
               <div className="emotion-modal-option-button-container">
                 {emoji.map((num) => (
-                  <div className="emotion-modal-option-button">
+                  <div key={num} className="emotion-modal-option-button">
                     <input
                       type="radio"
                       name={`chart-option-${index}`}
