@@ -3,11 +3,13 @@ import './EmotionTemplate.css';
 import useTodayList from '../../hooks/useTodayList';
 import handleEmotionRegist from '../../utils/handleEmotionRegist';
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../components/common/loading-spinner/LoadingSpinner';
 
 const EmotionTemplate = () => {
   const regDate = new Date();
   regDate.setHours(0, 0, 0, 0);
   const { todayList, todayLoading } = useTodayList(regDate);
+  const [loading, setLoading] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [emotionList, setEmotionList] = useState([]);
   const navigate = useNavigate();
@@ -17,6 +19,17 @@ const EmotionTemplate = () => {
 
   if (todayLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (loading) {
+    return (
+      <div className="loading-spinner-container">
+        <div className="loading-spinner">
+          <LoadingSpinner />
+        </div>
+        <div className="loading-text">나마니가 일기를 생성 중입니다.</div>
+      </div>
+    );
   }
 
   if (todayList.data.length === 0) {
@@ -57,23 +70,28 @@ const EmotionTemplate = () => {
   // 감정 등록 및 일기 생성
   const onEmotionRegistClick = async (event) => {
     event.preventDefault();
+    setLoading(true);
     console.log(emotionList);
     if (todayList.data.length === emotionList.length) {
       try {
         const response = await handleEmotionRegist(emotionList);
         console.log(response);
         if (response.data.code === 1000) {
+          setLoading(false);
           console.log('emotion regist success');
           navigate('/');
         } else {
+          setLoading(false);
           console.error(response.data.code + ' ' + response.data.message);
           alert('등록에 실패하셨습니다');
         }
       } catch (error) {
+        setLoading(false);
         console.error('emotion regist failed');
         alert('등록에 실패하셨습니다');
       }
     } else {
+      setLoading(false);
       alert('아직 평가하지 않은 항목이 있습니다.');
     }
   };
