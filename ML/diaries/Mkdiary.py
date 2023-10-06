@@ -73,9 +73,9 @@ def mkdiary(req):
 
         [ResponseFormat]
         {
-            "title": "Provide a title with more than 10 characters",
-            "content": "Based on the 'ConsumeFormat', analyze the spending patterns. Discuss if the consumption was within the set limit, identify any items that might be considered excessive or unnecessary, and suggest possible areas for financial improvement. The content should be between 50 and 250 characters.",
-            "comment": "Offer feedback as if you were a financial advisor, providing tips or insights on better financial management.",
+            "title": "Provide a funny title with more than 10 characters",
+            "content": "Write a delightful diary content, ranging between 50 and 250 characters.",
+            "comment": "Based on the 'ConsumeFormat', analyze the spending patterns. Discuss if the consumption was within the set limit, identify any items that might be considered excessive or unnecessary, and suggest possible areas for financial improvement. The content should be between 30 and 80 characters. 존댓말로 작성",
             "stampType": "Rate the spending details on a scale of 1 to 5 (integer)"
         }
 
