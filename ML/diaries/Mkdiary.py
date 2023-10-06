@@ -74,10 +74,11 @@ def mkdiary(req):
         [ResponseFormat]
         {
             "title": "Provide a title with more than 10 characters",
-            "content": "Write a delightful diary content as if you were 75 years old, ranging between 50 and 250 characters.",
-            "comment": "Offer feedback as if you were an elementary school teacher",
+            "content": "Based on the 'ConsumeFormat', analyze the spending patterns. Discuss if the consumption was within the set limit, identify any items that might be considered excessive or unnecessary, and suggest possible areas for financial improvement. The content should be between 50 and 250 characters.",
+            "comment": "Offer feedback as if you were a financial advisor, providing tips or insights on better financial management.",
             "stampType": "Rate the spending details on a scale of 1 to 5 (integer)"
         }
+
     """
 
     limit_amount_txt = "\nSpendingLimit: " + str(limit_amount) + "Won\n"
