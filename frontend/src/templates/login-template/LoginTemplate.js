@@ -32,7 +32,7 @@ const LoginTemplate = () => {
         goalResponse.then((result) => {
           const isCheckGoal = result;
           if (isCheckGoal) {
-            navigate('/', { replace: true });
+            navigate('/first-goal', { replace: true });
           } else {
             navigate('/first-goal', { replace: true });
           }
