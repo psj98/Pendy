@@ -32,7 +32,17 @@
 
 <br/>
 
-## 📅 프로젝트 진행 기간
+## 👨‍💻 팀원 소개
+
+| 강한(PM) | 권현우 | 김동현 | 김윤우 | 박성준 | 박동휘 |
+| ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- |
+| <p align="left" style="color:skyblue">Backend</p> | <p align="left" style="color:skyblue">Backend, Infra</p> | <p align="left" style="color:skyblue">Backend, ML</p> | <p align="left" style="color:skyblue">Backend</p> | <p align="left" style="color:skyblue">Backend</p> | <p align="left" style="color:skyblue">Frontend</p> |
+|회원 API|Clova OCR<br>CI/CD 구축|일기, 월간 분석, 채팅|계좌, 거래 내역 API|일기, 목표, 통계, 평균 소비 통계, 감정, 카테고리 API|페이지 별 API 연결|
+|[@27kanghan](https://github.com/27kanghan)|[@mycodeisnoob](https://github.com/mycodeisnoob)|[@hannernos](https://github.com/hannernos)|[@yoonwoo-kim](https://github.com/yoonwoo-kim)|[@psj98](https://github.com/psj98)|[@DongHui-Park](https://github.com/DongHui-Park)|
+
+<br/>
+
+## 📅 프로젝트 일정
 
 > 2023.08.21 ~ 2023.10.06
 
@@ -45,16 +55,6 @@
 |5주차|`2023.09.18 ~ 2023.09.24`|Front-End : 핵심 기능 개발<br>Back-End : 부가 기능 개발|
 |6주차|`2023.09.25 ~ 2023.10.01`|Front-End : 부가 기능 개발<br>Back-End : ML 연결 및 테스트|
 |7주차|`2023.10.02 ~ 2023.10.06`|개발 마무리<br>오류 확인 및 처리<br>최종 확인|
-
-<br/>
-
-## 👨‍💻 팀원 소개
-
-| 강한(PM) | 권현우 | 김동현 | 김윤우 | 박성준 | 박동휘 |
-| ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- |
-| <p align="left" style="color:skyblue">Backend</p> | <p align="left" style="color:skyblue">Backend, Infra</p> | <p align="left" style="color:skyblue">Backend, ML</p> | <p align="left" style="color:skyblue">Backend</p> | <p align="left" style="color:skyblue">Backend</p> | <p align="left" style="color:skyblue">Frontend</p> |
-|회원 API|Clova OCR<br>CI/CD 구축|일기, 월간 분석, 채팅|계좌, 거래 내역 API|일기, 목표, 통계, 평균 소비 통계, 감정, 카테고리 API|페이지 별 API 연결|
-|[@27kanghan](https://github.com/27kanghan)|[@mycodeisnoob](https://github.com/mycodeisnoob)|[@hannernos](https://github.com/hannernos)|[@yoonwoo-kim](https://github.com/yoonwoo-kim)|[@psj98](https://github.com/psj98)|[@DongHui-Park](https://github.com/DongHui-Park)|
 
 <br/>
 
@@ -102,7 +102,6 @@
 ## ❗❗ 주요 기능
 
 **📝 AI 일기**
-
 - 일간 소비 내역과 감정을 바탕으로 **금융 일기**를 작성해줍니다.
 - **감정**을 바탕으로 어떤 부분이 좋은 소비였는지 또는 나쁜 소비였는지 나타내줍니다.
 - **코멘트**를 통해 과소비한 부분을 알려줍니다.
@@ -110,18 +109,15 @@
 - 카테고리별로 **남은 목표 금액**을 시각화하여 알려줍니다.
 
 **📊 월간 분석**
-
 - 월별 소비 내역을 기반으로 **월간 분석 내용 및 피드백**을 제공해줍니다.
 - 분석 내용을 기반으로 **맞춤형 금융 상품**을 추천해줍니다.
 - **카테고리별 소비내역 통계**를 시각화하여 알려줍니다.
 
 **📌 목표 설정**
-
 - **월간 목표**를 설정할 수 있습니다.
 - **카테고리별 소비내역 통계**를 시각화하여 알려줍니다.
 
 **🤖 챗봇**
-
 - 금융 · 경제 등의 질문에 대한 답변을 제공합니다.
 
 <br/>
