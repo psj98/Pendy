@@ -82,6 +82,12 @@
 
 <br/>
 
+## ERD
+
+![ERD](https://github.com/psj98/Pendy/assets/60167488/79d89015-f6f0-4def-bb26-4cdbe60de0a6)
+
+<br/>
+
 ## 개발 설정
 
 1. 포팅 메뉴얼 : [포팅 메뉴얼](https://github.com/psj98/Pendy/blob/dev/exec/pendi_%ED%8F%AC%ED%8C%85%EB%A7%A4%EB%89%B4%EC%96%BC.pdf)
