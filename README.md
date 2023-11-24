@@ -65,12 +65,12 @@
 ![Spring](https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![JPA](https://img.shields.io/badge/jpa-20336B?style=for-the-badge&logo=JPA&logoColor=white)
 
-### Database
-![MariaDB](https://img.shields.io/badge/mariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
-
 ### Front-End
 ![React](https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![Css](https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css&logoColor=white)
+
+### Database
+![MariaDB](https://img.shields.io/badge/mariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
 
 ### Infra
 ![Amazon EC2](https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
@@ -88,12 +88,10 @@
 ![Clova OCR](https://img.shields.io/badge/ClovaOCR-333333?style=for-the-badge&logoColor=white)
 
 ### Collaboration Tools
-
 ![Notion](https://img.shields.io/badge/Notion-000000.svg?&style=for-the-badge&logo=Notion&logoColor=로고색상)
 ![Mattermost](https://img.shields.io/badge/Mattermost-0058CC.svg?&style=for-the-badge&logo=Mattermost&logoColor=로고색상)
 
 ### Issue & Configuration Management
-
 ![GitLab](https://img.shields.io/badge/Gitlab-FC6D26.svg?&style=for-the-badge&logo=Gitlab&logoColor=#FC6D26)
 ![Jira](https://img.shields.io/badge/Jira-0052CC.svg?&style=for-the-badge&logo=Jira&logoColor=Blue)
 
