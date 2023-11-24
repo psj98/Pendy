@@ -2,7 +2,7 @@
 
 > 생성형 AI를 이용한 금융 일기 서비스
 
-![pendy](https://github.com/psj98/Pendy/assets/60167488/ccb7753a-b5d6-4a76-9bb7-8a2703e91a07)
+![Pendy](https://github.com/psj98/Pendy/assets/60167488/ccb7753a-b5d6-4a76-9bb7-8a2703e91a07)
 
 일상생활을 하다 보면 많은 소비를 하게 됩니다.
 
@@ -32,7 +32,74 @@
 
 <br/>
 
-## 주요 기능
+## 📅 프로젝트 진행 기간
+
+> 2023.08.21 ~ 2023.10.06
+
+|주차|기간|설명|
+|:---|:---|:---|
+|1주차|`2023.08.21 ~ 2023.08.27`|그라운드 룰 설정, 팀 소개|
+|2주차|`2023.08.28 ~ 2023.09.03`|주제 선정 및 토론|
+|3주차|`2023.09.04 ~ 2023.09.10`|세부 기획 선정<br>API 설계<br>ERD 설계<br>아키텍처 설계|
+|4주차|`2023.09.11 ~ 2023.09.17`|Front-End : 기본 틀 생성<br>Back-End : 핵심 기능 개발|
+|5주차|`2023.09.18 ~ 2023.09.24`|Front-End : 핵심 기능 개발<br>Back-End : 부가 기능 개발|
+|6주차|`2023.09.25 ~ 2023.10.01`|Front-End : 부가 기능 개발<br>Back-End : ML 연결 및 테스트|
+|7주차|`2023.10.02 ~ 2023.10.06`|개발 마무리<br>오류 확인 및 처리<br>최종 확인|
+
+<br/>
+
+## 👨‍💻 팀원 소개
+
+| 강한(PM) | 권현우 | 김동현 | 김윤우 | 박성준 | 박동휘 |
+| ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- |
+| <p align="left" style="color:skyblue">Backend</p> | <p align="left" style="color:skyblue">Backend, Infra</p> | <p align="left" style="color:skyblue">Backend, ML</p> | <p align="left" style="color:skyblue">Backend</p> | <p align="left" style="color:skyblue">Backend</p> | <p align="left" style="color:skyblue">Frontend</p> |
+|회원 API|Clova OCR<br>CI/CD 구축|일기, 월간 분석, 채팅|계좌, 거래 내역 API|일기, 목표, 통계, 평균 소비 통계, 감정, 카테고리 API|페이지 별 API 연결|
+|[@27kanghan](https://github.com/27kanghan)|[@mycodeisnoob](https://github.com/mycodeisnoob)|[@hannernos](https://github.com/hannernos)|[@yoonwoo-kim](https://github.com/yoonwoo-kim)|[@psj98](https://github.com/psj98)|[@DongHui-Park](https://github.com/DongHui-Park)|
+
+<br/>
+
+## 📚 기술 스택
+
+### Back-End
+![Java](https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![JPA](https://img.shields.io/badge/jpa-20336B?style=for-the-badge&logo=JPA&logoColor=white)
+
+### Database
+![MariaDB](https://img.shields.io/badge/mariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
+
+### Front-End
+![React](https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Css](https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css&logoColor=white)
+
+### Infra
+![Amazon EC2](https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Jenkins](https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
+![Amazon S3](https://img.shields.io/badge/amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-009639.svg?&style=for-the-badge&logo=Nginx&logoColor=white)
+
+### AI & ML
+![OpenAI](https://img.shields.io/badge/openai-412991.svg?&style=for-the-badge&logo=openai&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-3178C6?style=for-the-badge&logoColor=white)
+![FAISS](https://img.shields.io/badge/FAISS-00ADD8?style=for-the-badge&logoColor=white)
+
+### Clova OCR
+![Clova OCR](https://img.shields.io/badge/ClovaOCR-333333?style=for-the-badge&logoColor=white)
+
+### Collaboration Tools
+
+![Notion](https://img.shields.io/badge/Notion-000000.svg?&style=for-the-badge&logo=Notion&logoColor=로고색상)
+![Mattermost](https://img.shields.io/badge/Mattermost-0058CC.svg?&style=for-the-badge&logo=Mattermost&logoColor=로고색상)
+
+### Issue & Configuration Management
+
+![GitLab](https://img.shields.io/badge/Gitlab-FC6D26.svg?&style=for-the-badge&logo=Gitlab&logoColor=#FC6D26)
+![Jira](https://img.shields.io/badge/Jira-0052CC.svg?&style=for-the-badge&logo=Jira&logoColor=Blue)
+
+<br/>
+
+## ❗❗ 주요 기능
 
 **📝 AI 일기**
 
@@ -59,7 +126,7 @@
 
 <br/>
 
-## 세부 기능
+## ❗ 세부 기능
 
 |구분|기능|설명|비고|
 |:---|:---|:---|:---|
@@ -76,19 +143,19 @@
 
 <br/>
 
-## 아키텍처
+## 🗺 아키텍처
 
 ![아키텍처](https://github.com/psj98/Pendy/assets/60167488/5873d771-0fc2-4a02-a2dd-f2f8b6ad7348)
 
 <br/>
 
-## ERD
+## 📝 ERD
 
 ![ERD](https://github.com/psj98/Pendy/assets/60167488/79d89015-f6f0-4def-bb26-4cdbe60de0a6)
 
 <br/>
 
-## 개발 설정
+## ⚙ 개발 설정
 
 1. 포팅 메뉴얼 : [포팅 메뉴얼](https://github.com/psj98/Pendy/blob/dev/exec/pendi_%ED%8F%AC%ED%8C%85%EB%A7%A4%EB%89%B4%EC%96%BC.pdf)
 
@@ -96,59 +163,6 @@
 
 <br/>
 
-## 협업 툴
+## ✅ 참고 자료
 
-- GitLab
-  - 코드 버전 관리
-- Jira
-  - 매주 목표를 설정하여 Sprint 진행
-  - 업무의 양에 따라 Story Point 배정
-  - 업무의 우선순위에 따라 중요도 배정
-- Notion
-  - 기획, 설계, 기능 명세서, API 명세서 등 정리
-  - Git Convention 정리
-  - TroubleShooting 정리
-- MatterMost
-  - 공지 및 소통
-  - Git Commit 연동
-
-<br/>
-
-## 프로젝트 진행 기간
-
-> 2023.08.21 ~ 2023.10.06
-
-- 1주차 (2023.08.21 ~ 2023.08.27)
-  - 그라운드 룰 설정
-  - 팀 소개
-- 2주차 (2023.08.28 ~ 2023.09.03)
-  - 주제 선정 및 토론
-- 3주차 (2023.09.04 ~ 2023.09.10)
-  - 세부 기획 선정
-  - API 설계
-  - ERD 설계
-  - 아키텍처 설계
-- 4주차 (2023.09.11 ~ 2023.09.17)
-  - Front-End : 기본 틀 생성
-  - Back-End : 핵심 기능 개발
-- 5주차 (2023.09.18 ~ 2023.09.24)
-  - Front-End : 핵심 기능 개발
-  - Back-End : 부가 기능 개발
-- 6주차 (2023.09.25 ~ 2023.10.01)
-  - Front-End : 부가 기능 개발
-  - Back-End : ML 연결 및 테스트
-- 7주차 (2023.10.02 ~ 2023.10.06)
-  - 개발 마무리
-  - 오류 확인 및 처리
-  - 최종 확인
-
-<br/>
-
-## 팀원 소개
-
-- 강한 : PM, BE
-- 권현우 : BE, CI/CD
-- 김동현 : BE, ML
-- 김윤우 : BE
-- 박동휘 : FE
-- 박성준 : BE
+Notion : [Notion](https://checkered-bobolink-2c4.notion.site/04f8896197184f39a69bfaec78b3973c?pvs=4)
