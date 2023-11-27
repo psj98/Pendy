@@ -61,10 +61,10 @@
 ## 📚 기술 스택
 
 ### Back-End
-![Java](https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white)
+![Java](https://img.shields.io/badge/java-007396?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F.svg?&style=for-the-badge&logo=Spring%20Boot&logoColor=white)
-![JPA](https://img.shields.io/badge/jpa-20336B?style=for-the-badge&logo=JPA&logoColor=white)
+![JPA](https://img.shields.io/badge/jpa-59666C.svg?&style=for-the-badge&logo=hibernate&logoColor=white)
 <br/>
 ![Python](https://img.shields.io/badge/python-3776AB.svg?&style=for-the-badge&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/fastapi-009688.svg?&logo=fastapi&style=for-the-badge&logoColor=white)
